@@ -1,5 +1,7 @@
 # Park City, UT STR buy-box presentation webpage
 
+**Live:** https://ifrahamstr.github.io/ParkCityMarketAnalysis/ (repo `ifrahamSTR/ParkCityMarketAnalysis`, GitHub Pages from `main`, root).
+
 Plain HTML/CSS/JS with no build step and no framework. To run it locally, start any static server in this directory (for example `python3 -m http.server 8000`) and open `index.html`.
 
 This is the same template as the Charlotte, NC site (`../../../Charlotte/webpage`, live at ifrahamstr.github.io/CharlotteMarketAnalysis). It keeps the same section order, the same `data.js` → `render.js`/`charts.js` → `main.js` flow, and the same CSS tokens and components. The analysis is Park City's own.
@@ -97,4 +99,3 @@ Beware of search results about **Summit County, Colorado**. Its caps and waitlis
 
 - Section 6 deep dives: comp sets, revenue tiering, amenity and photo evidence.
 - Address-level regulatory checks for any candidate property.
-- Deployment. No GitHub repo or Pages site has been created for this market yet.

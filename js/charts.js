@@ -90,7 +90,7 @@ function renderRevenueDistributionChart() {
       fmtCurrency(dist.p90) +
       ") pulls away sharply from the median (" +
       fmtCurrency(dist.medianRevenue) +
-      "). The top band is almost entirely 4BR+ group homes. 12 of its 15 listings sit in three places: the Old Town core, the Summit Park forest and the edges of Heber Valley. All three buy boxes are built around that band, not the median; see the map below for how it splits by region.";
+      "). All 15 top-band listings are one of two products, large group homes or near-lift 3–4BR homes; see Section 1.";
   }
 }
 
@@ -188,7 +188,7 @@ function renderLiftScatterChart() {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        title: { display: true, text: "Revenue per bedroom vs. distance to nearest lift base (n=" + REGION_RESEARCH.scatter.length + ")", font: { size: 14, weight: "600" } },
+        title: { display: false },
         legend: { position: "bottom", labels: { boxWidth: 10, font: { size: 11 } } },
         tooltip: {
           callbacks: {
@@ -199,40 +199,6 @@ function renderLiftScatterChart() {
       scales: {
         x: { title: { display: true, text: "km to nearest lift base" }, min: 0 },
         y: { title: { display: true, text: "Revenue potential per bedroom" }, ticks: { callback: (v) => "$" + v / 1000 + "k" } },
-      },
-    },
-  });
-}
-
-// Section 4 -- review composition by region (stacked, same palette as the
-// by-bedroom chart).
-function renderDemographicsByRegionChart() {
-  const ctx = document.getElementById("chart-demographics-region");
-  if (!ctx) return;
-  const rows = DEMOGRAPHICS.byRegion;
-  new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: rows.map((r) => r.label + " (n=" + r.n + ")"),
-      datasets: [
-        { label: "Stayed with kids", data: rows.map((r) => r.kids), backgroundColor: DEMOGRAPHICS_PALETTE.kids },
-        { label: "Group trip", data: rows.map((r) => r.group), backgroundColor: DEMOGRAPHICS_PALETTE.group },
-        { label: "Stayed with a pet", data: rows.map((r) => r.pet), backgroundColor: DEMOGRAPHICS_PALETTE.pet },
-        { label: "Other", data: rows.map((r) => r.other), backgroundColor: DEMOGRAPHICS_PALETTE.other },
-      ],
-    },
-    options: {
-      indexAxis: "y",
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        title: { display: true, text: "Guest composition by region", font: { size: 14, weight: "600" } },
-        legend: { position: "bottom" },
-        tooltip: { callbacks: { label: (c) => c.dataset.label + ": " + c.parsed.x + "%" } },
-      },
-      scales: {
-        x: { stacked: true, max: 100, title: { display: true, text: "% of reviews" } },
-        y: { stacked: true, ticks: { font: { size: 11 } } },
       },
     },
   });

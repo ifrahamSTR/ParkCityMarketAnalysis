@@ -44,9 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
   renderRevenueDistributionChart();
   renderDemographicsPieChart();
   renderDemographicsStackedBarChart();
-  renderDemographicsByRegionChart();
   renderLocationInterpretation();
   renderClusterResearch();
+  document.getElementById("drivers-note").innerHTML = DRIVERS_NOTE;
   renderLiftScatterChart();
   initNav();
   initLightbox();

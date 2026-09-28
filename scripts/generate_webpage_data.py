@@ -35,24 +35,24 @@ def r0(x):
 
 regions = []
 for name in REGION_ORDER:
-    s = stats["regions"][name]
+    s_ = stats["regions"][name]
     regions.append({
         "id": REGION_SHORT[name], "name": name, "color": REGION_COLORS[name],
-        "n": int(s["N"]), "share": round(s["share"], 1),
-        "medianRev": r0(s["median_rev"]), "meanRev": r0(s["mean_rev"]), "p75Rev": r0(s["p75_rev"]), "maxRev": r0(s["max_rev"]),
-        "medianAdr": r0(s["median_adr"]), "medianOcc": round(s["median_occ"]), "medianBr": s["median_br"],
-        "medianSleeps": s["median_sleeps"], "revPerBr": r0(s["rev_per_br"]),
-        "top10N": int(s["top10_n"]), "top10Rate": round(s["top10_rate"], 1), "top25Rate": round(s["top25_rate"], 1),
-        "smallShare": round(s["small_share"]), "bigShare": round(s["big_share"]),
-        "hotTub": round(s["hot_tub"]), "sauna": round(s["sauna"]), "gameRoom": round(s["game_room"]), "firePit": round(s["fire_pit"]),
-        "superhost": round(s["superhost"]), "cleaningFee": r0(s["cleaning_fee"]),
-        "sizeMedian": {k: r0(v) for k, v in stats["size_median"][name].items()},
-        "sizeN": stats["size_n"][name],
+        "n": int(s_["N"]), "medianRev": r0(s_["median_rev"]),
+        "top10N": int(s_["top10_n"]), "top25Rate": round(s_["top25_rate"], 1),
+        "bigShare": round(s_["big_share"]), "sizeIndex": round(stats["region_index"][name], 2),
     })
 
-segments = {}
-for key, s in stats["segments"].items():
-    segments[key] = {k: (round(v, 1) if isinstance(v, float) else v) for k, v in s.items()}
+
+def clean(v):
+    if isinstance(v, float):
+        return round(v, 1)
+    if isinstance(v, dict):
+        return {k: clean(x) for k, x in v.items()}
+    return v
+
+
+segments = {key: clean(seg) for key, seg in stats["segments"].items()}
 
 scatter = [
     {"x": round(p["lift_km"], 2), "y": r0(p["Revenue Potential"] / p["Bedrooms"]), "br": int(p["Bedrooms"]),
@@ -77,21 +77,21 @@ payload = {
                        "other": stats["demographics_market"]["pct_other_reviews"]},
         "byBedroom": [{"label": b["label"], "n": b["n"], "kids": b["pct_stayed_with_kids"], "group": b["pct_group_trip"],
                        "pet": b["pct_stayed_with_a_pet"], "other": b["pct_other_reviews"]} for b in stats["demographics_by_bedroom"]],
-        "byRegion": [{"label": b["label"], "n": b["n"], "kids": b["pct_stayed_with_kids"], "group": b["pct_group_trip"],
-                      "pet": b["pct_stayed_with_a_pet"], "other": b["pct_other_reviews"]} for b in stats["demographics_by_region"]],
     },
     "REGION_RESEARCH": {
         "regions": regions,
         "segments": segments,
-        "liftBands": [{"band": b["lift_band"], "n": int(b["N"]), "medianRev": r0(b["median_rev"]), "medianAdr": r0(b["median_adr"]),
-                       "top10Rate": b["top10_rate"], "revPerBr": r0(b["rev_per_br"])} for b in stats["lift_bands"]],
+        "accessKm": stats["access_km"],
+        "tests": {k: (round(v, 5) if v < 1 else round(v, 1)) for k, v in stats["tests"].items()},
+        "matrix": [{"size": m["size3"], "access": bool(m["ski_access"]), "n": int(m["N"]), "top10N": int(m["top10_n"]),
+                    "top25Rate": round(m["top25_rate"], 1), "medianRev": r0(m["median_rev"]), "medianAdr": r0(m["median_adr"])}
+                   for m in stats["matrix"]],
+        "drivers": [{"driver": d["driver"], "base": d["base"], "nWith": d["n_with"], "nWithout": d["n_without"],
+                     "top10With": round(d["top10_with"], 1), "top10Without": round(d["top10_without"], 1),
+                     "medianWith": r0(d["median_with"]), "medianWithout": r0(d["median_without"])} for d in stats["drivers"]],
+        "liftBands": [{"band": b["lift_band"], "n": int(b["N"]), "revPerBr": r0(b["rev_per_br"])} for b in stats["lift_bands"]],
         "liftRho": round(stats["lift_rho"], 2),
         "scatter": scatter,
-        "amenities": [{"amenity": a["amenity"], "n": a["N"], "uplift": a["size_controlled_uplift_pct"],
-                       "top10": a["top10_prevalence"], "rest": a["rest_prevalence"]} for a in stats["amenities"]],
-        "top10": [{"region": t["Region"], "br": int(t["Bedrooms"]), "sleeps": int(t["Sleeps"]), "rev": r0(t["Revenue Potential"]),
-                   "adr": r0(t["ADR"]), "occ": round(t["Occupancy"] * 100), "title": t["Listing_Title"], "url": t["Listing URL"],
-                   "liftKm": round(t["lift_km"], 1)} for t in stats["top10_listings"]],
     },
 }
 

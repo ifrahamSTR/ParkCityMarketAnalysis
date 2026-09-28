@@ -174,42 +174,38 @@ function renderDeclarations() {
   const host = document.getElementById("buybox-declarations");
   if (!host) return;
   host.innerHTML = "";
+  host.classList.add("declarations-grid--2");
   BUY_BOXES.forEach((box) => {
-    // Segment stats come from the generated REGION_RESEARCH.segments
-    // (parkcity_overview.ipynb "Why These Buy Boxes"), never hand-copied.
+    // Stats come from the generated REGION_RESEARCH.segments
+    // (parkcity_overview.ipynb "Buy-box segments"), never hand-copied.
     const seg = REGION_RESEARCH.segments[box.segmentKey];
-    const card = el("div", "declaration-card declaration-card--lead");
-    card.appendChild(el("p", "declaration-card__eyebrow", box.label));
+    const card = el("div", "declaration-card declaration-card--lead" + (box.rank === "Primary" ? "" : " declaration-card--secondary"));
+    card.appendChild(el("p", "declaration-card__eyebrow", box.rank + " · " + box.label));
     card.appendChild(el("h2", null, box.name));
-    const rev = el("div", "declaration-card__revenue");
-    rev.appendChild(el("span", "declaration-card__revenue-value", fmtK(seg.p25) + " – " + fmtK(seg.p75)));
-    rev.appendChild(el("span", "declaration-card__revenue-label", "Revenue Potential (P25–P75)"));
-    card.appendChild(rev);
+    const stats = el("div", "bb2-stat-row bb2-stat-row--4 decl-stats");
+    [
+      [fmtK(seg.p25) + "–" + fmtK(seg.p75), "Revenue (P25–P75)"],
+      [fmtK(seg.median), "Median revenue"],
+      [Math.round(seg.top10_rate) + "%", "Reach the Top 10% (" + seg.top10_n + " of " + seg.N + ")"],
+      [Math.round(seg.top25_rate) + "%", "Reach the Top 25%"],
+    ].forEach(([v, l]) => {
+      const c = el("div", "bb2-stat");
+      c.appendChild(el("div", "bb2-stat__value", v));
+      c.appendChild(el("div", "bb2-stat__label", l));
+      stats.appendChild(c);
+    });
+    card.appendChild(stats);
     card.appendChild(el("p", "declaration-card__thesis", box.thesis));
     const dl = el("dl", "declaration-card__specs");
-    const rows = [
-      ["Bed / bath", box.atAGlance.bedBath],
-      ["Sleeps", box.atAGlance.sleeps],
-      ["Hero mechanism", box.atAGlance.heroMechanism],
-      ["Regulatory status", box.atAGlance.regulatory],
-      [
-        "Revenue bands",
-        "N=" + seg.N + " · median " + fmtCurrency(seg.median) + " · ADR " + fmtCurrency(seg.adr) + " · " + Math.round(seg.occ) + "% occ.<br>" +
-          "<strong>" + Math.round(seg.top10_rate) + "% reach the Top 10%</strong> (" + seg.top10_n + " listings) · " + Math.round(seg.top25_rate) + "% reach the Top 25%",
-      ],
-    ];
-    rows.forEach(([k, v]) => {
+    box.spec.forEach(([k, v]) => {
       dl.appendChild(el("dt", null, k));
       dl.appendChild(el("dd", null, v));
     });
     card.appendChild(dl);
-    // Section 6 (deep dive) is intentionally blank for this market, so the
-    // CTA points at the cluster research that scoped the box instead.
-    const cta = el("a", "btn btn--primary", "See the region research ↓");
-    cta.href = "#region-profiles";
-    card.appendChild(cta);
     host.appendChild(card);
   });
+  const note = document.getElementById("not-targets");
+  if (note) note.innerHTML = NOT_TARGETS;
 }
 
 // ---------------------------------------------------------------------------
@@ -219,6 +215,9 @@ function renderMarketOverview() {
   const host = document.getElementById("market-overview-body");
   if (!host) return;
   host.innerHTML = "";
+  // Photo + identity/attractions side by side; visitor stats and demand
+  // watch-outs run full width underneath so the photo column isn't left
+  // with a tall blank panel next to a long text column.
   const hero = el("div", "bb2-hero");
   if (MARKET_OVERVIEW.heroImage) {
     const media = el("div", "bb2-hero__media");
@@ -229,40 +228,34 @@ function renderMarketOverview() {
   }
   const body = el("div", "bb2-hero__body");
   body.appendChild(el("h3", null, MARKET_NAME));
-  if (MARKET_OVERVIEW.chips && MARKET_OVERVIEW.chips.length) {
-    const chipRow = el("div", "bb2-chip-row");
-    MARKET_OVERVIEW.chips.forEach((c) => chipRow.appendChild(el("span", "bb2-chip", c.label)));
-    body.appendChild(chipRow);
-  }
-  if (MARKET_OVERVIEW.attractions && MARKET_OVERVIEW.attractions.length) {
-    body.appendChild(el("h3", "subsection-title", "Top Attractions"));
-    body.appendChild(el("div", null, listHtml(MARKET_OVERVIEW.attractions)));
-  }
-  if (MARKET_OVERVIEW.visitorStats) {
-    body.appendChild(el("h3", "subsection-title", "Why People Visit"));
-    body.appendChild(el("p", null, "<strong>" + MARKET_OVERVIEW.visitorStats.headline + "</strong>"));
-    const statRow = el("div", "bb2-stat-row");
-    MARKET_OVERVIEW.visitorStats.breakdown.forEach((s) => {
-      const card = el("div", "bb2-stat");
-      card.appendChild(el("div", "bb2-stat__value", s.value));
-      card.appendChild(el("div", "bb2-stat__label", s.label));
-      statRow.appendChild(card);
-    });
-    body.appendChild(statRow);
-  }
-  if (MARKET_OVERVIEW.watchOuts && MARKET_OVERVIEW.watchOuts.length) {
-    body.appendChild(el("h3", "subsection-title", "Demand Watch-Outs"));
-    body.appendChild(el("div", "watch-outs", listHtml(MARKET_OVERVIEW.watchOuts)));
-  }
-  const sources = el("p", "market-sources");
-  sources.innerHTML =
-    "Sources: " +
-    MARKET_OVERVIEW.sources
-      .map((s) => (s.url ? '<a href="' + s.url + '" target="_blank" rel="noopener">' + s.label + "</a>" : s.label))
-      .join(" · ");
-  body.appendChild(sources);
+  const chipRow = el("div", "bb2-chip-row");
+  MARKET_OVERVIEW.chips.forEach((c) => chipRow.appendChild(el("span", "bb2-chip", c.label)));
+  body.appendChild(chipRow);
+  body.appendChild(el("h3", "subsection-title", "Demand Drivers"));
+  body.appendChild(el("div", null, listHtml(MARKET_OVERVIEW.attractions)));
   hero.appendChild(body);
   host.appendChild(hero);
+
+  const below = el("div", "market-below");
+  const stats = el("div");
+  stats.appendChild(el("p", "market-below__head", "<strong>" + MARKET_OVERVIEW.visitorStats.headline + "</strong>"));
+  const statRow = el("div", "bb2-stat-row");
+  MARKET_OVERVIEW.visitorStats.breakdown.forEach((s) => {
+    const card = el("div", "bb2-stat");
+    card.appendChild(el("div", "bb2-stat__value", s.value));
+    card.appendChild(el("div", "bb2-stat__label", s.label));
+    statRow.appendChild(card);
+  });
+  stats.appendChild(statRow);
+  below.appendChild(stats);
+  const watch = el("div");
+  watch.appendChild(el("p", "market-below__head", "<strong>Demand watch-outs</strong>"));
+  watch.appendChild(el("div", "watch-outs", listHtml(MARKET_OVERVIEW.watchOuts)));
+  below.appendChild(watch);
+  host.appendChild(below);
+  const sources = el("p", "market-sources");
+  sources.innerHTML = "Sources: " + MARKET_OVERVIEW.sources.map((s) => '<a href="' + s.url + '" target="_blank" rel="noopener">' + s.label + "</a>").join(" · ");
+  host.appendChild(sources);
 }
 
 // ---------------------------------------------------------------------------
@@ -276,13 +269,7 @@ function renderMarketOverview() {
 // ---------------------------------------------------------------------------
 function renderLocationInterpretation() {
   const host = document.getElementById("map-interpretation");
-  if (!host) return;
-  let html = "";
-  if (MAP_CONFIG.marketInterpretation) html += "<p>" + MAP_CONFIG.marketInterpretation + "</p>";
-  if (MAP_CONFIG.regionBullets && MAP_CONFIG.regionBullets.length) {
-    html += "<ul>" + MAP_CONFIG.regionBullets.map((b) => "<li>" + b + "</li>").join("") + "</ul>";
-  }
-  host.innerHTML = html;
+  if (host) host.innerHTML = MAP_CONFIG.marketInterpretation;
 }
 
 // ---------------------------------------------------------------------------
@@ -301,24 +288,15 @@ function renderDemographics() {
 function renderPendingBuyBoxes() {
   const host = document.getElementById("pending-buyboxes");
   if (!host) return;
-  host.innerHTML = "";
-  host.appendChild(el("p", "section-interpretation", PENDING_BUY_BOXES_NOTE));
-  const grid = el("div", "declarations-grid declarations-grid--coverage");
-  PENDING_BUY_BOXES.forEach((p) => {
-    const seg = p.segmentKey ? REGION_RESEARCH.segments[p.segmentKey] : null;
-    const stat = seg
-      ? '<p class="coverage-stat">N=' + seg.N + " · median " + fmtCurrency(seg.median) + " · <strong>" + Math.round(seg.top10_rate) + "% Top 10%</strong> · " + Math.round(seg.top25_rate) + "% Top 25%</p>"
-      : "";
-    const mod = p.eyebrow === "Excluded" ? " declaration-card--excluded" : p.eyebrow === "Watch list" || /hold/.test(p.eyebrow) ? " declaration-card--watch" : "";
-    grid.appendChild(
-      el(
-        "div",
-        "declaration-card declaration-card--pending" + mod,
-        '<p class="declaration-card__eyebrow">' + p.eyebrow + "</p><h3>" + p.label + "</h3>" + stat + "<p>" + p.note + "</p>"
-      )
-    );
+  let html = '<div class="table-scroll"><table class="data-table data-table--wrap"><thead><tr><th>Segment</th><th>Status</th><th>N</th><th>Median</th><th>Top 10%</th><th>Top 25%</th><th>Note</th></tr></thead><tbody>';
+  COVERAGE_ROWS.forEach((r) => {
+    const seg = REGION_RESEARCH.segments[r.segmentKey];
+    const cls = r.status === "Excluded" ? "status-pill status-pill--out" : "status-pill";
+    html += '<tr><th scope="row">' + r.label + '</th><td><span class="' + cls + '">' + r.status + "</span></td><td>" + seg.N + "</td><td>" + fmtCurrency(seg.median) +
+      "</td><td>" + seg.top10_n + " (" + Math.round(seg.top10_rate) + "%)</td><td>" + Math.round(seg.top25_rate) + '%</td><td class="cell-note">' + r.note + "</td></tr>";
   });
-  host.appendChild(grid);
+  html += "</tbody></table></div>";
+  host.innerHTML = html;
 }
 
 // ---------------------------------------------------------------------------
@@ -1270,54 +1248,25 @@ function compSetComparisonBlock(data) {
   return wrap;
 }
 
-// STR Regulations (Section 5). Same category structure as Charlotte's card
-// (Regulation Tier / Permit & Residency / Operating Limits / Investor
-// Notes), but this market spans several jurisdictions (Park City, Summit
-// County, Wasatch County, Heber, Midway, Hideout...), so it renders one
-// market-wide overview card plus one card per jurisdiction -- see
-// STR_REGULATIONS in data.js.
-function regulationsCardBody(data) {
-  const wrap = el("div", "regs-card");
-  if (data.jurisdiction) wrap.appendChild(el("h3", "regs-card__title", data.jurisdiction));
-  if (data.covers) wrap.appendChild(el("p", "regs-card__covers", data.covers));
-  const tier = el("div", "regs-card__tier regs-card__tier--" + (data.tierKey || "friendly"));
-  tier.innerHTML = '<span class="regs-card__tier-dot"></span>' + data.tier;
-  wrap.appendChild(tier);
-  wrap.appendChild(el("p", "regs-card__summary", data.tierNote));
-
-  const rows = el("div", "dd-rows");
-  const addRow = (label, items) => {
-    if (!items || !items.length) return;
-    const row = el("div", "dd-row");
-    row.appendChild(el("span", "dd-row__label", label));
-    const value = el("div", "dd-row__value");
-    value.innerHTML = listHtml(items);
-    row.appendChild(value);
-    rows.appendChild(row);
-  };
-  addRow("Permit / Residency", data.permitResidency);
-  addRow("Operating Limits", data.operatingLimits);
-  addRow("Investor Notes", data.investorNotes);
-  wrap.appendChild(rows);
-
-  if (data.sources && data.sources.length) {
-    const links = data.sources
-      .map((s) => (s.url ? '<a href="' + s.url + '" target="_blank" rel="noopener">' + s.label + "</a>" : s.label))
-      .join(" · ");
-    wrap.appendChild(el("p", "dd-note regs-card__sources", "<strong>Sources:</strong> " + links));
-  }
-  return wrap;
-}
+// STR Regulations (Section 5): one overview line plus a compact
+// jurisdiction table (STR_REGULATIONS in data.js). The market spans six
+// jurisdiction groups, so a table carries the same facts Charlotte's single
+// card did in far less space than one card per jurisdiction.
 function renderRegulationsSection() {
   const host = document.getElementById("regulations-body");
   if (!host || !STR_REGULATIONS) return;
-  host.innerHTML = "";
-  if (STR_REGULATIONS.overview) host.appendChild(regulationsCardBody(STR_REGULATIONS.overview));
-  if (STR_REGULATIONS.byRegionNote) host.appendChild(el("p", "section-interpretation", STR_REGULATIONS.byRegionNote));
-  const grid = el("div", "regs-grid");
-  (STR_REGULATIONS.jurisdictions || []).forEach((j) => grid.appendChild(regulationsCardBody(j)));
-  host.appendChild(grid);
-  if (STR_REGULATIONS.verifiedNote) host.appendChild(el("p", "dd-note regs-verified", STR_REGULATIONS.verifiedNote));
+  const R = STR_REGULATIONS;
+  let html = '<div class="regs-card__tier regs-card__tier--moderate"><span class="regs-card__tier-dot"></span>' + R.tier + "</div>";
+  html += '<p class="regs-card__summary">' + R.summary + "</p>";
+  html += '<div class="table-scroll"><table class="data-table data-table--wrap regs-table"><thead><tr><th>Jurisdiction</th><th>Tier</th><th>Key rules</th><th>Affects</th></tr></thead><tbody>';
+  R.rows.forEach((r) => {
+    html += '<tr><th scope="row">' + r.j + '<span class="cell-sub">' + r.areas + '</span></th><td><span class="tier-pill tier-pill--' + r.tierKey + '">' + r.tier +
+      '</span></td><td class="cell-note">' + r.rules + "</td><td>" + r.affects + "</td></tr>";
+  });
+  html += "</tbody></table></div>";
+  html += '<p class="dd-note regs-verified"><strong>Sources:</strong> ' +
+    R.sources.map((x) => '<a href="' + x.url + '" target="_blank" rel="noopener">' + x.label + "</a>").join(" · ") + ". " + R.verifiedNote + "</p>";
+  host.innerHTML = html;
 }
 
 // Queue of chart-instantiation callbacks collected while building a pending

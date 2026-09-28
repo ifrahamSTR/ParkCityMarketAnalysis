@@ -499,6 +499,15 @@ img { max-width: 100%; display: block; }
 .matrix-sub { font-size: 0.8rem; color: var(--color-text-muted); white-space: normal; }
 .matrix-hot { background: color-mix(in srgb, var(--brand-green) 12%, white); }
 .matrix-cold { background: #f6f7f7; }
+.title-note { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); background: #eef0ef; border-radius: 999px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; }
+.matrix-total th, .matrix-total td { border-top: 2px solid var(--color-border); background: var(--surface-tint); }
+.matrix-table td.cell-note { min-width: 180px; }
+.tight-list ul { margin: 0; padding-left: 1.1em; font-size: 0.9rem; }
+.tight-list li { margin-bottom: 8px; }
+.ref-details { margin-top: 20px; border: var(--hairline); border-radius: var(--radius); background: var(--color-surface); }
+.ref-details summary { cursor: pointer; padding: 10px 14px; font-weight: 600; color: var(--color-primary); font-size: 0.92rem; }
+.ref-details[open] summary { border-bottom: var(--hairline); }
+.ref-details .table-scroll { border: 0; border-radius: 0 0 var(--radius) var(--radius); }
 .conclusion-box { margin-top: 24px; padding: 14px 18px; background: var(--color-surface); border-left: 3px solid var(--color-accent); border-radius: 4px; font-size: 0.93rem; }
 .conclusion-box h3 { font-size: 1rem; margin-bottom: 8px; }
 

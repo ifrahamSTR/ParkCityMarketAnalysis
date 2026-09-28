@@ -39,7 +39,7 @@ for name in REGION_ORDER:
     regions.append({
         "id": REGION_SHORT[name], "name": name, "color": REGION_COLORS[name],
         "n": int(s_["N"]), "medianRev": r0(s_["median_rev"]),
-        "top10N": int(s_["top10_n"]), "top25Rate": round(s_["top25_rate"], 1),
+        "top10N": int(s_["top10_n"]), "top25Rate": round(s_["top25_rate"], 3),
         "bigShare": round(s_["big_share"]), "sizeIndex": round(stats["region_index"][name], 2),
     })
 
@@ -89,6 +89,18 @@ payload = {
         "drivers": [{"driver": d["driver"], "base": d["base"], "nWith": d["n_with"], "nWithout": d["n_without"],
                      "top10With": round(d["top10_with"], 1), "top10Without": round(d["top10_without"], 1),
                      "medianWith": r0(d["median_with"]), "medianWithout": r0(d["median_without"])} for d in stats["drivers"]],
+        "defTest": [{"segment": r["segment"], "nNear": r["n_near"], "nFar": r["n_far"],
+                     "medianNear": r0(r["median_near"]), "medianFar": r0(r["median_far"]),
+                     "top10Near": r["top10_near"], "top10Far": r["top10_far"],
+                     "top25Near": round(r["top25_rate_near"], 1), "top25Far": round(r["top25_rate_far"], 1),
+                     "adrNear": r0(r["adr_near"]), "adrFar": r0(r["adr_far"]),
+                     "indexNear": round(r["index_near"], 2), "indexFar": round(r["index_far"], 2),
+                     "pTop25": r["p_top25"], "pIndex": r["p_index"]} for r in stats["def_test"]],
+        "sensitivity": [{"segment": r["segment"], "km": r["km"], "nNear": r["n_near"], "top10Near": r["top10_near"],
+                         "top25Near": round(r["top25_rate_near"], 1), "top25Far": round(r["top25_rate_far"], 1),
+                         "indexNear": round(r["index_near"], 2), "indexFar": round(r["index_far"], 2)} for r in stats["sensitivity"]],
+        "gradients": {k: {"rho": round(v["rho"], 2), "p": v["p"], "n": v["n"]} for k, v in stats["gradients"].items()},
+        "regression": {k: ({"mult": round(v["mult"], 2), "p": v["p"]} if isinstance(v, dict) else round(v, 3)) for k, v in stats["regression"].items() if k != "const"},
         "liftBands": [{"band": b["lift_band"], "n": int(b["N"]), "revPerBr": r0(b["rev_per_br"])} for b in stats["lift_bands"]],
         "liftRho": round(stats["lift_rho"], 2),
         "scatter": scatter,

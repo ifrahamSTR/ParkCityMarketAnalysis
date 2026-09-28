@@ -5,10 +5,12 @@
  * structure: with only 145 listings, the seven geographic clusters are
  * REFERENCE geography, not buy boxes. The data supports two products,
  * defined by size x ski access (see parkcity_overview.ipynb, "Distilling the
- * structure"):
- *   - Large Group Home: 5BR+, sleeps 14+, location-flexible
- *   - Ski-Access Home: 3-4BR within 2 km of a lift base
- * Together these hold all 15 of the market's Top 10% listings.
+ * structure" and "Validating the Ski-Access definition"):
+ *   - Large Group Home: 5BR+, sleeps 14+, location-flexible (product-first)
+ *   - Ski-Access Home: 3BR+ within 2 km of a lift base (location-first)
+ * The boxes are unranked (ranking needs the Section 6 deep dives) and may
+ * overlap on the rare 5BR+ near a lift. Together they hold all 15 Top 10%
+ * listings.
  *
  * Prose and config only. Every computed number shown in tables/cards comes
  * from js/region_data.js (generated). Where prose below quotes a number, it
@@ -30,35 +32,36 @@ const BUY_BOXES = [
   {
     id: "group",
     segmentKey: "group",
-    rank: "Primary",
-    label: "Large Group Home",
-    name: "5BR+ group homes, sleeping 14+",
+    label: "Buy Box 1 · Large Group Home",
+    name: "5BR+ homes sleeping 14+, anywhere legal",
     thesis:
-      "Headcount carries this product, not location. 10 of its 11 Top 10% listings sit more than 2 km from a lift, spread across Heber Valley, Summit Park, Snyderville and Pine Meadow. The winners also add a hot tub and an entertainment stack.",
+      "Buy the product. Headcount and amenities carry these homes, and lift access isn't required: 10 of their 11 Top 10% listings sit more than 2 km from a lift.",
     spec: [
-      ["Size", "5BR+, sleeps 14–16 (Heber City caps occupancy at 16)"],
-      ["Must-haves", "Hot tub (0 of 5 without one reached the Top 10%). 2+ entertainment amenities: game room, pool table, sauna, pickleball or theater (69% Top 10% with them, 15% without)."],
-      ["Where", "Heber Valley edges (the north bench and toward Deer Creek), Snyderville Basin, and Old Town where available. <strong>Hold:</strong> Summit Park and Pine Meadow, pending Summit County's proposed nightly-rental ban. <strong>Avoid:</strong> Midway."],
+      ["Size", "5BR+, sleeping 14–16 (Heber City caps occupancy at 16)"],
+      ["Screening signals", "A hot tub (every Top 10% listing has one) and 2+ entertainment amenities: game room, pool table, sauna, pickleball or theater."],
+      ["Where", "Heber Valley edges, Snyderville Basin, or Old Town when available. <strong>Hold</strong> Summit Park and Pine Meadow pending Summit County's proposed ban. <strong>Avoid</strong> Midway."],
     ],
   },
   {
     id: "ski",
     segmentKey: "ski",
-    rank: "Secondary",
-    label: "Ski-Access Home",
-    name: "3–4BR within 2 km of a lift base",
+    label: "Buy Box 2 · Ski-Access Home",
+    name: "3BR+ within 2 km of a lift base",
     thesis:
-      "This is the one place a mid-size home competes: 73% reach the Top 25%, against 15% for the same homes farther out. It earns on ADR (median $491) from walk-to-lift ski demand. It's a different search and a different underwrite from the group home: location-first and adult-skewed.",
+      "Buy the location. Near a lift, a 3–4BR reaches the Top 25% 73% of the time, against 15% for the same homes farther out. The premium shows up as ADR at similar occupancy.",
     spec: [
-      ["Size", "3–4BR, sleeps 6–15 (median 10)"],
-      ["Must-haves", "Walkable or ski-in access to Main Street / Town Lift, Deer Valley or Canyons. Hot tub (87% of the segment)."],
-      ["Where", "Old Town / Main Street and Deer Valley first: all 4 of the segment's Top 10% listings are here. The Deer Valley gondola side of Jordanelle is directional (3 of 4 reach the Top 25%). Park City zoning decides eligibility; HR-1, R-1, Estate and most RD zones allow nightly rental."],
+      ["Size", "3BR and up, with no upper cap. The core of this box is 3–4BR (15 of the 17 listings)."],
+      ["Screening signals", "Walkable or ski-in access to Main Street / Town Lift, Deer Valley or Canyons, plus a hot tub (88% of the segment)."],
+      ["Where", "Old Town / Main Street and Deer Valley hold all 5 of this box's Top 10% listings. The Jordanelle gondola side is directional. Eligibility follows Park City zoning (HR-1, R-1, Estate and most RD zones)."],
     ],
   },
 ];
 
+const OVERLAP_NOTE =
+  "<strong>The boxes can overlap.</strong> A 5BR+ home near a lift fits both. Only 2 exist in the data, so the Group Home economics are its base case and the location is upside that can't be sized yet.";
+
 const NOT_TARGETS =
-  "<strong>Not a target:</strong> 1–2BR anywhere (0 of 53 reach the Top 10%, even at the lifts), and 3–4BR beyond 2 km of a lift (0 of 46).";
+  "<strong>Not a target:</strong> 1–2BR anywhere (0 of 53 reach the Top 10%), 3–4BR beyond 2 km (0 of 46), and 5BR+ sleeping fewer than 14 away from the lifts (0 of 4).";
 
 // ---------------------------------------------------------------------------
 // Section 2 — Market context
@@ -106,7 +109,7 @@ const MARKET_OVERVIEW = {
 };
 
 const DRIVERS_NOTE =
-  "Size is the first filter: 5BR+ homes reach the Top 10% at ten times the rate of everything else. Among 4BR+ homes, a hot tub is effectively mandatory, and a stack of three or more entertainment amenities is the strongest single separator. Amenity rows compare 4BR+ homes with and without the feature, so size isn't credited to the amenity. Rows with fewer than 15 listings on one side are directional.";
+  "<strong>These are screening signals, not proven revenue uplift.</strong> Each row shows how often listings with and without a feature reach the Top 10%. Amenity rows compare 4BR+ homes only, so size isn't credited to the amenity, but better-run, better-designed homes may simply have more amenities. Rows with fewer than 15 listings on one side are directional.";
 
 // ---------------------------------------------------------------------------
 // Section 3 — Location (compressed). The map is the embedded folium map from
@@ -115,32 +118,30 @@ const DRIVERS_NOTE =
 const MAP_CONFIG = {
   stateAbbr: "UT",
   marketInterpretation:
-    "Check a tier and an area together to isolate a slice, e.g. <em>Top 10%</em> + <em>Heber Valley</em>. The red rings are the 2 km ski-access zone. The seven areas are clusters of listing coordinates, named for the places they cover. They're reference geography for this analysis, not separate strategies.",
+    "<strong>Click an area outline</strong> for its numbers. The seven areas are clusters of listing coordinates, used as reference geography only. The red rings mark the 2 km ski-access zone. Filter by tier and area in the bottom-left panel.",
 };
 
-// One short role per area for the reference table (small-N areas are
-// flagged in the table itself).
-const AREA_ROLES = {
-  oldtown: "Ski-access core, with a premium at every size",
-  summitpark: "Group homes (2 in the Top 10%), on regulatory hold",
-  jordanelle: "Ski-access, gondola side; no 5BR+ homes",
-  pinemeadow: "Small cabins over-earn; regulatory hold",
-  snyderville: "Group homes only; condos underperform",
-  midway: "Not a target: no Top 10%, and a shrinking STR zone",
-  heber: "Largest group-home supply (5 in the Top 10%); small units weak",
+// One-word read per bedroom bucket for the size x ski-access table.
+const MATRIX_READS = {
+  "1-2BR": "Helps, but never reaches target level",
+  "3BR": "Transforms it (only 6 near a lift)",
+  "4BR": "Transforms it",
+  "3-4BR": "Required: none reach the Top 10% without it",
+  "5BR+": "Can't measure (only 2 near a lift)",
+  "3BR+": "The Ski-Access box",
 };
 
 const LOCATION_CONCLUSION = [
-  "<strong>Location matters for mid-size homes, not large ones.</strong> A 3–4BR near a lift is a top performer, while the same home 10 km out is ordinary. At 5BR+, headcount carries it wherever it is.",
-  "<strong>Old Town &amp; Deer Valley is the only real location premium:</strong> it earns 1.45× what its size predicts. Heber, Snyderville and Midway run at 0.80–0.87×, because of small-unit supply rather than their big homes.",
-  "<strong>Screen location through regulation first.</strong> Summit Park and Pine Meadow hold 3 of the 11 Top 10% group homes but sit in Summit County's proposed ban areas, and Midway has shrunk its STR zone.",
+  "<strong>Mid-size homes (3–4BR):</strong> the location is the product. Search within about 2 km of a lift; beyond that, pass.",
+  "<strong>Large homes (5BR+, sleeping 14+):</strong> search anywhere zoning allows. Treat lift proximity as upside, not a requirement.",
+  "<strong>Screen for regulation before geography.</strong> Summit Park and Pine Meadow hold 3 of the 11 Top 10% group homes but sit in Summit County's proposed ban areas.",
 ];
 
 // ---------------------------------------------------------------------------
 // Section 4 — Demographics
 // ---------------------------------------------------------------------------
 const DEMOGRAPHICS_NOTE =
-  "These are review-derived signals, not verified demographics. Group trips climb with size, from under 6% of reviews at 1–2BR to about half at 5BR+, and kids appear in about a third of 5BR+ reviews. The two products serve different guests: the Large Group Home is a family and group-trip product (35% kids, 50% group trips), while the Ski-Access Home skews adult (21% kids).";
+  "These are review-derived signals, not verified demographics. Group trips climb with size, from under 6% of reviews at 1–2BR to about half at 5BR+, and kids appear in about a third of 5BR+ reviews. The two products serve different guests: the Large Group Home is a family and group-trip product (35% kids, 50% group trips), while the Ski-Access Home skews adult (20% kids).";
 
 // ---------------------------------------------------------------------------
 // Section 5 — Regulations, as one overview plus a compact jurisdiction table.
@@ -210,13 +211,3 @@ const STR_REGULATIONS = {
   verifiedNote:
     "Researched 2026-09-28. Not verified: combined lodging-tax rates, Park City and Hideout fees, MIDA EO 2025-09, and whether Summit County has voted on the bans since August 2026. Not legal advice; confirm every candidate address.",
 };
-
-// ---------------------------------------------------------------------------
-// Section 7 — coverage
-// ---------------------------------------------------------------------------
-const COVERAGE_ROWS = [
-  { segmentKey: "group", label: "Large Group Home (primary)", status: "Pending deep dive", note: "Hold the Summit Park and Pine Meadow candidates until Summit County votes." },
-  { segmentKey: "ski", label: "Ski-Access Home (secondary)", status: "Pending deep dive", note: "N=15; the Jordanelle gondola side is directional." },
-  { segmentKey: "small", label: "1–2BR, anywhere", status: "Excluded", note: "None reach the Top 10%; the best reaches $97k." },
-  { segmentKey: "mid_offcore", label: "3–4BR beyond 2 km of a lift", status: "Excluded", note: "None reach the Top 10%; the best reaches $92k." },
-];

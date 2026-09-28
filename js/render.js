@@ -179,8 +179,10 @@ function renderDeclarations() {
     // Stats come from the generated REGION_RESEARCH.segments
     // (parkcity_overview.ipynb "Buy-box segments"), never hand-copied.
     const seg = REGION_RESEARCH.segments[box.segmentKey];
-    const card = el("div", "declaration-card declaration-card--lead" + (box.rank === "Primary" ? "" : " declaration-card--secondary"));
-    card.appendChild(el("p", "declaration-card__eyebrow", box.rank + " · " + box.label));
+    // Unranked on purpose: which box is the better acquisition strategy
+    // depends on price, inventory, margins and regulation (Section 6).
+    const card = el("div", "declaration-card declaration-card--lead");
+    card.appendChild(el("p", "declaration-card__eyebrow", box.label));
     card.appendChild(el("h2", null, box.name));
     const stats = el("div", "bb2-stat-row bb2-stat-row--4 decl-stats");
     [
@@ -205,7 +207,7 @@ function renderDeclarations() {
     host.appendChild(card);
   });
   const note = document.getElementById("not-targets");
-  if (note) note.innerHTML = NOT_TARGETS;
+  if (note) note.innerHTML = OVERLAP_NOTE + " " + NOT_TARGETS;
 }
 
 // ---------------------------------------------------------------------------
@@ -285,19 +287,8 @@ function renderDemographics() {
 // ---------------------------------------------------------------------------
 // Section 5 — Pending buy boxes
 // ---------------------------------------------------------------------------
-function renderPendingBuyBoxes() {
-  const host = document.getElementById("pending-buyboxes");
-  if (!host) return;
-  let html = '<div class="table-scroll"><table class="data-table data-table--wrap"><thead><tr><th>Segment</th><th>Status</th><th>N</th><th>Median</th><th>Top 10%</th><th>Top 25%</th><th>Note</th></tr></thead><tbody>';
-  COVERAGE_ROWS.forEach((r) => {
-    const seg = REGION_RESEARCH.segments[r.segmentKey];
-    const cls = r.status === "Excluded" ? "status-pill status-pill--out" : "status-pill";
-    html += '<tr><th scope="row">' + r.label + '</th><td><span class="' + cls + '">' + r.status + "</span></td><td>" + seg.N + "</td><td>" + fmtCurrency(seg.median) +
-      "</td><td>" + seg.top10_n + " (" + Math.round(seg.top10_rate) + "%)</td><td>" + Math.round(seg.top25_rate) + '%</td><td class="cell-note">' + r.note + "</td></tr>";
-  });
-  html += "</tbody></table></div>";
-  host.innerHTML = html;
-}
+// Section 7 (Buy-Box Coverage) is removed from this page for now: it only
+// repeated Section 1. The segment stats remain in region_data.js.
 
 // ---------------------------------------------------------------------------
 // Section 4 — Deep dive tabs + content

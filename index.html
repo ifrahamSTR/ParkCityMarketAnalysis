@@ -6,7 +6,7 @@
 <title>Park City, UT STR Buy-Box Evaluation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/styles.css?v=20260929-pc2" />
+<link rel="stylesheet" href="css/styles.css?v=20260929-pc3" />
 </head>
 <body>
 
@@ -23,7 +23,6 @@
       <a href="#demographics">Demographics</a>
       <a href="#regulations">Regulations</a>
       <a href="#deep-dive">Deep Dive</a>
-      <a href="#pending">Coverage</a>
     </nav>
   </div>
 </header>
@@ -35,7 +34,7 @@
     <div class="container">
       <p class="section-kicker">Preliminary Direction</p>
       <h1>One Park City market, two products</h1>
-      <p class="hero-sub">Size and ski access separate the top performers, not neighborhood. Large group homes win almost anywhere in the market, while 3–4BR homes win only near the lifts. Between them, these two products account for <strong>all 15</strong> of the market's Top 10% listings. Location acts as guidance inside each box, not as a box of its own.</p>
+      <p class="hero-sub"><strong>For mid-size homes, buy the location; for large homes, buy the product.</strong> The seven areas on the map are reference geography, not strategies. The two boxes below account for all 15 of the market's Top 10% listings. They are unranked: which one to pursue first depends on price, inventory, margins and regulation, all covered in the deep dives.</p>
       <div id="buybox-declarations" class="declarations-grid"></div>
       <p id="not-targets" class="not-targets"></p>
     </div>
@@ -54,7 +53,7 @@
       <div id="chart-revenue-distribution-legend" class="chart-legend-row"></div>
       <p id="chart-revenue-distribution-interpretation" class="caption"></p>
 
-      <h3 class="subsection-title">What Separates the Top Performers</h3>
+      <h3 class="subsection-title">What Separates the Top Performers <span class="title-note">screening signals</span></h3>
       <div id="drivers-table"></div>
       <p class="caption" id="drivers-note"></p>
     </div>
@@ -65,17 +64,19 @@
     <div class="container">
       <p class="section-kicker">Section 3</p>
       <h2>Location Analysis</h2>
-      <iframe class="embedded-map embedded-map--tall" src="assets/overview/parkcity_overview_map.html?v=20260929-pc2" loading="lazy" title="Interactive map of Park City area STR revenue tiers, seven reference areas, the 2 km ski-access zone, and demand-driver landmarks"></iframe>
+      <iframe class="embedded-map embedded-map--tall" src="assets/overview/parkcity_overview_map.html?v=20260929-pc3" loading="lazy" title="Interactive map of Park City area STR revenue tiers, seven reference areas, the 2 km ski-access zone, and demand-driver landmarks"></iframe>
       <p id="map-interpretation" class="caption"></p>
+
+      <h3 class="subsection-title">When Does Location Matter? Bedrooms × Ski Access</h3>
+      <div id="access-matrix"></div>
 
       <div class="chart-row chart-row--lift">
         <div>
-          <h3 class="subsection-title">Does Location Matter Once Size Is Considered?</h3>
-          <div id="access-matrix"></div>
-          <p id="access-matrix-caption" class="caption"></p>
+          <h3 class="subsection-title">Why the Ski-Access Box Is 3BR+, Not 3–4BR</h3>
+          <div id="definition-test" class="tight-list"></div>
         </div>
         <div>
-          <h3 class="subsection-title">Ski Access: Revenue per Bedroom vs. Lift Distance</h3>
+          <h3 class="subsection-title">Revenue vs. Distance to the Nearest Lift</h3>
           <div class="chart-card chart-card--tall">
             <canvas id="chart-lift-scatter"></canvas>
           </div>
@@ -83,9 +84,10 @@
         </div>
       </div>
 
-      <h3 class="subsection-title">The Seven Reference Areas</h3>
-      <p class="subsection-lede">The size-adjusted index is each listing's revenue divided by the market median for its bedroom count, taken as a median across the area. 1.00× means the area earns what its size mix predicts. Areas with fewer than 15 listings are directional.</p>
-      <div id="area-table"></div>
+      <details class="ref-details">
+        <summary>Reference-area numbers (the same figures appear when you click an area on the map)</summary>
+        <div id="area-table"></div>
+      </details>
 
       <div class="conclusion-box">
         <h3>How location should shape acquisition</h3>
@@ -132,14 +134,6 @@
     </div>
   </section>
 
-  <!-- Section 7: Buy-box coverage status -->
-  <section id="pending" class="section section--note">
-    <div class="container">
-      <p class="section-kicker">Section 7</p>
-      <h2>Buy-Box Coverage</h2>
-      <div id="pending-buyboxes"></div>
-    </div>
-  </section>
 
 </main>
 
@@ -158,11 +152,11 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<script src="js/region_data.js?v=20260929-pc2"></script>
-<script src="js/data.js?v=20260929-pc2"></script>
-<script src="js/render.js?v=20260929-pc2"></script>
-<script src="js/research.js?v=20260929-pc2"></script>
-<script src="js/charts.js?v=20260929-pc2"></script>
-<script src="js/main.js?v=20260929-pc2"></script>
+<script src="js/region_data.js?v=20260929-pc3"></script>
+<script src="js/data.js?v=20260929-pc3"></script>
+<script src="js/render.js?v=20260929-pc3"></script>
+<script src="js/research.js?v=20260929-pc3"></script>
+<script src="js/charts.js?v=20260929-pc3"></script>
+<script src="js/main.js?v=20260929-pc3"></script>
 </body>
 </html>

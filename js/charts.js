@@ -90,7 +90,7 @@ function renderRevenueDistributionChart() {
       fmtCurrency(dist.p90) +
       ") pulls away sharply from the median (" +
       fmtCurrency(dist.medianRevenue) +
-      "). All 15 top-band listings are one of two products, large group homes or near-lift 3–4BR homes; see Section 1.";
+      "). All 15 top-band listings are one of two products, large group homes or near-lift 3BR+ homes; see Section 1.";
   }
 }
 
@@ -172,10 +172,17 @@ function renderDemographicsStackedBarChart() {
 function renderLiftScatterChart() {
   const ctx = document.getElementById("chart-lift-scatter");
   if (!ctx) return;
-  const datasets = REGION_RESEARCH.regions.map((r) => ({
-    label: r.name,
-    data: REGION_RESEARCH.scatter.filter((p) => p.region === r.id).map((p) => ({ x: p.x, y: p.y, title: p.title, rev: p.rev, br: p.br })),
-    backgroundColor: r.color + "cc",
+  // Colored by size group, not area: the point of this chart is that the
+  // distance effect belongs to mid-size homes.
+  const groups = [
+    { label: "1–2BR", test: (br) => br <= 2, color: "#8b94a3" },
+    { label: "3–4BR", test: (br) => br >= 3 && br <= 4, color: "#075646" },
+    { label: "5BR+", test: (br) => br >= 5, color: "#d99132" },
+  ];
+  const datasets = groups.map((g) => ({
+    label: g.label,
+    data: REGION_RESEARCH.scatter.filter((p) => g.test(p.br)).map((p) => ({ x: p.x, y: p.rev, title: p.title, br: p.br })),
+    backgroundColor: g.color + "cc",
     borderColor: "#ffffff",
     borderWidth: 0.6,
     pointRadius: 4.5,
@@ -192,13 +199,13 @@ function renderLiftScatterChart() {
         legend: { position: "bottom", labels: { boxWidth: 10, font: { size: 11 } } },
         tooltip: {
           callbacks: {
-            label: (c) => c.raw.title + " — " + c.raw.br + "BR, $" + Math.round(c.raw.rev / 1000) + "k ($" + Math.round(c.raw.y / 1000) + "k/BR, " + c.raw.x.toFixed(1) + " km)",
+            label: (c) => c.raw.title + " — " + c.raw.br + "BR, $" + Math.round(c.raw.y / 1000) + "k, " + c.raw.x.toFixed(1) + " km",
           },
         },
       },
       scales: {
         x: { title: { display: true, text: "km to nearest lift base" }, min: 0 },
-        y: { title: { display: true, text: "Revenue potential per bedroom" }, ticks: { callback: (v) => "$" + v / 1000 + "k" } },
+        y: { type: "logarithmic", title: { display: true, text: "Revenue potential (log scale)" }, ticks: { callback: (v) => ([10000, 20000, 50000, 100000, 200000, 300000].includes(v) ? "$" + v / 1000 + "k" : "") } },
       },
     },
   });

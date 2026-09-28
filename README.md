@@ -8,24 +8,34 @@ This is the same template as the Charlotte, NC site (`../../../Charlotte/webpage
 
 ## Status
 
-- **Revised 2026-09-29: distilled from seven region-first boxes to two product boxes.** The seven clusters are now reference geography only; the page no longer treats them as acquisition strategies. The notebook's "Distilling the structure" cells hold the evidence (Fisher exact tests):
-  - **Large Group Home (primary): 5BR+, sleeps 14+, location-flexible.** 11 of 26 reach the Top 10%, and 10 of those 11 are more than 2 km from a lift.
-  - **Ski-Access Home (secondary): 3–4BR within 2 km of a lift base.** 4 of 15 reach the Top 10%, against 0 of 46 for 3–4BR homes farther out (p = 0.003). 73% reach the Top 25%, against 15% (p < 0.001).
-  - Together the two boxes hold **all 15** Top 10% listings.
-  - **Excluded:** 1–2BR anywhere, and 3–4BR beyond 2 km of a lift.
-- **Section 6 (Buy-Box Deep Dive) is intentionally blank**, per the original request.
-- **Regulatory hold:** Summit County proposed nightly-rental bans in Summit Park and Tollgate Canyon (Pine Meadow) in June 2026. They affect 3 of the 11 Top 10% group homes. No final vote had been found as of 2026-09-28.
+- **Two unranked product buy boxes; the seven clusters are reference geography only.** Ranking waits for the Section 6 deep dives (price, inventory, margins, regulation).
+  - **Buy Box 1 · Large Group Home:** 5BR+ sleeping 14+, anywhere legal (product-first). 11 of 26 reach the Top 10%, and 10 of those 11 are more than 2 km from a lift.
+  - **Buy Box 2 · Ski-Access Home:** 3BR+ within 2 km of a lift base (location-first). 5 of 17 reach the Top 10%.
+  - The boxes overlap on 1 listing and together hold all 15 Top 10% listings.
+- **The Ski-Access definition was tested on 2026-09-29** and changed from 3–4BR to **3BR+** (notebook: "Validating the Ski-Access definition"):
+  - Every bedroom bucket was compared near vs. away from the lifts, with a size-adjusted index and Fisher / Mann-Whitney tests.
+  - A log-revenue OLS gives the near-lift effect as ×1.84 (p < 0.001) after controlling for bedrooms. The extra effect at 5BR+ is ×1.16 (p = 0.67), indistinguishable from zero.
+  - Distance thresholds from 1 to 5 km were tested, along with within-size Spearman gradients: 3–4BR ρ = −0.52 (p < 0.001); 5BR+ ρ = −0.20 (p = 0.29).
+  - **3BR floor:** 1–2BR homes gain from ski access but never reach target level.
+  - **No cap:** there is no evidence the premium stops at 5BR+, only N=2 to measure it with. Capping at 4BR would drop a Top 25% 6BR (sleeps 10) near a lift that fits neither box.
+- **Section 7 (Coverage) is removed from the page**, because it repeated Section 1. The segment stats remain in `region_data.js`.
+- **Section 6 is intentionally blank.**
+- **Regulatory hold:** Summit County's proposed nightly-rental bans (June 2026) in Summit Park and Tollgate Canyon (Pine Meadow) affect 3 of the 11 Top 10% group homes.
 
-## Page structure (after the distillation)
+## Page structure
 
-1. **Preliminary direction:** two product cards (spec, must-haves, where) plus one "not a target" line.
-2. **Market:** hero, visitor stats, watch-outs, revenue distribution, and one **performance-drivers table**. Amenity rows are compared inside 4BR+ so size isn't credited to amenities.
-3. **Location:** the map (tier × area filter, plus a 2 km ski-access ring layer), a **size × ski-access matrix**, a lift-distance scatter, one **seven-area reference table** with a size-adjusted index, and a three-bullet conclusion.
-4. **Demographics:** market-wide and by bedroom count. The by-region chart was removed.
-5. **Regulations:** a one-line overview plus one jurisdiction table (previously seven cards).
-7. **Coverage:** one table.
+1. **Preliminary direction:** two unranked product cards, an overlap note, and a "not a target" line.
+2. **Market:** hero, visitor stats, watch-outs, revenue distribution, and the drivers table. Drivers are labeled as **screening signals (association), not proven uplift**, and amenity rows are compared inside 4BR+.
+3. **Location:**
+   - the map: click an area outline for a popup with its generated stats and a small-N warning; 2 km ski-access rings;
+   - **the centerpiece:** a bedrooms × ski-access table (1–2 / 3 / 4 / 3–4 / 5+ / 3BR+) with a size-adjusted index and a one-line read;
+   - the definition-test bullets beside a revenue vs. lift-distance scatter, colored by size;
+   - a collapsed reference-area table;
+   - a three-bullet acquisition conclusion.
+4. **Demographics:** market-wide and by bedroom count.
+5. **Regulations:** one jurisdiction table.
 
-Removed from the page but kept in the notebook: the cluster methodology, the full region scorecard, the region × bedroom heat grid, lift-band table detail, seven region profiles, the Top 10% roster and region demographics. Any comparison resting on fewer than 15 listings is greyed and tagged "directional" (`SMALL_N` in `js/research.js`).
+Removed from the page but kept in the notebook: the cluster methodology, the full scorecards, the region × bedroom grid, lift-band detail, region profiles, the Top 10% roster and region demographics. Anything resting on fewer than 15 listings is greyed and tagged "directional" (`SMALL_N` in `js/research.js`).
 
 ## Where the numbers come from
 
@@ -58,8 +68,8 @@ The areas come from Ward agglomerative clustering on km-projected lat/long (k = 
 
 - `renderDeclarations()` renders the two product cards from `BUY_BOXES` (with a `spec` list) and `REGION_RESEARCH.segments`, and `NOT_TARGETS` below them.
 - `renderMarketOverview()` puts the photo beside the identity and demand drivers; stats and watch-outs run full width underneath.
-- `renderRegulationsSection()` renders `STR_REGULATIONS.rows` as one table, and `renderPendingBuyBoxes()` renders `COVERAGE_ROWS` as one table.
-- `js/research.js` holds the drivers table, the size × ski-access matrix, the area table and the location conclusion.
+- `renderRegulationsSection()` renders `STR_REGULATIONS.rows` as one table. Section 7 and `renderPendingBuyBoxes()` were removed.
+- `js/research.js` holds the drivers table, the bedrooms × ski-access table (from `REGION_RESEARCH.defTest`), the definition test, the collapsed area table and the location conclusion. The area popups are built in the notebook's map cell from the same computed stats.
 - Charlotte's `map.js` was dropped; the folium map is embedded instead.
 
 ## Not yet done

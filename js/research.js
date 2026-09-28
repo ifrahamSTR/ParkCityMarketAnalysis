@@ -2,7 +2,7 @@
  * Section 2 performance drivers and the compressed Section 3 location
  * analysis: size x ski-access matrix, area reference table, and the location
  * conclusion. Numbers come from REGION_RESEARCH (region_data.js, generated);
- * prose from data.js (DRIVERS_NOTE, AREA_ROLES, LOCATION_CONCLUSION).
+ * prose from data.js (DRIVERS_NOTE, MATRIX_READS, LOCATION_CONCLUSION).
  *
  * Small samples: any comparison resting on fewer than SMALL_N listings is
  * rendered muted and marked "directional".
@@ -39,56 +39,71 @@ function renderDrivers() {
   host.innerHTML = html;
 }
 
-// Section 3 — bedroom count x ski access (within REGION_RESEARCH.accessKm
-// of a lift base). This one table answers "does geography still matter once
-// size is considered" and "does ski access matter".
+// Section 3 centerpiece: every bedroom bucket near vs. away from the lifts
+// (REGION_RESEARCH.defTest, from the notebook's "Validating the Ski-Access
+// definition"). Columns: the two sides, the size-adjusted gap, one-line read.
+function matrixCell(n, top10, top25, median, strong, cold) {
+  const cls = (n < SMALL_N ? "is-thin " : "") + (strong ? "matrix-hot" : cold ? "matrix-cold" : "");
+  return '<td class="' + cls + '"><div class="matrix-big">' + top10 + " of " + n + ' <span>in Top 10%</span></div><div class="matrix-sub">' +
+    Math.round(top25) + "% Top 25% · median " + fmtK(median) + (n < SMALL_N ? directionalTag() : "") + "</div></td>";
+}
+
 function renderAccessMatrix() {
   const host = document.getElementById("access-matrix");
   if (!host) return;
   const km = REGION_RESEARCH.accessKm;
-  const cell = (size, access) => REGION_RESEARCH.matrix.find((m) => m.size === size && m.access === access);
-  let html = '<div class="table-scroll"><table class="data-table matrix-table"><thead><tr><th>Bedrooms</th><th>Within ' + km + " km of a lift</th><th>Beyond " + km + " km</th></tr></thead><tbody>";
-  ["1-2BR", "3-4BR", "5BR+"].forEach((size) => {
-    html += '<tr><th scope="row">' + size.replace("-", "–") + "</th>";
-    [true, false].forEach((access) => {
-      const c = cell(size, access);
-      const cls = (c.n < SMALL_N ? "is-thin " : "") + (c.top25Rate >= 50 ? "matrix-hot" : c.top10N === 0 && c.top25Rate < 20 ? "matrix-cold" : "");
-      html += '<td class="' + cls + '"><div class="matrix-big">' + c.top10N + " of " + c.n + ' <span>in Top 10%</span></div><div class="matrix-sub">' +
-        Math.round(c.top25Rate) + "% Top 25% · median " + fmtK(c.medianRev) + (c.n < SMALL_N ? directionalTag() : "") + "</div></td>";
-    });
-    html += "</tr>";
+  let html = '<div class="table-scroll"><table class="data-table matrix-table"><thead><tr><th>Bedrooms</th><th>Within ' + km + " km of a lift</th><th>Beyond " + km +
+    " km</th><th>Size-adjusted index<br><span class=\"muted\">near · away</span></th><th>What ski access does</th></tr></thead><tbody>";
+  REGION_RESEARCH.defTest.forEach((r) => {
+    const total = r.segment === "3BR+";
+    html += '<tr class="' + (total ? "matrix-total" : "") + '"><th scope="row">' + r.segment.replace("-", "–") + "</th>" +
+      matrixCell(r.nNear, r.top10Near, r.top25Near, r.medianNear, r.top25Near >= 50 && r.nNear >= 3, false) +
+      matrixCell(r.nFar, r.top10Far, r.top25Far, r.medianFar, r.top25Far >= 50, r.top10Far === 0 && r.top25Far < 20) +
+      "<td><strong>" + r.indexNear.toFixed(2) + "×</strong> · " + r.indexFar.toFixed(2) + '×</td><td class="cell-note">' + MATRIX_READS[r.segment] + "</td></tr>";
   });
   html += "</tbody></table></div>";
   host.innerHTML = html;
-  const t = REGION_RESEARCH.tests;
-  const cap = document.getElementById("access-matrix-caption");
-  if (cap) {
-    cap.innerHTML =
-      "Ski access changes the outcome for mid-size homes: 3–4BR homes near a lift beat the same homes farther out (Top 10% p = " + t.ski_top10_p.toFixed(3) +
-      ", Top 25% p &lt; 0.001, Fisher exact). 5BR+ homes succeed without it: 10 of the 11 top-band 5BR+ listings are beyond 2 km. The near-lift 5BR+ cell has only 2 listings.";
-  }
 }
 
-// Lift-distance caption under the scatter (band stats from the notebook).
+// Why the Ski-Access box is 3BR+ (not 3-4BR): the definition test, compact.
+function renderDefinitionTest() {
+  const host = document.getElementById("definition-test");
+  if (!host) return;
+  const R = REGION_RESEARCH, g = R.regression, row = (seg) => R.defTest.find((r) => r.segment === seg);
+  const one = row("1-2BR"), five = row("5BR+");
+  const s3 = R.sensitivity.find((x) => x.segment === "3-4BR" && x.km === 3), s5 = R.sensitivity.find((x) => x.segment === "3-4BR" && x.km === 5);
+  host.innerHTML = listHtml([
+    "<strong>Floor at 3BR.</strong> Ski access lifts 1–2BR homes too (" + one.indexNear.toFixed(2) + "× vs " + one.indexFar.toFixed(2) + "×), but only " +
+      Math.round(one.top25Near) + "% of them reach the Top 25%.",
+    "<strong>No cap at 4BR.</strong> After controlling for bedrooms, being near a lift is worth about ×" + g.near.mult.toFixed(2) + " (p &lt; 0.001). The extra effect at 5BR+ (×" +
+      g.near_x_5br.mult.toFixed(2) + ", p = " + g.near_x_5br.p.toFixed(2) + ") is indistinguishable from zero. There's no sign the premium stops at 5BR+; there are just " + five.nNear +
+      " near-lift 5BR+ homes to measure it with.",
+    "<strong>Why it's still a different product.</strong> Away from the lifts, 3–4BR homes almost never reach the top band, but " + Math.round(five.top25Far) +
+      "% of 5BR+ homes reach the Top 25%. Mid-size homes need the location; large homes don't.",
+    "<strong>The 2 km line holds.</strong> At 3 km, " + Math.round(s3.top25Near) + "% of near-lift 3–4BR homes still reach the Top 25%. At 5 km it thins to " + Math.round(s5.top25Near) + "%.",
+  ]);
+}
+
+// Lift-distance caption: adds the within-size gradient the matrix can't show.
 function renderLiftCaption() {
   const host = document.getElementById("lift-caption");
   if (!host) return;
-  const b = REGION_RESEARCH.liftBands;
+  const gr = REGION_RESEARCH.gradients;
   host.innerHTML =
-    "Revenue per bedroom steps down past about 2 km: " + fmtK(b[0].revPerBr) + " within 2 km (N=" + b[0].n + "), then about " + fmtK((b[1].revPerBr + b[2].revPerBr) / 2) +
-    " at 2–10 km and " + fmtK(b[3].revPerBr) + " at 10–20 km (Spearman ρ = " + REGION_RESEARCH.liftRho.toFixed(2) + "). It's a step at the lifts, not a steady slope.";
+    "Within 3–4BR, revenue falls steadily with distance (Spearman ρ = " + gr["3-4BR"].rho.toFixed(2) + ", p &lt; 0.001, N=" + gr["3-4BR"].n + "). Within 5BR+ there's no clear gradient (ρ = " +
+    gr["5BR+"].rho.toFixed(2) + ", p = " + gr["5BR+"].p.toFixed(2) + ", N=" + gr["5BR+"].n + ").";
 }
 
-// Section 3 — the seven areas as one compact reference table.
+// Reference-area numbers, collapsed by default (the map popups carry the
+// same generated numbers). Kept so the figures are also available as a table.
 function renderAreaTable() {
   const host = document.getElementById("area-table");
   if (!host) return;
-  let html = '<div class="table-scroll"><table class="data-table data-table--wrap"><thead><tr><th>Area</th><th>N</th><th>Median revenue</th><th>Top 10%</th><th>Top 25%</th><th>4BR+ share</th><th>Size-adjusted index</th><th>Role in the thesis</th></tr></thead><tbody>';
+  let html = '<div class="table-scroll"><table class="data-table"><thead><tr><th>Area</th><th>N</th><th>Median revenue</th><th>Top 10%</th><th>Top 25%</th><th>4BR+ share</th><th>Size-adjusted index</th></tr></thead><tbody>';
   REGION_RESEARCH.regions.forEach((r) => {
     const idxCls = r.sizeIndex >= 1.1 ? "idx-up" : r.sizeIndex <= 0.9 ? "idx-down" : "";
     html += "<tr" + (r.n < SMALL_N ? ' class="is-thin"' : "") + '><th scope="row">' + regionDot(r) + r.name + (r.n < SMALL_N ? directionalTag() : "") + "</th><td>" + r.n + "</td><td>" + fmtCurrency(r.medianRev) +
-      "</td><td>" + r.top10N + "</td><td>" + Math.round(r.top25Rate) + "%</td><td>" + r.bigShare + '%</td><td class="' + idxCls + '">' + r.sizeIndex.toFixed(2) +
-      '×</td><td class="cell-note">' + AREA_ROLES[r.id] + "</td></tr>";
+      "</td><td>" + r.top10N + "</td><td>" + Math.round(r.top25Rate) + "%</td><td>" + r.bigShare + '%</td><td class="' + idxCls + '">' + r.sizeIndex.toFixed(2) + "×</td></tr>";
   });
   html += "</tbody></table></div>";
   host.innerHTML = html;
@@ -103,6 +118,7 @@ function renderLocationConclusion() {
 function renderClusterResearch() {
   renderDrivers();
   renderAccessMatrix();
+  renderDefinitionTest();
   renderLiftCaption();
   renderAreaTable();
   renderLocationConclusion();

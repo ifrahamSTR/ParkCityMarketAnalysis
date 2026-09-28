@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderMarketOverview();
   renderDemographics();
   renderRegulationsSection();
-  renderPendingBuyBoxes();
   renderRevenueDistributionChart();
   renderDemographicsPieChart();
   renderDemographicsStackedBarChart();

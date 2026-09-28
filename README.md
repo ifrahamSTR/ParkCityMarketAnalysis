@@ -91,7 +91,7 @@ Beware of search results about **Summit County, Colorado**. Its caps and waitlis
 - `renderDeclarations()` pulls each box's stats from `REGION_RESEARCH.segments[box.segmentKey]` (P25–P75 revenue chip, N, median, hit rates) and adds a "Regulatory status" row. Its CTA points at `#region-profiles`, because Section 6 is blank.
 - `renderPendingBuyBoxes()` supports "Pending", "Pending · regulatory hold", "Watch list" and "Excluded" eyebrows, and shows segment stats when a segment is attached.
 - `renderRegulationsSection()` renders an overview card, a region-to-jurisdiction note, and a grid of jurisdiction cards. Sources are linked.
-- `map.js` isn't loaded, because Section 3 uses the embedded folium map. `research.js` defines its own `escapeHtml`.
+- Charlotte's `map.js` (native Leaflet map) was dropped, because Section 3 uses the embedded folium map. `research.js` defines its own `escapeHtml`.
 
 ## Not yet done
 

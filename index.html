@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Park City, UT STR Buy-Box Evaluation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css?v=20260928-pc1" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <div class="site-header__brand">
+      <img class="site-header__logo" src="assets/branding/strsearch-logo.webp" alt="STR Search" />
+      <div class="site-header__title">Park City, UT <span>STR Buy-Box Evaluation</span></div>
+    </div>
+    <nav class="site-nav">
+      <a href="#declaration">Buy Box</a>
+      <a href="#market">Market</a>
+      <a href="#location">Location</a>
+      <a href="#demographics">Demographics</a>
+      <a href="#regulations">Regulations</a>
+      <a href="#deep-dive">Deep Dive</a>
+      <a href="#pending">Coverage</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- Section 1: Buy-box declaration -->
+  <section id="declaration" class="section section--hero">
+    <div class="container">
+      <p class="section-kicker">Recommendation</p>
+      <h1>Three buy boxes for the Park City, UT STR market, each a region paired with the product that wins there</h1>
+      <p class="hero-sub">They are ordered from weakest to strongest by Top 10% hit rate: Mountain Cabins (Summit Park, Pinebrook &amp; Pine Meadow), Heber Valley Group Homes, and Old Town &amp; Deer Valley Ski Access. All three come from a seven-region cluster analysis of the market's 145 listings. The deep dives (comp sets, revenue tiering, amenity evidence) are not built yet. <strong>The Mountain Cabin box is on regulatory hold:</strong> Summit County has proposed banning nightly rentals in Summit Park and Tollgate Canyon (see Section 5).</p>
+      <div id="buybox-declarations" class="declarations-grid"></div>
+    </div>
+  </section>
+
+  <!-- Section 2: Market context -->
+  <section id="market" class="section">
+    <div class="container">
+      <p class="section-kicker">Section 2</p>
+      <h2>The Market</h2>
+      <div id="market-overview-body" class="market-overview"></div>
+
+      <h3 class="subsection-title">Revenue Distribution — Full Market, Top 25%, Top 10%</h3>
+      <div class="chart-card chart-card--wide">
+        <canvas id="chart-revenue-distribution"></canvas>
+      </div>
+      <div id="chart-revenue-distribution-legend" class="chart-legend-row"></div>
+      <p id="chart-revenue-distribution-interpretation" class="section-interpretation"></p>
+
+      <h3 class="subsection-title">What the Top 10% Have in Common</h3>
+      <div id="amenity-signal"></div>
+      <p class="section-interpretation"><strong>A hot tub is table stakes.</strong> All 15 Top 10% listings have one, against 55% of the rest of the market, and it carries the largest size-controlled revenue uplift of any amenity present in 10 or more listings (+69%). Game rooms (73% vs. 22%) and pool tables (67% vs. 11%) are the next-widest gaps. "Size-controlled uplift" compares median revenue with and without the amenity inside each bedroom bucket, so a big house's amenities aren't credited for its size.</p>
+    </div>
+  </section>
+
+  <!-- Section 3: Location analysis + cluster research -->
+  <section id="location" class="section">
+    <div class="container">
+      <p class="section-kicker">Section 3</p>
+      <h2>Location Analysis</h2>
+      <iframe class="embedded-map embedded-map--tall" src="assets/overview/parkcity_overview_map.html?v=20260928-pc1" loading="lazy" title="Interactive map of Park City area STR revenue tiers, seven listing clusters, and demand-driver landmarks"></iframe>
+      <div id="map-interpretation" class="section-interpretation"></div>
+
+      <h3 class="subsection-title">How the Clusters Were Found</h3>
+      <div id="cluster-method" class="method-list"></div>
+
+      <h3 class="subsection-title">Region Scorecard</h3>
+      <p class="subsection-lede">Each column's leader is highlighted. Hit rates use the market-wide thresholds (P90 = $120,568, P75 = $72,247).</p>
+      <div id="region-scorecard"></div>
+
+      <h3 class="subsection-title">Location vs. Size — Median Revenue by Region and Bedroom Count</h3>
+      <p class="subsection-lede">Each cell compares a region against the whole market <em>at the same bedroom count</em>. Green means a real location premium and red a discount; greyed cells rest on a single listing.</p>
+      <div id="region-size-table"></div>
+      <p class="section-interpretation"><strong>Old Town &amp; Deer Valley is the only region with a location premium at every size</strong>, and it widens as homes get bigger (+44% at 3BR, +103% at 4BR). Elsewhere, revenue follows size. Heber runs 22–47% below market through 4BR and only reaches the market median at 5BR+. Its edge there is volume, not rate: it holds 15 of the market's 31 5BR+ listings. Pine Meadow is the reverse: its small cabins beat the market by 61%, while its 5BR+ houses trail it by 23%.</p>
+
+      <h3 class="subsection-title">Distance to the Lifts</h3>
+      <div class="chart-row chart-row--lift">
+        <div class="chart-card chart-card--tall">
+          <canvas id="chart-lift-scatter"></canvas>
+        </div>
+        <div>
+          <div id="lift-bands"></div>
+          <p id="lift-interpretation" class="section-interpretation"></p>
+        </div>
+      </div>
+
+      <h3 class="subsection-title" id="region-profiles">Region Profiles</h3>
+      <div id="region-profiles-grid" class="region-grid"></div>
+
+      <h3 class="subsection-title">The Top 10% Roster</h3>
+      <p id="top10-roster-summary" class="subsection-lede"></p>
+      <div id="top10-roster"></div>
+    </div>
+  </section>
+
+  <!-- Section 4: Traveller demographics -->
+  <section id="demographics" class="section">
+    <div class="container">
+      <p class="section-kicker">Section 4</p>
+      <h2>Traveller Demographics</h2>
+      <div id="demographics-intro-body"></div>
+
+      <div class="chart-row">
+        <div>
+          <h3 class="subsection-title">Review Composition — Whole Market</h3>
+          <div class="chart-card">
+            <canvas id="chart-demographics-pie"></canvas>
+          </div>
+          <div id="chart-demographics-pie-legend" class="chart-legend-row"></div>
+        </div>
+        <div>
+          <h3 class="subsection-title">Review Composition by Bedroom Count</h3>
+          <div class="chart-card">
+            <canvas id="chart-demographics-bedroom"></canvas>
+          </div>
+        </div>
+      </div>
+      <h3 class="subsection-title">Review Composition by Region</h3>
+      <div class="chart-card chart-card--wide">
+        <canvas id="chart-demographics-region"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: STR regulations -->
+  <section id="regulations" class="section">
+    <div class="container">
+      <p class="section-kicker">Section 5</p>
+      <h2>STR Regulations</h2>
+      <div id="regulations-body"></div>
+    </div>
+  </section>
+
+  <!-- Section 6: buy-box deep dive -- intentionally blank for now. -->
+  <section id="deep-dive" class="section">
+    <div class="container">
+      <p class="section-kicker">Section 6</p>
+      <h2>Buy-Box Deep Dive</h2>
+    </div>
+  </section>
+
+  <!-- Section 7: Buy-box coverage status -->
+  <section id="pending" class="section section--note">
+    <div class="container">
+      <p class="section-kicker">Section 7</p>
+      <h2>Buy-Box Coverage</h2>
+      <div id="pending-buyboxes"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Preliminary and provisional. No property has been underwritten and no acquisition decision has been made. Revenue figures are gross Revenue Potential benchmarks from the market dataset (145 listings, 2026-07-29 snapshot), not a full underwriting model.</p>
+  </div>
+</footer>
+
+<!-- Shared lightbox: reused by every real-photo figure on the page. -->
+<div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Expanded image">
+  <button type="button" class="lightbox__close" aria-label="Close image" onclick="closeLightbox()">&times;</button>
+  <figure class="lightbox__figure">
+    <img id="lightbox-image" src="" alt="" />
+    <figcaption id="lightbox-caption"></figcaption>
+  </figure>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="js/region_data.js?v=20260928-pc1"></script>
+<script src="js/data.js?v=20260928-pc1"></script>
+<script src="js/render.js?v=20260928-pc1"></script>
+<script src="js/research.js?v=20260928-pc1"></script>
+<script src="js/charts.js?v=20260928-pc1"></script>
+<script src="js/main.js?v=20260928-pc1"></script>
+</body>
+</html>

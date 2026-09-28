@@ -8,15 +8,24 @@ This is the same template as the Charlotte, NC site (`../../../Charlotte/webpage
 
 ## Status
 
-- **Sections 1–5 and 7 are built. Section 6 (Buy-Box Deep Dive) is intentionally blank**, per the request that created this page. It shows only its kicker and heading. `main.js` does not call `renderDeepDiveTabs()`/`renderDeepDive()`, but `render.js` still carries the full deep-dive code from Charlotte for when a deep dive is built.
-- **Three buy boxes are named and scoped from the cluster research.** Each one is a region paired with the product that wins there, because the size-controlled table shows region alone isn't enough:
-  - Mountain Cabins: Summit Park, Pinebrook and Pine Meadow, 4BR+.
-  - Heber Valley Group Homes: 5BR+, sleeps 14+.
-  - Old Town and Deer Valley Ski Access: 3BR+.
-- **The Mountain Cabin box is flagged "regulatory hold".** Summit County, UT proposed nightly-rental bans in Summit Park and Tollgate Canyon (Pine Meadow) in June 2026. No final vote had been found as of 2026-09-28. Re-check before building its deep dive.
-- **One watch-list segment and two exclusions** appear in Section 7:
-  - Watch list: Jordanelle and Hideout 4BR+.
-  - Excluded: all 1–2BR, and Snyderville Basin plus Midway.
+- **Revised 2026-09-29: distilled from seven region-first boxes to two product boxes.** The seven clusters are now reference geography only; the page no longer treats them as acquisition strategies. The notebook's "Distilling the structure" cells hold the evidence (Fisher exact tests):
+  - **Large Group Home (primary): 5BR+, sleeps 14+, location-flexible.** 11 of 26 reach the Top 10%, and 10 of those 11 are more than 2 km from a lift.
+  - **Ski-Access Home (secondary): 3–4BR within 2 km of a lift base.** 4 of 15 reach the Top 10%, against 0 of 46 for 3–4BR homes farther out (p = 0.003). 73% reach the Top 25%, against 15% (p < 0.001).
+  - Together the two boxes hold **all 15** Top 10% listings.
+  - **Excluded:** 1–2BR anywhere, and 3–4BR beyond 2 km of a lift.
+- **Section 6 (Buy-Box Deep Dive) is intentionally blank**, per the original request.
+- **Regulatory hold:** Summit County proposed nightly-rental bans in Summit Park and Tollgate Canyon (Pine Meadow) in June 2026. They affect 3 of the 11 Top 10% group homes. No final vote had been found as of 2026-09-28.
+
+## Page structure (after the distillation)
+
+1. **Preliminary direction:** two product cards (spec, must-haves, where) plus one "not a target" line.
+2. **Market:** hero, visitor stats, watch-outs, revenue distribution, and one **performance-drivers table**. Amenity rows are compared inside 4BR+ so size isn't credited to amenities.
+3. **Location:** the map (tier × area filter, plus a 2 km ski-access ring layer), a **size × ski-access matrix**, a lift-distance scatter, one **seven-area reference table** with a size-adjusted index, and a three-bullet conclusion.
+4. **Demographics:** market-wide and by bedroom count. The by-region chart was removed.
+5. **Regulations:** a one-line overview plus one jurisdiction table (previously seven cards).
+7. **Coverage:** one table.
+
+Removed from the page but kept in the notebook: the cluster methodology, the full region scorecard, the region × bedroom heat grid, lift-band table detail, seven region profiles, the Top 10% roster and region demographics. Any comparison resting on fewer than 15 listings is greyed and tagged "directional" (`SMALL_N` in `js/research.js`).
 
 ## Where the numbers come from
 
@@ -41,59 +50,17 @@ These commands used the `airbnb_visual_tier` conda env, which has pandas, scikit
 
 `js/data.js` holds prose and config only. Where a sentence there quotes a number, it was checked against the notebook output. If the workbook changes, re-read the prose, because the generated numbers will update but the sentences will not.
 
-## Cluster method (Section 3)
+## Cluster method (reference geography)
 
-Charlotte's regions came from a teammate's hand classification. No equivalent exists for Park City, so here the regions are **data-derived, then named**:
-
-- **Clustering:** Ward agglomerative clustering on km-projected lat/long, with **k = 7**.
-- **Choosing k:** k = 4–10 were tested with KMeans and Ward. Their silhouette scores are near-identical at every k. k = 7 is the first k where every cluster is one real place. Higher k values only split off 3–5-listing sub-pockets, which are documented inside the region profiles:
-  - Timber Lakes.
-  - Canyons/Kimball versus Silver Creek.
-  - Rural Coalville.
-- **Naming:** clusters are named by their centroid (`pc_common._name_cluster`), so re-runs label them stably.
-- **Hit rates:** these are **market-wide** (P90 = $120,568, P75 = $72,247), the same convention as Charlotte, Shenandoah and Clearwater.
-- **Lift distance:** measured to the nearest of six lift bases (coordinates in `../notebooks/landmarks.json`).
-
-Section 3 goes further than Charlotte's map and bullets. It adds:
-
-- the method notes;
-- a region scorecard;
-- a size-controlled heat table (region × bedroom count against the market median);
-- a scatter of revenue per bedroom against lift distance, with a banded table;
-- seven region profile cards;
-- the Top 10% roster.
-
-This code lives in `js/research.js` and the new charts in `js/charts.js`.
-
-The map is a folium map built in the notebook. It uses the same combined **AND** tier × region filter as Charlotte's. It also has:
-
-- dashed region outlines (buffered convex hulls, with the scorecard on hover);
-- region labels;
-- small badge landmarks, so they don't cover listings: ski bases, towns, lakes and parks, attractions, airports;
-- an optional terrain basemap.
-
-## Regulations (Section 5)
-
-The market spans several jurisdictions, so `STR_REGULATIONS` is structured as one overview card plus six jurisdiction cards:
-
-- Park City;
-- unincorporated Summit County;
-- Heber City;
-- Wasatch County, MIDA and Hideout;
-- Midway;
-- Kamas and Coalville.
-
-Each card keeps Charlotte's categories: tier, permit and residency, operating limits, investor notes. Items marked "unverified" came only from secondary sources or from official pages that could not be loaded.
-
-Beware of search results about **Summit County, Colorado**. Its caps and waitlists don't apply here.
+The areas come from Ward agglomerative clustering on km-projected lat/long (k = 7), named by centroid (`pc_common._name_cluster`). k = 4–10 were tested, and higher k only split off 3–5-listing pockets. On the page this is a one-line note under the map; the full method stays in the notebook. Hit rates use the market-wide thresholds (P90 = $120,568, P75 = $72,247). Lift distance is measured to the nearest of six lift bases (`../notebooks/landmarks.json`), and the ski-access zone is set at 2 km (`ACCESS_KM` in the notebook). Regulations were researched 2026-09-28; see `STR_REGULATIONS` in `js/data.js` for the sourced detail.
 
 ## Code changes from the Charlotte template
 
-- The Section 2 heading uses `MARKET_NAME`. Section 2 also renders `MARKET_OVERVIEW.watchOuts`: the 2025/26 record-low snow year, and Sundance moving to Boulder from 2027.
-- `renderDeclarations()` pulls each box's stats from `REGION_RESEARCH.segments[box.segmentKey]` (P25–P75 revenue chip, N, median, hit rates) and adds a "Regulatory status" row. Its CTA points at `#region-profiles`, because Section 6 is blank.
-- `renderPendingBuyBoxes()` supports "Pending", "Pending · regulatory hold", "Watch list" and "Excluded" eyebrows, and shows segment stats when a segment is attached.
-- `renderRegulationsSection()` renders an overview card, a region-to-jurisdiction note, and a grid of jurisdiction cards. Sources are linked.
-- Charlotte's `map.js` (native Leaflet map) was dropped, because Section 3 uses the embedded folium map. `research.js` defines its own `escapeHtml`.
+- `renderDeclarations()` renders the two product cards from `BUY_BOXES` (with a `spec` list) and `REGION_RESEARCH.segments`, and `NOT_TARGETS` below them.
+- `renderMarketOverview()` puts the photo beside the identity and demand drivers; stats and watch-outs run full width underneath.
+- `renderRegulationsSection()` renders `STR_REGULATIONS.rows` as one table, and `renderPendingBuyBoxes()` renders `COVERAGE_ROWS` as one table.
+- `js/research.js` holds the drivers table, the size × ski-access matrix, the area table and the location conclusion.
+- Charlotte's `map.js` was dropped; the folium map is embedded instead.
 
 ## Not yet done
 

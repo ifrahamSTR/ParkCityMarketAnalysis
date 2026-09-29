@@ -1231,15 +1231,16 @@ function compSetTierColumn(tierKey, tierLabel, properties) {
 }
 function compSetComparisonBlock(data) {
   const wrap = el("div", "comp-set-comparison");
+  const lab = data.labels || { high: "Top (High Tier)", mid: "Mid Tier", low: "Low Tier" };
   if (data.intro) wrap.appendChild(el("div", "dd-block__body", data.intro));
   (data.categories || []).forEach((cat) => {
     const catWrap = el("div", "bb2-tier-compare__category");
     catWrap.appendChild(el("h4", "dd-block__title", cat.title));
     if (cat.interpretation) catWrap.appendChild(el("div", "dd-note comp-tier-category__note", cat.interpretation));
     const grid = el("div", "bb2-tier-compare__grid");
-    grid.appendChild(compSetTierColumn("high", "Top (High Tier)", cat.tiers.high));
-    grid.appendChild(compSetTierColumn("mid", "Mid Tier", cat.tiers.mid));
-    grid.appendChild(compSetTierColumn("low", "Low Tier", cat.tiers.low));
+    grid.appendChild(compSetTierColumn("high", lab.high, cat.tiers.high));
+    grid.appendChild(compSetTierColumn("mid", lab.mid, cat.tiers.mid));
+    grid.appendChild(compSetTierColumn("low", lab.low, cat.tiers.low));
     catWrap.appendChild(grid);
     wrap.appendChild(catWrap);
   });

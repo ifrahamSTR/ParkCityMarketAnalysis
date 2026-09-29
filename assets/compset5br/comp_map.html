@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_07e904d083108baf6f67c46df06ec9ac {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    <div style='position:fixed;bottom:18px;left:12px;z-index:9999;background:#fff;padding:8px 10px;border:1px solid #DCE2E6;border-radius:6px;font:12px Arial'><b>Approved 5BR+ comps (N=14)</b><br><span style='color:#1B7A43;font-size:15px'>●</span> High (3)<br><span style='color:#D9A404;font-size:15px'>●</span> Medium (4)<br><span style='color:#8FA6B8;font-size:15px'>●</span> Low (7)<br><span style='color:#C0473F'>●</span> Lift base &nbsp; <span style='color:#5b3f78'>★</span> Town</div>
+    
+            <div class="folium-map" id="map_07e904d083108baf6f67c46df06ec9ac" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_07e904d083108baf6f67c46df06ec9ac = L.map(
+                "map_07e904d083108baf6f67c46df06ec9ac",
+                {
+                    center: [40.63, -111.49],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 10,
+  "zoomControl": true,
+  "preferCanvas": false,
+  "zoomSnap": 0.25,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_07e904d083108baf6f67c46df06ec9ac);
+
+            
+
+        
+    
+            var tile_layer_485d35c04962a6c5065aed14e8bea059 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_485d35c04962a6c5065aed14e8bea059.addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+            var circle_marker_7d1f0b2921951d72bb515f8ee9365879 = L.circleMarker(
+                [40.6474, -111.4985],
+                {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+            circle_marker_7d1f0b2921951d72bb515f8ee9365879.bindTooltip(
+                `<div>
+                     Park City Mountain — Town Lift (Main St)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b11461279ebc717265db16c0f813d9b0 = L.circleMarker(
+                [40.6526, -111.5082],
+                {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+            circle_marker_b11461279ebc717265db16c0f813d9b0.bindTooltip(
+                `<div>
+                     Park City Mountain — Mountain Village base
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_948f26dc1c4cc032280de2483185b84d = L.circleMarker(
+                [40.6855, -111.5565],
+                {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+            circle_marker_948f26dc1c4cc032280de2483185b84d.bindTooltip(
+                `<div>
+                     Canyons Village (new Skyway gondola 2026/27)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_557bfa8af390b84f5614c005e8f0b5e6 = L.circleMarker(
+                [40.6373, -111.4783],
+                {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+            circle_marker_557bfa8af390b84f5614c005e8f0b5e6.bindTooltip(
+                `<div>
+                     Deer Valley — Snow Park Lodge
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a961db8732e5e557d3ae016f500ee2ba = L.circleMarker(
+                [40.636, -111.4516],
+                {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+            circle_marker_a961db8732e5e557d3ae016f500ee2ba.bindTooltip(
+                `<div>
+                     Deer Valley — Jordanelle Express Gondola base
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c474ec206f15afdf903d69603f19bc59 = L.circleMarker(
+                [40.6207, -111.4415],
+                {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+            circle_marker_c474ec206f15afdf903d69603f19bc59.bindTooltip(
+                `<div>
+                     Deer Valley East Village (Expanded Excellence, approx.)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_022ed3f1ac6c046f924663f81ed96447 = L.marker(
+                [40.6426, -111.4949],
+                {
+}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+            var div_icon_8e2be6367967414356a47351220aa3cc = L.divIcon({
+  "html": "\u003cdiv style=\"font:600 11px Arial;color:#5b3f78;white-space:nowrap;\"\u003e\u2605 Historic Main Street, Park City\u003c/div\u003e",
+  "className": "empty",
+});
+        
+    
+            marker_022ed3f1ac6c046f924663f81ed96447.bindTooltip(
+                `<div>
+                     Historic Main Street, Park City
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_022ed3f1ac6c046f924663f81ed96447.setIcon(div_icon_8e2be6367967414356a47351220aa3cc);
+            
+    
+            var marker_a1e90db29636510c8b2f3eff21ddeaf7 = L.marker(
+                [40.7272, -111.5441],
+                {
+}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+            var div_icon_42e9026285dd3a05febb2ee04398d1fb = L.divIcon({
+  "html": "\u003cdiv style=\"font:600 11px Arial;color:#5b3f78;white-space:nowrap;\"\u003e\u2605 Kimball Junction\u003c/div\u003e",
+  "className": "empty",
+});
+        
+    
+            marker_a1e90db29636510c8b2f3eff21ddeaf7.bindTooltip(
+                `<div>
+                     Kimball Junction
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_a1e90db29636510c8b2f3eff21ddeaf7.setIcon(div_icon_42e9026285dd3a05febb2ee04398d1fb);
+            
+    
+            var marker_6fdeee07dbabaebcddf79a47c342838a = L.marker(
+                [40.507, -111.4135],
+                {
+}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+            var div_icon_0ecdd5451b501569b63876cceb5060b3 = L.divIcon({
+  "html": "\u003cdiv style=\"font:600 11px Arial;color:#5b3f78;white-space:nowrap;\"\u003e\u2605 Heber City Main Street\u003c/div\u003e",
+  "className": "empty",
+});
+        
+    
+            marker_6fdeee07dbabaebcddf79a47c342838a.bindTooltip(
+                `<div>
+                     Heber City Main Street
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6fdeee07dbabaebcddf79a47c342838a.setIcon(div_icon_0ecdd5451b501569b63876cceb5060b3);
+            
+    
+            var circle_marker_9a86ab3126f1611e78646f7ab7221041 = L.circleMarker(
+                [40.74413, -111.6167523],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1B7A43", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_26a041cd1fdc78ec18975649ae829d8f = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_2f610ef4c34ab66a50b1d06fd8871139 = $(`<div id="html_2f610ef4c34ab66a50b1d06fd8871139" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Park City Pines</b> · <span style='color:#1B7A43;font-weight:700'>High</span><br>$353,712 · ADR $1,364 · 72% occ<br>5BR / 5.5BA · sleeps 16<br>Summit Park & Pinebrook · 15.3 km to Main St<br><a href='https://www.airbnb.com/rooms/1249462576717491685' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_26a041cd1fdc78ec18975649ae829d8f.setContent(html_2f610ef4c34ab66a50b1d06fd8871139);
+            
+        
+
+        circle_marker_9a86ab3126f1611e78646f7ab7221041.bindPopup(popup_26a041cd1fdc78ec18975649ae829d8f)
+        ;
+
+        
+    
+    
+            circle_marker_9a86ab3126f1611e78646f7ab7221041.bindTooltip(
+                `<div>
+                     Park City Pines · High · $354k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_13eb44d4a5c8ecebbcaee6c5f07a6aab = L.circleMarker(
+                [40.6506, -111.5015],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1B7A43", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_7987e76006cded18b79648ffe23668c4 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_c5df3e720a3f70f83f2736d86e769f45 = $(`<div id="html_c5df3e720a3f70f83f2736d86e769f45" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Ski Views · Main St</b> · <span style='color:#1B7A43;font-weight:700'>High</span><br>$332,483 · ADR $1,717 · 52% occ<br>5BR / 7BA · sleeps 14<br>Old Town & Deer Valley · 1.0 km to Main St<br><a href='https://www.airbnb.com/rooms/1157237634486793116' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_7987e76006cded18b79648ffe23668c4.setContent(html_c5df3e720a3f70f83f2736d86e769f45);
+            
+        
+
+        circle_marker_13eb44d4a5c8ecebbcaee6c5f07a6aab.bindPopup(popup_7987e76006cded18b79648ffe23668c4)
+        ;
+
+        
+    
+    
+            circle_marker_13eb44d4a5c8ecebbcaee6c5f07a6aab.bindTooltip(
+                `<div>
+                     Ski Views · Main St · High · $332k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f8f2f6bd031973d1da5f27763989a84b = L.circleMarker(
+                [40.6452, -111.4967],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1B7A43", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_7df087e5b61ff774e9fb233f89786d14 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_0365cdb00e56a130d65d7a00a0c17ace = $(`<div id="html_0365cdb00e56a130d65d7a00a0c17ace" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Main St Penthouse</b> · <span style='color:#1B7A43;font-weight:700'>High</span><br>$308,996 · ADR $1,572 · 53% occ<br>5BR / 5.5BA · sleeps 10<br>Old Town & Deer Valley · 0.3 km to Main St<br><a href='https://www.airbnb.com/rooms/1385552512811946048' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_7df087e5b61ff774e9fb233f89786d14.setContent(html_0365cdb00e56a130d65d7a00a0c17ace);
+            
+        
+
+        circle_marker_f8f2f6bd031973d1da5f27763989a84b.bindPopup(popup_7df087e5b61ff774e9fb233f89786d14)
+        ;
+
+        
+    
+    
+            circle_marker_f8f2f6bd031973d1da5f27763989a84b.bindTooltip(
+                `<div>
+                     Main St Penthouse · High · $309k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6db540c938f7894cf69ea0075eddeb76 = L.circleMarker(
+                [40.53336, -111.39773],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#D9A404", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_f8a0f62efaf3d306ca9bf48fdcb4e014 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_d6db79b3f6b770ca88bbd3a1589b5041 = $(`<div id="html_d6db79b3f6b770ca88bbd3a1589b5041" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Heber Luxury Home</b> · <span style='color:#D9A404;font-weight:700'>Medium</span><br>$236,957 · ADR $1,096 · 58% occ<br>6BR / 8BA · sleeps 16<br>Heber Valley · 14.7 km to Main St<br><a href='https://www.airbnb.com/rooms/1024156820038696814' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_f8a0f62efaf3d306ca9bf48fdcb4e014.setContent(html_d6db79b3f6b770ca88bbd3a1589b5041);
+            
+        
+
+        circle_marker_6db540c938f7894cf69ea0075eddeb76.bindPopup(popup_f8a0f62efaf3d306ca9bf48fdcb4e014)
+        ;
+
+        
+    
+    
+            circle_marker_6db540c938f7894cf69ea0075eddeb76.bindTooltip(
+                `<div>
+                     Heber Luxury Home · Medium · $237k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_62bb3a3cbd3d0b76546514338fc602cc = L.circleMarker(
+                [40.80211, -111.5134424],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#D9A404", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_64c763ca904b24613b88876a80d458ff = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_f86c2a177f957087dd35152ae3b5bda4 = $(`<div id="html_f86c2a177f957087dd35152ae3b5bda4" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Aspen Bliss</b> · <span style='color:#D9A404;font-weight:700'>Medium</span><br>$231,451 · ADR $1,666 · 40% occ<br>7BR / 5BA · sleeps 16<br>Pine Meadow & Rockport · 17.8 km to Main St<br><a href='https://www.airbnb.com/rooms/1365458875910313024' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_64c763ca904b24613b88876a80d458ff.setContent(html_f86c2a177f957087dd35152ae3b5bda4);
+            
+        
+
+        circle_marker_62bb3a3cbd3d0b76546514338fc602cc.bindPopup(popup_64c763ca904b24613b88876a80d458ff)
+        ;
+
+        
+    
+    
+            circle_marker_62bb3a3cbd3d0b76546514338fc602cc.bindTooltip(
+                `<div>
+                     Aspen Bliss · Medium · $231k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_28d729954386b987c693da70985e8ce4 = L.circleMarker(
+                [40.73732, -111.6044082],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#D9A404", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_fa468ed84078e5542350ddb1fce7966e = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_7f6e7276b8a13b6ab01d4da480475e3c = $(`<div id="html_7f6e7276b8a13b6ab01d4da480475e3c" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Views at Matterhorn</b> · <span style='color:#D9A404;font-weight:700'>Medium</span><br>$222,455 · ADR $1,473 · 47% occ<br>6BR / 4.5BA · sleeps 16<br>Summit Park & Pinebrook · 14.0 km to Main St<br><a href='https://www.airbnb.com/rooms/1434740790176924686' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_fa468ed84078e5542350ddb1fce7966e.setContent(html_7f6e7276b8a13b6ab01d4da480475e3c);
+            
+        
+
+        circle_marker_28d729954386b987c693da70985e8ce4.bindPopup(popup_fa468ed84078e5542350ddb1fce7966e)
+        ;
+
+        
+    
+    
+            circle_marker_28d729954386b987c693da70985e8ce4.bindTooltip(
+                `<div>
+                     Views at Matterhorn · Medium · $222k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0e1ecc8d237ec910ad0572f51536e36b = L.circleMarker(
+                [40.65065, -111.4730884],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#D9A404", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_8b9110256806155afee509c06d09b023 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_b0857b9ee88f264eed28a3bc200e2621 = $(`<div id="html_b0857b9ee88f264eed28a3bc200e2621" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Triple Master DV</b> · <span style='color:#D9A404;font-weight:700'>Medium</span><br>$218,378 · ADR $1,487 · 43% occ<br>5BR / 6.5BA · sleeps 15<br>Old Town & Deer Valley · 2.0 km to Main St<br><a href='https://www.airbnb.com/rooms/1389181092282483465' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_8b9110256806155afee509c06d09b023.setContent(html_b0857b9ee88f264eed28a3bc200e2621);
+            
+        
+
+        circle_marker_0e1ecc8d237ec910ad0572f51536e36b.bindPopup(popup_8b9110256806155afee509c06d09b023)
+        ;
+
+        
+    
+    
+            circle_marker_0e1ecc8d237ec910ad0572f51536e36b.bindTooltip(
+                `<div>
+                     Triple Master DV · Medium · $218k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1b696c8cf5a40e44485e39347cfb3732 = L.circleMarker(
+                [40.49206, -111.42838],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_38083f8cf3a7d23a2536cc636c7e27fa = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_f6da59a062fe7ee68b2bb0e88220940f = $(`<div id="html_f6da59a062fe7ee68b2bb0e88220940f" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Heber Mountain Home</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$154,625 · ADR $795 · 51% occ<br>6BR / 3BA · sleeps 16<br>Heber Valley · 17.7 km to Main St<br><a href='https://www.airbnb.com/rooms/44106304' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_38083f8cf3a7d23a2536cc636c7e27fa.setContent(html_f6da59a062fe7ee68b2bb0e88220940f);
+            
+        
+
+        circle_marker_1b696c8cf5a40e44485e39347cfb3732.bindPopup(popup_38083f8cf3a7d23a2536cc636c7e27fa)
+        ;
+
+        
+    
+    
+            circle_marker_1b696c8cf5a40e44485e39347cfb3732.bindTooltip(
+                `<div>
+                     Heber Mountain Home · Low · $155k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_90b5eae31b686535cf0f90f9b15a4964 = L.circleMarker(
+                [40.45835, -111.46877],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_5a4150d0af99803b1a1625c8cc9dda1b = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_8b9dcd166632e6b07e24e0623eda822b = $(`<div id="html_8b9dcd166632e6b07e24e0623eda822b" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Heber Resort Home</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$154,272 · ADR $807 · 49% occ<br>6BR / 3BA · sleeps 16<br>Heber Valley · 20.6 km to Main St<br><a href='https://www.airbnb.com/rooms/31833751' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_5a4150d0af99803b1a1625c8cc9dda1b.setContent(html_8b9dcd166632e6b07e24e0623eda822b);
+            
+        
+
+        circle_marker_90b5eae31b686535cf0f90f9b15a4964.bindPopup(popup_5a4150d0af99803b1a1625c8cc9dda1b)
+        ;
+
+        
+    
+    
+            circle_marker_90b5eae31b686535cf0f90f9b15a4964.bindTooltip(
+                `<div>
+                     Heber Resort Home · Low · $154k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1c6d5d7a6188f6291d3dee0a69575d6a = L.circleMarker(
+                [40.7105, -111.5463],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_5356ba3486f7ec61ba810b9da84a8f91 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_a64a2eb6bf191213efa0245daa976bff = $(`<div id="html_a64a2eb6bf191213efa0245daa976bff" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Cabriolet Family Escape</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$152,606 · ADR $580 · 72% occ<br>5BR / 4BA · sleeps 14<br>Snyderville Basin · 8.7 km to Main St<br><a href='https://www.airbnb.com/rooms/46525589' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_5356ba3486f7ec61ba810b9da84a8f91.setContent(html_a64a2eb6bf191213efa0245daa976bff);
+            
+        
+
+        circle_marker_1c6d5d7a6188f6291d3dee0a69575d6a.bindPopup(popup_5356ba3486f7ec61ba810b9da84a8f91)
+        ;
+
+        
+    
+    
+            circle_marker_1c6d5d7a6188f6291d3dee0a69575d6a.bindTooltip(
+                `<div>
+                     Cabriolet Family Escape · Low · $153k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d5ebda8fd1765a2edc875ca1de85dab9 = L.circleMarker(
+                [40.73026, -111.48722],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_c3eee276cf909a165286aba1325e3a51 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_d05b3429b7c6a4fa37eb258a76255424 = $(`<div id="html_d05b3429b7c6a4fa37eb258a76255424" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Ski & Tee Chalet</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$128,560 · ADR $1,174 · 30% occ<br>5BR / 5.5BA · sleeps 16<br>Snyderville Basin · 9.8 km to Main St<br><a href='https://www.airbnb.com/rooms/1040050459591588704' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_c3eee276cf909a165286aba1325e3a51.setContent(html_d05b3429b7c6a4fa37eb258a76255424);
+            
+        
+
+        circle_marker_d5ebda8fd1765a2edc875ca1de85dab9.bindPopup(popup_c3eee276cf909a165286aba1325e3a51)
+        ;
+
+        
+    
+    
+            circle_marker_d5ebda8fd1765a2edc875ca1de85dab9.bindTooltip(
+                `<div>
+                     Ski & Tee Chalet · Low · $129k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_bd5f26c0a556f1f2d11e4fd6c3835619 = L.circleMarker(
+                [40.5323, -111.3988],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_b7a30ff15376f3b75278e9a59e50962d = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_20fdf6c8530464843c55924ffdac2a8f = $(`<div id="html_20fdf6c8530464843c55924ffdac2a8f" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Heber Heights</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$127,206 · ADR $784 · 43% occ<br>8BR / 6.5BA · sleeps 16<br>Heber Valley · 14.7 km to Main St<br><a href='https://www.airbnb.com/rooms/674588257747701243' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_b7a30ff15376f3b75278e9a59e50962d.setContent(html_20fdf6c8530464843c55924ffdac2a8f);
+            
+        
+
+        circle_marker_bd5f26c0a556f1f2d11e4fd6c3835619.bindPopup(popup_b7a30ff15376f3b75278e9a59e50962d)
+        ;
+
+        
+    
+    
+            circle_marker_bd5f26c0a556f1f2d11e4fd6c3835619.bindTooltip(
+                `<div>
+                     Heber Heights · Low · $127k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_88edd91ac685bf83c624fb2fa6aef88e = L.circleMarker(
+                [40.4566, -111.4692],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_c3cb58e24564a05a9ea8782891283b5e = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_6ff44757b7fce9a65f363c337174d08c = $(`<div id="html_6ff44757b7fce9a65f363c337174d08c" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>MTN Lake Retreat</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$124,539 · ADR $520 · 66% occ<br>5BR / 3.5BA · sleeps 14<br>Heber Valley · 20.8 km to Main St<br><a href='https://www.airbnb.com/rooms/1092081000062966212' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_c3cb58e24564a05a9ea8782891283b5e.setContent(html_6ff44757b7fce9a65f363c337174d08c);
+            
+        
+
+        circle_marker_88edd91ac685bf83c624fb2fa6aef88e.bindPopup(popup_c3cb58e24564a05a9ea8782891283b5e)
+        ;
+
+        
+    
+    
+            circle_marker_88edd91ac685bf83c624fb2fa6aef88e.bindTooltip(
+                `<div>
+                     MTN Lake Retreat · Low · $125k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3a2ff0aa8098b5eda00a31ce982a78e2 = L.circleMarker(
+                [40.52265, -111.4017788],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 1.5}
+            ).addTo(map_07e904d083108baf6f67c46df06ec9ac);
+        
+    
+        var popup_16281d77ea6fe82ffe61306ca954a11a = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_3703db4f7105c9375a3b54ae955b4edf = $(`<div id="html_3703db4f7105c9375a3b54ae955b4edf" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Deer Valley Views (Heber)</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$114,718 · ADR $827 · 38% occ<br>5BR / 4.5BA · sleeps 16<br>Heber Valley · 15.5 km to Main St<br><a href='https://www.airbnb.com/rooms/1282265192128639367' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_16281d77ea6fe82ffe61306ca954a11a.setContent(html_3703db4f7105c9375a3b54ae955b4edf);
+            
+        
+
+        circle_marker_3a2ff0aa8098b5eda00a31ce982a78e2.bindPopup(popup_16281d77ea6fe82ffe61306ca954a11a)
+        ;
+
+        
+    
+    
+            circle_marker_3a2ff0aa8098b5eda00a31ce982a78e2.bindTooltip(
+                `<div>
+                     Deer Valley Views (Heber) · Low · $115k
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            map_07e904d083108baf6f67c46df06ec9ac.fitBounds(
+                [[40.4366, -111.6467523], [40.82211, -111.36773]],
+                {}
+            );
+        
+</script>
+</html>

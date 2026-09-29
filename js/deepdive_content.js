@@ -1,17 +1,18 @@
 /**
- * Section 6 — Buy-Box Deep Dives (pre-comp-set), attached to BUY_BOXES.
+ * Section 6 — Buy-Box Deep Dives, attached to BUY_BOXES.
  *
  * Structure follows Charlotte's Lake Buy Box (overview hero -> grouped
- * sections -> recap), with Clearwater's large-home thinking (buy the space
- * vs. add the equipment; Must-Have / Nice-to-Have / Auto-Add) where it fits
- * the 5BR+ product. The two boxes deliberately differ: the Large Group Home
- * is a product/execution spec; the Ski-Access Home is a location spec with a
- * minimum-product standard.
+ * sections -> comp set -> recap), with Clearwater's large-home thinking (buy
+ * the space vs. add the equipment; Must-Have / Nice-to-Have / Auto-Add).
  *
- * Every number is read from DEEPDIVE (deepdive_data.js, generated from
- * ../notebooks/parkcity_buybox_deepdive.ipynb). Photos are reference
- * examples from the market population, chosen after viewing every gallery
- * in both populations — NOT comps. Comp sets are pending analyst input.
+ * Buy Box 1 (Large Group Home) has two evidence layers, kept apart:
+ *   - product population: DEEPDIVE (deepdive_data.js, parkcity_buybox_deepdive.ipynb)
+ *   - analyst-approved revenue comp set: COMPSET_5BR (compset_data.js,
+ *     parkcity_5br_compset.ipynb), rendered with the helpers in compset.js
+ * Buy Box 2 (Ski-Access Home) is still pre-comp-set.
+ *
+ * Every number is read from the generated data. Photos are labelled either
+ * "Approved Group Home comp" or "Market reference" (ddPhoto in deepdive.js).
  */
 
 (function () {
@@ -35,58 +36,109 @@
     title: "Comp Set Analysis — pending analyst-provided comp set",
     body:
       "<p>The revenue comp set, design comp set and High / Mid / Low comp tiers for " + what +
-      " will come from the analyst-curated list. Nothing on this tab is an approved comp: the listings pictured are reference examples from the whole product population, chosen to show execution patterns.</p>",
+      " will come from the analyst-curated list. Nothing on this tab is an approved " + what.replace(/^the /, "") + " comp: the listings pictured are reference examples from the whole product population, chosen to show execution patterns. A few are also approved Group Home comps and are labelled as such.</p>",
   });
 
   // -------------------------------------------------------------------------
-  // Buy Box 1 · Large Group Home
+  // Buy Box 1 · Large Group Home — product population (DEEPDIVE, July
+  // snapshot) + the analyst-approved revenue comp set (COMPSET_5BR).
   // -------------------------------------------------------------------------
   const group = BUY_BOXES.find((b) => b.id === "group");
   const g = DG.summary;
+  const T = CS.tiers, DEC = CS.decomposition, POS = CS.position;
+  const OPEN = csRoute("Heber"), HOLD = csRoute("Summit"), PCR = csRoute("Park City");
+  const cc = csComp, cA = csAmen, cD = csDriver, cK = csConcept;
+  const upComps = CS.comps.filter((c) => c.tier !== "Low");
+  const lowComps = CS.comps.filter((c) => c.tier === "Low");
+  const upMaxGpb = Math.max.apply(null, upComps.map((c) => c.guests_per_bath));
+  const lowOverGpb = lowComps.filter((c) => c.guests_per_bath > upMaxGpb);
+  const lowUnderGpb = lowComps.length - lowOverGpb.length;
+  const n6 = (t) => CS.comps.filter((c) => c.tier === t && c.bedrooms >= 6).length;
+  const allHigh5 = CS.comps.filter((c) => c.tier === "High").every((c) => c.bedrooms === 5);
+  const pcUp = T.High.park_city_side + T.Medium.park_city_side, nUp = T.High.n + T.Medium.n;
+  const amenOf = (a) => cA(a).High_n + " of " + T.High.n + " High · " + cA(a).Medium_n + " of " + T.Medium.n + " Medium · " + cA(a).Low_n + " of " + T.Low.n + " Low";
+  const pctOf = (share) => Math.round(share) + "%";
+  const cStats = (s) => ddK(cc(s).revenue) + ", ADR " + csUsd(cc(s).adr) + " at " + Math.round(cc(s).occ) + "%";
+  const bandText = CS_TIERS.map((t) => t + " " + csRange(T[t].rev_min, T[t].rev_max) + " (" + T[t].n + ")").join(" · ");
+  const lowMode = (m) => (CS.low_modes[m] || []).length;
+  const heberLux = cc("Heber Luxury Home"), pines = cc("Park City Pines"), pent = cc("Main St Penthouse");
+
+  // Section 1 card: the comp set refines the thesis and "Where" (numbers generated).
+  group.thesis =
+    "Buy the product: lift access isn't required, and the top comp is " + pines.lift_km.toFixed(0) + " km from a lift. The approved comps add the constraint: the product gets a home into the comp set, the market side sets the tier. " +
+    pcUp + " of the " + nUp + " comps above $200k are on the Park City side.";
+  group.name = "5BR+ homes sleeping 14+, lift-flexible";
+  group.spec = group.spec.map((r) => (r[0] === "Screening signals"
+    ? [r[0], "Bathrooms first (≤3.5 guests per bath; every Medium/High comp meets it), a hot tub (all 14 comps), a real entertainment room and an evening deck with outdoor dining and fire."]
+    : r)).filter((r) => r[0] !== "Where").concat([
+    ["Approved comps", bandText + ". Purchase price pending."],
+    ["Where", "Heber Valley and Snyderville are the open supply; " + OPEN.Low + " of their " + OPEN.n + " comps are Low tier (median " + ddK(OPEN.rev_median) + "). $200k+ needs a Park City-side address: Old Town / Deer Valley (rare 5BR+ inventory) or Summit Park / Pine Meadow (<strong>on hold</strong> pending Summit County's proposed ban). <strong>Avoid</strong> Midway."],
+  ]);
+
+  const ROLES = {
+    "Park City Pines": "Product-built High: full après deck, " + pines.lift_km.toFixed(0) + " km from a lift",
+    "Ski Views · Main St": "Old Town location + 7 baths for 14",
+    "Main St Penthouse": "Exception: sleeps " + pent.sleeps + ". A Main Street location ceiling, not a group-home base case",
+    "Heber Luxury Home": "The one Heber comp above Low: " + heberLux.baths + " baths + " + heberLux.ent_stack + " entertainment amenities",
+    "Aspen Bliss": "Top-tier ADR, low occupancy: a remote log lodge",
+    "Views at Matterhorn": "Indoor sport court + game room; Summit Park",
+    "Triple Master DV": "Deer Valley + " + cc("Triple Master DV").baths + " baths, almost no amenities",
+    "Heber Mountain Home": "3 baths for 16 caps it",
+    "Heber Resort Home": "Most amenities in the set, still Low (flagged Exclude_Comp in the export; kept as supplied)",
+    "Cabriolet Family Escape": "Fills nights (" + Math.round(cc("Cabriolet Family Escape").occ) + "%) at the lowest-but-one rate",
+    "Ski & Tee Chalet": "Meets the structural spec; lowest occupancy in the set",
+    "Heber Heights": "8BR / 6.5BA: size doesn't break the Heber rate",
+    "MTN Lake Retreat": "Lowest ADR in the set",
+    "Deer Valley Views (Heber)": "Top kitchen score in the set, lowest revenue. It's in Heber",
+  };
+
   Object.assign(group, {
-    status: "pre-comp-set",
+    status: "comp-set",
     overview: {
-      statusBadge: "Pre-comp-set specification · comp set and acquisition pricing pending",
+      statusBadge: "Revenue comp set complete · 14 analyst-approved comps · purchase-price underwriting pending",
       thesis:
-        "Buy a real 5–6BR house with the bathrooms and floor plan to host 14–16 people, then run it as a private resort: a hot tub, a genuine entertainment room, and a designed, finished interior. Location is mainly a legality filter here, not the revenue engine.",
+        "Buy a 5BR+ house with the bathrooms to host 14–16 people (≤3.5 guests per bath), a hot tub, a real entertainment room and an evening deck, then run it as a private resort. " +
+        "<strong>The product gets a home into the comp set; the market side sets the tier.</strong> In Heber and Snyderville, the approved comps earn " + csRange(T.Low.rev_min, T.Low.rev_max) + ". " +
+        pcUp + " of the " + nUp + " comps above $200k are on the Park City side.",
       whyItWorks:
-        "Inside this product, revenue follows <strong>bathrooms, the entertainment stack and execution</strong>, not headcount: across the product, advertised sleeps barely correlates with revenue. The overall Visual Score doesn't separate winners either (ρ " + gC("Overall Visual Score").rho_full_adj.toFixed(2) +
-        " after adjustment). What does is looking like a resort.",
+        "Across the approved comps, " + pctOf(DEC.high_vs_low.adr_share) + " of the Low-to-High revenue gap is ADR (" + DEC.high_vs_low.adr_ratio.toFixed(1) + "× the rate), and only " + pctOf(DEC.high_vs_low.occ_share) +
+        " is occupancy. Sleeps, bedroom count, amenity count and the Visual Score don't separate the tiers. What does is <strong>where the house is, how many bathrooms it has, and whether it has an après program</strong>.",
       heroImage: gp("hero", "A multi-zone deck with string lights, a fire pit and lounge seating: the outdoor program that a 14–16-guest group actually uses."),
       chips: [
-        { label: "5BR+ · 6BR+ preferred" },
+        { label: "5BR+ (6BR+ adds nothing in the comps)" },
         { label: "≤3.5 guests per bathroom" },
         { label: "Sleeps 14–16" },
-        { label: "Hot tub required" },
-        { label: "2+ entertainment amenities" },
-        { label: "Designed, resort-like interior" },
+        { label: "Hot tub (" + cA("Hot tub").all_n + " of 14 comps)" },
+        { label: "Entertainment room + après deck" },
+        { label: "Park City side for $200k+" },
       ],
-      revenueChips: [
-        { label: "Product population", value: "N=" + g.n + " · median " + ddK(g.median) },
-        { label: "Reach the Top 10%", value: ddOf(g.top10_n, g.n) },
-      ],
+      revenueChips: CS_TIERS.map((t) => ({ label: "Comp tier · " + t, value: csRange(T[t].rev_min, T[t].rev_max) + " (" + T[t].n + ")" })),
     },
     pendingSections: [
       { groupTitle: "Acquisition Checklist" },
       {
         title: "Buy the Real Estate for This vs. Add It During Conversion",
+        body: "<p>Each requirement carries two layers of evidence: the <strong>product population</strong> (all " + g.n + " Park City 5BR+ homes sleeping 14+, July snapshot) and the <strong>approved comp set</strong> (14 analyst-selected revenue comps, September pull).</p>",
         html: () =>
           ddStatStrip(g, "listings in the product") +
           ddChecklist([
-            ["5–6+ bedrooms", "buy", "A bedroom count can't be added cheaply; 6BR+ out-earns 5BR.",
-              "5BR: " + ddOf(gB("bedrooms", "5BR").top10_n, gB("bedrooms", "5BR").n) + " Top 10% · 6BR+: " + ddOf(gB("bedrooms", "6BR").top10_n + gB("bedrooms", "7BR+").top10_n, gB("bedrooms", "6BR").n + gB("bedrooms", "7BR+").n), "strong"],
-            ["Bathrooms: ≤3.5 guests per bath (≈4.5+ baths for 16)", "buy", "The strongest structural signal in the product, and the hardest thing to retrofit.",
-              "≤3.5 guests/bath: " + ddOf(gB("guests_per_bath", "≤3.5 guests/bath").top10_n, gB("guests_per_bath", "≤3.5 guests/bath").n) + " Top 10% · 4.6+: " + ddOf(gB("guests_per_bath", "4.6+").top10_n, gB("guests_per_bath", "4.6+").n), "strong"],
+            ["5BR+ (don't pay up for a 6th bedroom)", "buy", "A bedroom count can't be added cheaply, but past five it doesn't earn more.",
+              "Population: 5BR " + ddOf(gB("bedrooms", "5BR").top10_n, gB("bedrooms", "5BR").n) + " Top 10%. Comps: " + (allHigh5 ? "all 3 High comps are 5BR" : "") + "; 6BR+ is " + n6("Medium") + " of " + T.Medium.n + " Medium and " + n6("Low") + " of " + T.Low.n + " Low (" + csRho(cD("Bedrooms")) + ")", "strong"],
+            ["Bathrooms: ≤3.5 guests per bath (≈4.5+ baths for 16)", "buy", "The strongest structural signal, and the hardest thing to retrofit. Necessary, not sufficient.",
+              "Population: ≤3.5 guests/bath " + ddOf(gB("guests_per_bath", "≤3.5 guests/bath").top10_n, gB("guests_per_bath", "≤3.5 guests/bath").n) + " Top 10%. Comps: every Medium/High comp is at ≤" + upMaxGpb.toFixed(1) + "; the " + lowOverGpb.length + " comps above that are all Low", "strong"],
+            ["A Park City-side address, legal for 14–16 guests, for Medium/High revenue", "buy", "The address sets the rate. Heber City caps occupancy at 16; Summit Park and Pine Meadow face a proposed ban; Old Town / Deer Valley follow Park City zoning.",
+              "Comps: " + pcUp + " of " + nUp + " above $200k are Park City side; Heber/Snyderville median ADR " + csUsd(OPEN.adr_median) + " vs " + csUsd(PCR.adr_median) + " in Old Town / Deer Valley. Section 5 for the rules", "strong"],
             ["A floor plan for 16: great room, dining for 12–16, a second social or game space", "either", "The rooms have to exist; the pool table, arcade and furniture can be added.",
-              "2+ entertainment amenities: " + ddOf(gF("2+ entertainment amenities").top25_with, gF("2+ entertainment amenities").n_with) + " Top 25% vs " + ddOf(gF("2+ entertainment amenities").top25_without, gF("2+ entertainment amenities").n_without) + " (" + ddP(gF("2+ entertainment amenities").p_top25) + ")", "strong"],
-            ["Deck or yard with room for a hot tub, fire pit and lounge zones", "either", "The footprint and structure are bought; the hot tub and furniture are added.",
-              "Hot tub: " + ddOf(gF("Hot tub").top25_with, gF("Hot tub").n_with) + " Top 25% vs " + ddOf(gF("Hot tub").top25_without, gF("Hot tub").n_without) + " (" + ddP(gF("Hot tub").p_top25) + ")", "strong"],
-            ["Legal for 14–16 guests at this address", "buy", "Heber City caps occupancy at 16; unincorporated Wasatch County is restrictive by default; Summit Park and Pine Meadow face a proposed ban.", "Section 5 (researched 2026-09-28)", "strong"],
-            ["Designed, finished interior (kitchen, great room, bedrooms)", "add", "Addable, but it's the biggest conversion cost. Price it before offering.",
-              "Resort-like execution survives full adjustment (ρ " + gC("Resort-like").rho_full_adj.toFixed(2) + ", " + ddP(gC("Resort-like").p_full_adj) + ")", "directional"],
+              "Population: 2+ entertainment amenities " + ddOf(gF("2+ entertainment amenities").top25_with, gF("2+ entertainment amenities").n_with) + " Top 25% vs " + ddOf(gF("2+ entertainment amenities").top25_without, gF("2+ entertainment amenities").n_without) +
+              ". Comps: an entry ticket, not a tier-lifter (median " + cD("ent_stack").High.median + " entertainment amenities in High and " + cD("ent_stack").Low.median + " in Low)", "strong"],
+            ["A deck with room for a hot tub, outdoor dining, fire and lounge zones", "either", "The footprint and structure are bought; the hot tub, sauna and furniture are added.",
+              "Population: hot tub " + ddOf(gF("Hot tub").top25_with, gF("Hot tub").n_with) + " Top 25% vs " + ddOf(gF("Hot tub").top25_without, gF("Hot tub").n_without) +
+              ". Comps: hot tub in all 14; outdoor dining + fire pit in every High comp; après program " + csRho(cD("apres")) + " (" + ddP(cD("apres").p) + ")", "strong"],
+            ["Designed, finished interior (kitchen, great room, bedrooms)", "add", "Addable, but the biggest conversion cost. Price it before offering. Finish alone doesn't lift a home out of Low.",
+              "Population: resort-like survives adjustment (ρ " + gC("Resort-like").rho_full_adj.toFixed(2) + "). Comps: no visual concept separates the tiers; the highest kitchen score in the set belongs to the lowest comp", "directional"],
             ["Sauna, pool table, arcade, ping pong", "add", "Equipment that goes into an existing room or yard.",
-              "Pool table: " + ddOf(gF("Pool table").top25_with, gF("Pool table").n_with) + " Top 25% · Sauna: " + ddOf(gF("Sauna").top25_with, gF("Sauna").n_with), "directional"],
-            ["Sport or pickleball court", "either", "Needs lot area and grading; the court itself is added.", "Pickleball: " + ddOf(gF("Pickleball").top25_with, gF("Pickleball").n_with) + " Top 25% (thin)", "directional"],
+              "Comps: sauna " + amenOf("Sauna") + "; pool table " + amenOf("Pool table"), "directional"],
+            ["Pickleball court, pool, playground", "either", "Needs lot area; not worth paying for.", "Comps: pickleball " + amenOf("Pickleball") + "; pool only in " + cA("Pool").Low_n + " Low comps", "weak"],
             ["Crib, pack 'n play, high chair, board games", "add", "Cheap. Provide them regardless of the evidence.", "No positive signal on its own (see Amenities)", "weak"],
           ]),
       },
@@ -95,27 +147,27 @@
       {
         title: "Bedrooms, Bathrooms & Capacity",
         body:
-          "<p><strong>Bathrooms, not headcount.</strong> Within this product, bathroom count tracks revenue (ρ " + DG.capacity.rho.Baths.toFixed(2) + ") and guests per bathroom tracks it inversely (ρ " + DG.capacity.rho.guests_per_bath.toFixed(2) +
-          "). Advertised sleeps barely moves it (ρ " + DG.capacity.rho.Sleeps.toFixed(2) + "): 16-sleepers edge out 14–15 in the table, but headcount isn't the lever, and only " + DG.summary.sleeps_advertised_over_16 +
-          " listings even claim more than 16 in the title. <strong>The floor is real:</strong> 5BR+ homes sleeping under 14 are 0 of " + DG.boundary_small_sleeps.n + " in the Top 10%. 6BR+ pulls ahead of 5BR, but on few listings.</p>" +
-          "<p><strong>Sleeping layout:</strong> about two beds per bedroom is the norm among winners. Bunk rooms are common: " + DG.capacity.bunk.top25_with + " of " + DG.capacity.bunk.n_with +
-          " listings that mention one reach the Top 25%, against " + DG.capacity.bunk.top25_without + " of " + DG.capacity.bunk.n_without +
-          " that don't (text-derived, directional). A bunk room is a cheap way to reach 14–16 without adding bathrooms, so check the bathroom count before counting on it.</p>",
+          "<p><strong>Bathrooms, not headcount.</strong> Within the product population, bathroom count tracks revenue (ρ " + DG.capacity.rho.Baths.toFixed(2) + ") and guests per bathroom tracks it inversely (ρ " + DG.capacity.rho.guests_per_bath.toFixed(2) +
+          "). Advertised sleeps barely moves it (ρ " + DG.capacity.rho.Sleeps.toFixed(2) + "). <strong>The floor is real:</strong> 5BR+ homes sleeping under 14 are 0 of " + DG.boundary_small_sleeps.n + " in the Top 10%.</p>" +
+          "<p><strong>Comp check.</strong> The approved comps confirm the bathroom finding and overturn the 6BR+ preference. Guests per bath is the one capacity variable that separates the tiers (" + csRho(cD("guests_per_bath")) + ", " + ddP(cD("guests_per_bath").p) +
+          "; median " + cD("guests_per_bath").High.median.toFixed(1) + " High, " + cD("guests_per_bath").Medium.median.toFixed(1) + " Medium, " + cD("guests_per_bath").Low.median.toFixed(1) + " Low). Bedrooms (" + csRho(cD("Bedrooms")) + "), sleeps (" + csRho(cD("Sleeps")) + ") and beds (" + csRho(cD("Bed_Count")) +
+          ") don't. All three High comps are 5BR.</p>",
         html: () =>
           ddTableRow([
-            ddBucketTable(DG.capacity.bedrooms, "Bedrooms"),
-            ddBucketTable(DG.capacity.guests_per_bath, "Bathroom pressure"),
-            ddBucketTable(DG.capacity.sleeps_boundary, "Sleeps (all 5BR+)"),
+            ddBucketTable(DG.capacity.bedrooms, "Bedrooms (population)"),
+            ddBucketTable(DG.capacity.guests_per_bath, "Bathroom pressure (population)"),
+            ddBucketTable(DG.capacity.sleeps_boundary, "Sleeps, all 5BR+ (population)"),
           ]),
         images: [
           gp("bunk", "A kids' bunk room. Bunks are the usual route to 14–16 guests, but this listing (3 baths for 16) shows capacity alone isn't enough."),
-          gp("dining_12", "Dining for 12+ with the view: a table that seats the whole group is part of the product, not furniture."),
+          gp("dining_12", "Dining for 10 with the view: a table that seats the whole group is part of the product, not furniture."),
         ],
       },
       {
         title: "Group Usability — Great Room, Kitchen & a Second Space",
         body:
-          "<p>Sixteen people need <strong>one room where everyone fits</strong> (a great room open to a long dining table), <strong>a kitchen built for several cooks</strong> (a long island with seating, double ovens) and <strong>somewhere else to go</strong> (a game or media room, or a second living area) so families and groups can coexist. The winners photograph these as distinct spaces; ordinary homes show one living room and a standard kitchen.</p>",
+          "<p>Sixteen people need <strong>one room where everyone fits</strong> (a great room open to a long dining table), <strong>a kitchen built for several cooks</strong> (a long island with seating, double ovens) and <strong>somewhere else to go</strong> (a game or media room, or a second living area) so families and groups can coexist. " +
+          "<strong>Comp check:</strong> every tier's galleries show a group-sized great room and dining for 10–12. It is table stakes for the comp set, not what separates High from Low (see the visual comparison below).</p>",
         images: [
           gp("great_room", "A great room scaled for the group, with seating for a dozen and the view as the focal point."),
           gp("kitchen_strong", "The kitchen standard among winners: a long island with bar seating for eight, pendant lighting, double ovens."),
@@ -126,51 +178,66 @@
       {
         title: "Architecture & Design",
         body:
-          "<p><strong>Style is flexible; execution isn't.</strong> Winners span a dark contemporary mountain home, a true log lodge and a suburban resort home with a pool and courts. What they share is being <em>designed</em>: big glass, vaulted or beamed ceilings, a finished outdoor program. The recurring ordinary product is the builder-grade subdivision house (vinyl siding, stock finishes, a tract lot). It's large and clean, but it isn't an experience.</p>" +
-          "<p><strong>Buy the bones, not the finish:</strong> good ceiling heights, glass and an outdoor footprint are real-estate decisions. Furniture and styling can be redone, at a cost.</p>",
+          "<p><strong>Style is flexible; execution isn't.</strong> Strong homes span a dark contemporary mountain home, a true log lodge and an Old Town modern farmhouse. What they share is being <em>designed</em>: big glass, vaulted or beamed ceilings, a finished outdoor program. The recurring ordinary product is the builder-grade subdivision house.</p>" +
+          "<p><strong>Comp check:</strong> style spans every tier (contemporary builds are High, Medium and Low). The suburban resort home pictured below, with pool, courts and play structure, is a <em>Low</em> comp at " + ddK(cc("Heber Resort Home").revenue) +
+          ". Its program got it into the comp set, but not past the Heber rate. <strong>Buy the bones, not the finish:</strong> ceiling heights, glass and an outdoor footprint are real-estate decisions.</p>",
         images: [
           gp("arch_contemporary", "Contemporary mountain: dark exterior, clean lines, lit at dusk."),
           gp("arch_lodge", "A traditional log lodge works equally well when it's executed at this level."),
-          gp("arch_resort", "A suburban lot turned into a resort: pool, loungers and a play structure. The architecture is ordinary; the program isn't."),
+          gp("arch_resort", "A suburban lot turned into a resort: pool, loungers and a play structure. In the comps it earns Low-tier revenue."),
           gp("arch_tract", "Counterexample: a builder-grade subdivision house. Large and well photographed (Visual Score 94), but ordinary revenue."),
         ],
       },
       {
         title: "Outdoor Program",
         body:
-          "<p><strong>The hot tub is non-negotiable.</strong> None of the " + gF("Hot tub").n_without + " listings without one reach even the Top 25% (" + ddP(gF("Hot tub").p_top25) + "). Beyond that, winners build <strong>zones</strong>: a lounge with a view, a fire pit circle, a sport or pickleball court, a putting green. Fire pits are common but rarely photographed (only " +
-          DG.confirm.fire_pit.confirmed + " of " + DG.confirm.fire_pit.claimed + " claimed fire pits are visible in the gallery), and outdoor dining shows no signal on its own. <strong>Buy the footprint and the deck structure; add the rest.</strong> A hot tub on a plain deck is the minimum, not the standard.</p>",
+          "<p><strong>The hot tub is non-negotiable.</strong> None of the " + gF("Hot tub").n_without + " product listings without one reach even the Top 25% (" + ddP(gF("Hot tub").p_top25) + "), and all 14 approved comps have one. " +
+          "<strong>Comp check: what separates the tiers is the kind of outdoor program.</strong> Every High comp has outdoor dining and a fire pit (outdoor dining: " + amenOf("Outdoor dining") + "). Their decks are elevated evening spaces: a rooftop over Main Street, a treetop deck with hammocks and a fire table. " +
+          "Backyard-lot amenities point the other way: pickleball, a pool and a playground appear only in Low comps. <strong>Buy the deck footprint; add the evening program.</strong></p>",
         images: [
           gp("deck_zones", "A fire-pit lounge on a wraparound deck: an evening zone, separate from the hot tub."),
           gp("hot_tub_view", "A rooftop hot tub framed on the town view: the hot tub sold as part of the view."),
-          gp("sport_court", "A private sport court with a mountain backdrop: needs lot area, which is a real-estate decision."),
+          gp("sport_court", "A backyard pickleball court with a mountain backdrop. It needs lot area, and in the comps it only appears in the Low tier."),
           gp("hot_tub_plain", "Counterexample: a hot tub on a plain porch. It meets the requirement but builds no experience."),
         ],
       },
 
       { groupTitle: "Amenities" },
       {
+        title: "Amenity Prevalence — Approved Comp Set",
+        body:
+          "<p>Left: how often each tracked amenity appears in each tier. Right: which amenities each comp has, High → Medium → Low in revenue order, with the tracked-amenity count at the end of each row. Flags are the export's host-reported <code>HAS_*</code> fields (movie theater is in none of the comps, so it's left off).</p>" +
+          "<ul class=\"tight-list\"><li><strong>Table stakes:</strong> the hot tub is in all 14. The game room (" + amenOf("Game room") + ") and pool table (" + amenOf("Pool table") + ") are common in every tier.</li>" +
+          "<li><strong>What High adds:</strong> an evening program. Outdoor dining and a fire pit are in every High comp; the sauna is in " + cA("Sauna").High_n + " of " + T.High.n + ".</li>" +
+          "<li><strong>What only Low has:</strong> backyard-lot amenities, namely pickleball (" + cA("Pickleball").Low_n + "), a pool (" + cA("Pool").Low_n + ") and a playground (" + cA("Playground").Low_n + "). <strong>" + cc("Heber Resort Home").short + "</strong> has the most amenities in the set (" + cc("Heber Resort Home").amen_count + ") and earns " + ddK(cc("Heber Resort Home").revenue) + ".</li>" +
+          "<li><strong>Count isn't the lever:</strong> median tracked amenities " + cD("amen_count").High.median + " High, " + cD("amen_count").Medium.median + " Medium, " + cD("amen_count").Low.median + " Low (" + csRho(cD("amen_count")) + "). Two comps with a single tracked amenity sit in Medium and Low. The difference is which amenities, and where the house is.</li></ul>",
+        chartsRow: [
+          { file: "assets/" + CS.charts.prevalence, alt: "Grouped bar chart of amenity prevalence by comp revenue tier", caption: "Amenity prevalence by tier, approved comps (High N=" + T.High.n + ", Medium N=" + T.Medium.n + ", Low N=" + T.Low.n + ")." },
+          { file: "assets/" + CS.charts.presence, alt: "Heatmap of amenity presence for each of the 14 approved comps", caption: "Amenity presence by comp, High → Medium → Low. Colored = present." },
+        ],
+      },
+      {
         title: "Amenity Evidence Inside the Product",
         body:
-          "<p>Each row compares listings <em>inside this product</em> with and without the feature. These are screening signals, not proven revenue uplift: better-run homes tend to have more of everything. <strong>Photo check:</strong> hot tubs (" +
+          "<p>The population layer: each row compares <em>all</em> 5BR+/14+ listings with and without the feature (July snapshot). These are screening signals, not proven revenue uplift. <strong>Photo check:</strong> hot tubs (" +
           DG.confirm.hot_tub.confirmed + " of " + DG.confirm.hot_tub.claimed + ") and game rooms (" + DG.confirm.game_room.confirmed + " of " + DG.confirm.game_room.claimed +
-          ") are usually visible in the gallery when claimed. Gyms never are (" + DG.confirm.gym.confirmed + " of " + DG.confirm.gym.claimed + "), so the gym flag is unreliable. <strong>Baseline, not differentiators:</strong> BBQ grill (" + gF("BBQ grill").n_with + " of " + g.n + "), indoor fireplace (" + gF("Indoor fireplace").n_with + ") and air conditioning (" + gF("Air conditioning").n_with + ") are near-universal. Ping pong and arcade games move with the game room (see Must-Have's).</p>",
+          ") usually show in the gallery when claimed. Gyms never do (" + DG.confirm.gym.confirmed + " of " + DG.confirm.gym.claimed + "), so the gym flag is unreliable, and that includes the two High comps that list one. <strong>Baseline:</strong> BBQ grill (" + gF("BBQ grill").n_with + " of " + g.n + "), indoor fireplace (" + gF("Indoor fireplace").n_with + ") and air conditioning (" + gF("Air conditioning").n_with + ").</p>",
         html: () =>
           ddFeatureTable(DG.amenities.filter((r) => !["3+ entertainment amenities", "BBQ grill", "Indoor fireplace", "Air conditioning", "Ping pong", "Arcade games"].includes(r.feature)), {
             "Hot tub": ["Must-have", "must"], "2+ entertainment amenities": ["Must-have", "must"], "Game room": ["Must-have space", "must"],
             "Pool table": ["Nice-to-have #1", "nice"], "Sauna": ["Nice-to-have #2", "nice"], "Ping pong": ["Auto-add", "auto"], "Arcade games": ["Auto-add", "auto"],
-            "Fire pit": ["Auto-add", "auto"], "Pickleball": ["Nice-to-have (lot)", "nice"], "Gym": ["Unreliable flag", "weak"], "Pool": ["Thin — capex", "weak"],
-            "Theater": ["Not supported", "weak"], "Outdoor dining area": ["Auto-add", "auto"], "BBQ grill": ["Baseline", "base"], "Indoor fireplace": ["Baseline", "base"],
+            "Fire pit": ["Auto-add", "auto"], "Pickleball": ["Not a criterion", "weak"], "Gym": ["Unreliable flag", "weak"], "Pool": ["Not a criterion", "weak"],
+            "Theater": ["Not supported", "weak"], "Outdoor dining area": ["Auto-add (après)", "auto"], "BBQ grill": ["Baseline", "base"], "Indoor fireplace": ["Baseline", "base"],
             "Pack 'n play / crib": ["Auto-add (cheap)", "auto"], "Air conditioning": ["Baseline", "base"],
           }),
       },
       {
         title: "Must-Have's",
         body:
-          "<p>A hot tub, plus <strong>a real entertainment space holding at least two entertainment amenities</strong> (game room, pool table, sauna, pickleball, theater, pool). Homes with two or more reach the Top 25% " +
+          "<p>A hot tub, plus <strong>a real entertainment space holding at least two entertainment amenities</strong> (game room, pool table, sauna, theater, golf simulator). In the product population, homes with two or more reach the Top 25% " +
           ddOf(gF("2+ entertainment amenities").top25_with, gF("2+ entertainment amenities").n_with) + " times, against " +
-          ddOf(gF("2+ entertainment amenities").top25_without, gF("2+ entertainment amenities").n_without) + " for those without. The room is the acquisition requirement; the equipment is added.</p>",
-        items: ["Hot tub", "Game / entertainment room (the space)", "2+ entertainment amenities", "BBQ grill", "Indoor fireplace"],
+          ddOf(gF("2+ entertainment amenities").top25_without, gF("2+ entertainment amenities").n_without) + " without. In the comps it is the entry ticket, not a tier-lifter. The room is the acquisition requirement; the equipment is added.</p>",
+        items: ["Hot tub", "Game / entertainment room (the space)", "2+ entertainment amenities", "Outdoor dining + fire on the deck", "BBQ grill", "Indoor fireplace"],
         images: [
           gp("game_room_1", "A dedicated game level: ping pong, arcade cabinets, foosball, a bar and a TV lounge in one room."),
           gp("game_room_2", "A pool table and shuffleboard in a second living space, so the kids' zone and the adult lounge can run at once."),
@@ -179,14 +246,14 @@
       },
       {
         ranked: {
-          note: "Ranked by Top 25% and median-revenue difference inside the product. Items with fewer than 5 listings on either side are flagged as thin rather than ranked.",
+          note: "Ranked by Top 25% and median-revenue difference inside the product population, with the comp-set prevalence in each note. Items with fewer than 5 listings on either side are flagged as thin rather than ranked.",
           items: ddRanked(DG.amenities, [
-            ["Pool table", "The single strongest amenity signal in the product. Cheap to add once the game-room space exists (pictured under Must-Have's).", []],
-            ["Sauna", "A strong luxury signal. A barrel or indoor sauna is an add-on, not a real-estate requirement.", [gp("sauna_1", "An outdoor cabin sauna tucked into the deck."), gp("sauna_2", "A cedar indoor sauna.")]],
-            ["Pickleball", "Every listing with a court reaches the Top 25%, but it needs lot area. Directional.", [gp("pickleball", "A pickleball court beside the pool.")], true],
+            ["Pool table", "The strongest amenity signal in the product population. Comps: " + amenOf("Pool table") + ". Cheap to add once the room exists.", []],
+            ["Sauna", "A strong luxury signal. Comps: " + amenOf("Sauna") + ". A barrel or indoor sauna is an add-on, not a real-estate requirement.", [gp("sauna_1", "An outdoor cabin sauna tucked into the deck."), gp("sauna_2", "A cedar indoor sauna.")]],
+            ["Pickleball", "Every population listing with a court reaches the Top 25%, but in the comps the court appears only in the Low tier (" + cA("Pickleball").Low_n + " of " + T.Low.n + "). Not a criterion.", [gp("pickleball", "A pickleball court beside the pool.")], true],
             ["Gym", "Never visible in any gallery, so the flag is unreliable. Not a buying criterion.", [], true],
-            ["Pool", "Both listings with a pool are Top 10%, but a pool is heavy capex with a short season. Not a criterion.", [], true],
-            ["Theater", "Theater listings don't outperform (1 of 3 reach the Top 25%). Not supported.", [], true],
+            ["Pool", "Heavy capex with a short season; in the comps it appears only in Low (" + cA("Pool").Low_n + " of " + T.Low.n + "). Not a criterion.", [], true],
+            ["Theater", "Theater listings don't outperform (1 of 3 reach the Top 25%), and no comp has one. Not supported.", [], true],
           ]),
         },
       },
@@ -194,25 +261,25 @@
         title: "Auto-Add (Cheap to Provide)",
         body:
           "<p>Low-cost items to provide at conversion regardless of their statistical signal:</p>" +
-          "<ul><li><strong>Fire pit and outdoor lounge furniture</strong> — common among winners; the fire pit rarely shows in photos, so photograph it.</li>" +
+          "<ul><li><strong>Outdoor dining, fire table and lounge furniture</strong> — the evening program every High comp has; photograph it.</li>" +
           "<li><strong>Ping pong, arcade cabinets, board games</strong> — fill the entertainment room.</li>" +
           "<li><strong>Crib, pack 'n play, high chair</strong> — families are a third of these guests. The flag's negative association (" + ddOf(gF("Pack 'n play / crib").top25_with, gF("Pack 'n play / crib").n_with) +
-          " Top 25%) reflects which hosts list it, not a penalty.</li>" +
-          "<li><strong>Outdoor dining</strong> — shows no signal on its own; provide it as part of the deck program.</li></ul>",
+          " Top 25%) reflects which hosts list it, not a penalty.</li></ul>",
       },
 
       { groupTitle: "Execution — What Winning Looks Like" },
       {
         title: "Which Visual Signals Separate Winners Inside the Product",
         body:
-          "<p>Visual concepts are zero-shot image scores, so treat them as pointers, not measurements. <strong>After adjusting for bedrooms, most design concepts track revenue. After also adjusting for bathrooms and amenities, only “resort-like” holds up</strong> (" + ddP(gC("Resort-like").p_full_adj) + "), with high-end kitchen close behind (" + ddP(gC("High-end kitchen").p_full_adj) +
-          "). “Upscale” and “luxury interior” mostly measure a bigger, better-built house. <strong>The overall Visual Score is not a filter:</strong> polished photos of an ordinary house score as high as a true resort home.</p>",
+          "<p>Population layer. Visual concepts are zero-shot image scores, so treat them as pointers, not measurements. After adjusting for bedrooms, most design concepts track revenue. <strong>After also adjusting for bathrooms and amenities, only “resort-like” holds up</strong> (" + ddP(gC("Resort-like").p_full_adj) + "), with high-end kitchen close behind (" + ddP(gC("High-end kitchen").p_full_adj) +
+          "). <strong>Inside the approved comps, none of them separates the tiers</strong> (see Visual Enrichment under Revenue Comp Set). Design moves a home from the market into the comp set, not from Low to High.</p>",
         html: () => ddConceptTable(DG.concepts, DS.concepts, "Ski-Access Home", ["Resort-like", "High-end kitchen", "Unique architecture", "Outdoor entertainment", "Luxury interior", "Upscale appearance", "Modern style", "Overall Visual Score"]),
       },
       {
         title: "Same Size, Same Valley, More Than 3× the Revenue",
         body:
-          "<p>Both are 6BR Heber Valley homes sleeping 16, each with a hot tub and a Visual Score above 90; the ordinary one actually scores higher. <strong>The gap is bathrooms and the resort program.</strong> 8 baths against 3.5 is a real-estate difference; four entertainment amenities against two, and the finish, are conversion choices. This is a reference pair from the market population, not a comp.</p>",
+          "<p>Both are 6BR Heber Valley homes sleeping 16, each with a hot tub and a Visual Score above 90; the ordinary one actually scores higher. <strong>The gap is bathrooms and the resort program.</strong> 8 baths against 3.5 is a real-estate difference; four entertainment amenities against two, and the finish, are conversion choices. " +
+          "The left home is an approved Medium comp (" + heberLux.short + ", " + ddK(heberLux.revenue) + " in September). It is the only Heber comp above the Low tier. The right home is a market reference outside the comp set. Figures below are from the July snapshot.</p>",
         pairLabels: [PAIR_G.strong.title, PAIR_G.ordinary.title],
         compStats: ddPairStats(PAIR_G),
         compPhotoRows: [
@@ -225,63 +292,204 @@
         title: "Polished Isn't the Same as the Product",
         body:
           "<p>One of the highest Visual Scores in the product belongs to a " + DEEPDIVE.photos.group.polished_kitchen.bedrooms + "BR home with a crisp modern-farmhouse kitchen and a putting green, earning " + ddK(DEEPDIVE.photos.group.polished_kitchen.revenue) +
-          ". It has the finish but not the scale: a small lot and one entertainment amenity. <strong>A great kitchen on a tract lot doesn't make a group-home product.</strong></p>",
+          ". It has the finish but not the scale: a small lot and one entertainment amenity. <strong>A great kitchen on a tract lot doesn't make a group-home product.</strong> The comp set shows the same thing: " + cc("Deer Valley Views (Heber)").short + " has the highest high-end-kitchen score of the 14 and the lowest revenue.</p>",
         images: [
           gp("polished_kitchen", "A modern-farmhouse kitchen that photographs beautifully."),
           gp("polished_yard", "The same home's yard: a pergola hot tub and a putting green squeezed into a small lot."),
         ],
       },
 
+      { groupTitle: "Revenue Comp Set" },
+      {
+        title: "The Approved Comp Set at a Glance",
+        body:
+          "<p>The 14 comps are the analyst's selection, used exactly as supplied. Tiers follow the analyst's bands on the export's own Revenue Potential (" + POS.data_date + " pull). <strong>This is the top of the market:</strong> " +
+          POS.comps_in_product + " of the comps are the " + POS.comps_in_product + " highest earners of the " + POS.product_n + "-listing product population. No product listing left out earned more than " + ddK(POS.best_excluded_snapshot) + " in July. Every comp sits at or above the export's " + Math.round(POS.export_pct_min) +
+          "th revenue percentile. So <strong>“Low” here means the floor of a winning product</strong>, around the market's P90 (" + ddK(POS.market_p90_snapshot) + ").</p>" +
+          "<p class=\"dd-note\">N is " + T.High.n + " / " + T.Medium.n + " / " + T.Low.n + ", so every tier comparison is descriptive and correlations are directional. " + POS.new_listings + " comps (" + CS.comps.filter((c) => !c.in_snapshot).map((c) => c.short).join(", ") + ") were listed after the July market snapshot. Their photos were fetched and scored with the same visual pipeline. " +
+          POS.possibly_good_data.join(", ") + " carry the export's “Possibly Good Data” flag. " + POS.exclude_flag_in_export.join(", ") + " is marked Exclude_Comp in the export but was supplied in the set and is kept.</p>",
+        html: () => csTierBands() + csTierTable(["ADR", "occ", "Baths", "guests_per_bath", "Bedrooms", "Sleeps", "ent_stack", "main_st_km", "kids", "group"]),
+      },
+      {
+        title: "The 14 Approved Comps",
+        body: "<p>Grouped by tier, in revenue order. Photos are each comp's own Airbnb cover image. The line under each card is its analytical role.</p>",
+        html: () => csCards(ROLES) + '<details class="ref-details"><summary>Full metrics for all 14 comps</summary>' + csFullTable() + "</details>",
+      },
+      {
+        title: "What Separates High, Medium and Low",
+        body:
+          "<ul class=\"tight-list\"><li><strong>Rate separates; nights mostly don't.</strong> ADR is the strongest separator (" + csRho(cD("ADR")) + ", " + ddP(cD("ADR").p) + "); occupancy is directional at best.</li>" +
+          "<li><strong>Bathroom pressure separates; capacity doesn't.</strong> Guests per bath " + csRho(cD("guests_per_bath")) + "; bedrooms, sleeps and beds show nothing.</li>" +
+          "<li><strong>The après program separates; the amenity count doesn't.</strong> Outdoor dining + fire pit + sauna " + csRho(cD("apres")) + "; tracked amenities " + csRho(cD("amen_count")) + "; backyard-lot amenities run the wrong way (" + csRho(cD("lot_amen")) + ").</li>" +
+          "<li><strong>The guest mix separates.</strong> High comps draw adult group trips (" + Math.round(T.High.group_median) + "% of reviews, " + Math.round(T.High.kids_median) + "% kids), Low comps draw families (" + Math.round(T.Low.group_median) + "%, " + Math.round(T.Low.kids_median) + "% kids). This is an outcome of location and product, not a lever on its own.</li>" +
+          "<li><strong>The Visual Score doesn't.</strong> Low comps' median Visual Score is " + Math.round(cD("pct_visual_score").Low.median) + "th percentile, High comps' " + Math.round(cD("pct_visual_score").High.median) + "th.</li></ul>",
+        html: () => csDriversTable(["ADR", "occ", "guests_per_bath", "Baths", "Bedrooms", "Sleeps", "Bed_Count", "apres", "ent_stack", "amen_count", "lot_amen", "main_st_km", "lift_km", "Cleaning Fee", "Min_Stay", "kids", "group", "pct_visual_score"]),
+      },
+      {
+        title: "Rate, Not Nights: ADR vs. Occupancy",
+        body:
+          "<p><strong>High earns mainly through a premium rate.</strong> High comps earn " + DEC.high_vs_low.revenue_ratio.toFixed(1) + "× the Low tier (geometric means). About " + pctOf(DEC.high_vs_low.adr_share) + " of that gap is ADR (" + DEC.high_vs_low.adr_ratio.toFixed(1) + "×) and " + pctOf(DEC.high_vs_low.occ_share) + " is occupancy.</p>" +
+          "<ul class=\"tight-list\"><li><strong>Low → Medium is a pure rate step:</strong> ADR " + DEC.mid_vs_low.adr_ratio.toFixed(2) + "×, occupancy " + DEC.mid_vs_low.occ_ratio.toFixed(2) + "×. Medium comps sell <em>fewer</em> nights than Low at a much higher rate.</li>" +
+          "<li><strong>Medium → High adds occupancy:</strong> ADR " + DEC.high_vs_mid.adr_ratio.toFixed(2) + "×, occupancy " + DEC.high_vs_mid.occ_ratio.toFixed(2) + "×. " + pines.short + " is the clearest case, at " + cStats("Park City Pines") + ".</li>" +
+          "<li><strong>How the Low tier falls short:</strong> " + lowMode("Rate below every Medium/High comp") + " of " + T.Low.n + " Low comps price below every Medium/High comp (under " + csUsd(CS.low_cuts.adr) + "). " +
+          (CS.low_modes["Rate and occupancy both below"] || []).join(", ") + " is low on both, and " + (CS.low_modes["Occupancy below every Medium/High comp"] || []).join(", ") + " prices like a Medium comp but fills only " + Math.round(cc("Ski & Tee Chalet").occ) + "% of nights. " +
+          cc("Cabriolet Family Escape").short + " and " + cc("MTN Lake Retreat").short + " fill 66–72% of nights and still land Low: filling nights doesn't substitute for rate.</li>" +
+          "<li><strong>What buys the rate:</strong> the Park City side (median ADR " + csUsd(PCR.adr_median) + " in Old Town / Deer Valley and " + csUsd(HOLD.adr_median) + " in Summit Park / Pine Meadow, against " + csUsd(OPEN.adr_median) + " in Heber / Snyderville), bathrooms for the group, and the après deck. Amenity count and the Visual Score don't.</li></ul>",
+        chartsRow: [
+          { file: "assets/" + CS.charts.adr_occ, alt: "Scatter of ADR against occupancy for the 14 approved comps, colored by tier, with equal-revenue curves", caption: "ADR vs. occupancy for the approved comps; dashed lines are equal revenue." },
+        ],
+      },
+      {
+        title: "Location: When the Address Creates the Premium",
+        body:
+          "<p>This is still a product-first box: lift access isn't needed. " + pines.short + ", the top comp, is " + pines.lift_km.toFixed(1) + " km from the nearest lift, and the Medium tier's median distance to a lift is " + cD("lift_km").Medium.median.toFixed(0) + " km. <strong>But the market side sets the ceiling.</strong> " +
+          pcUp + " of the " + nUp + " comps above $200k are on the Park City side, and " + OPEN.Low + " of the " + OPEN.n + " Heber / Snyderville comps are Low. The one exception, " + heberLux.short + ", needed the most bathrooms in the set (" + heberLux.baths + ") and a " + heberLux.ent_stack + "-amenity stack to reach " + ddK(heberLux.revenue) + ".</p>" +
+          "<ul class=\"tight-list\"><li><strong>When location creates the premium:</strong> Old Town. " + pent.short + " reaches High with only " + pent.sleeps + " guests and no entertainment room, because it's " + pent.main_st_km.toFixed(1) + " km from Main Street.</li>" +
+          "<li><strong>When the property creates it:</strong> " + pines.short + " (Summit Park, " + pines.main_st_km.toFixed(0) + " km from Main Street) reaches High on its product and outdoor program alone.</li>" +
+          "<li><strong>The catch:</strong> the Park City-side comps are either in Old Town / Deer Valley, where 5BR+ inventory is rare and overlaps the Ski-Access box, or in Summit Park / Pine Meadow, which is on regulatory hold (Section 5).</li></ul>",
+        html: () => csRoutesTable({
+          "Heber Valley / Snyderville (open supply)": "Eligible with checks: Heber City caps occupancy at 16; confirm city vs. county; check Snyderville CC&Rs.",
+          "Summit Park / Pine Meadow (regulatory hold)": "<strong>Hold.</strong> Summit County's proposed nightly-rental ban covers these areas.",
+          "Park City: Old Town / Deer Valley": "Eligible under Park City zoning; 5BR+ is rare and overlaps Buy Box 2.",
+        }),
+        mapEmbed: { url: "assets/" + CS.map + "?v=20260929-pc5", className: "embedded-map--compact", title: "Map of the 14 approved 5BR+ revenue comps, colored by High, Medium and Low tier, with lift bases" },
+      },
+      {
+        title: "Visual Enrichment: Where to Look vs. What to Learn",
+        body:
+          "<p>Each comp's visual concepts are expressed as a percentile of the whole market, so the tiers can be compared. <strong>Inside the approved comps, the visual scores don't separate the tiers.</strong> They told us where to look; the photos below tell us what to learn.</p><ul class=\"tight-list\">" +
+          "<li><strong>Resort-like</strong> runs " + Math.round(cK("Resort-like").High) + " / " + Math.round(cK("Resort-like").Medium) + " / " + Math.round(cK("Resort-like").Low) + " (High / Medium / Low). It separates the product from the market (population layer), not the comps from each other.</li>" +
+          "<li><strong>The Visual Score runs slightly backwards:</strong> " + pines.short + " is the top earner at the market's " + Math.round(pines.visual_pct) + "th percentile, and the Low tier's median is the highest of the three.</li>" +
+          "<li><strong>Scenic view is inverse</strong> (" + csRho(cK("Scenic view")) + "). Open Heber valley and pasture views are common in the Low tier.</li>" +
+          "<li><strong>Gallery composition is the one visible difference.</strong> High galleries give " + Math.round(CS.gallery["Outdoor / hot tub / view"].High) + "% of their photos to outdoor spaces (Low " + Math.round(CS.gallery["Outdoor / hot tub / view"].Low) + "%). Low galleries give " +
+          Math.round(CS.gallery["Game room / sauna / gym"].Low) + "% to game rooms and gyms (High " + Math.round(CS.gallery["Game room / sauna / gym"].High) + "%). High sells the setting; Low sells the equipment.</li></ul>",
+        html: () => csConceptTable(["Resort-like", "Luxury interior", "High-end kitchen", "Upscale appearance", "Unique architecture", "Outdoor entertainment", "Professional photography", "Scenic view", "Secluded setting", "Overall Visual Score"]),
+      },
+      {
+        title: "Comp-Set Visual Comparison",
+        body: "<p>Photos from the approved comps' own galleries, chosen after viewing all 14 in full. Qualitative observations, not causal conclusions. The question is what the High tier physically does differently.</p>",
+        html: () => csComparisonHtml(
+          [
+            ["setting", "Setting & Arrival", "Architecture spans the tiers: contemporary builds are High, Medium and Low. The setting doesn't. High comps sit in Old Town or in forest; the Low tier is mostly open Heber subdivisions (and so is the one Heber Medium comp)."],
+            ["living", "Great Room, Kitchen & Dining", "Every tier has a group-sized great room and dining for 10–12. Finish doesn't separate the tiers either: the highest-scoring kitchen in the set belongs to the lowest comp. A dated finish (slate, honey oak) is the one visible drag."],
+            ["sleeping", "Bedrooms & Bathrooms", "Bedrooms look alike across the tiers. Bathrooms are what differs, in the numbers (" + cD("guests_per_bath").High.median.toFixed(1) + " guests per bath in High against " + cD("guests_per_bath").Low.median.toFixed(1) + " in Low) and in the galleries: only " +
+              (CS.gallery_bath_listings.High + CS.gallery_bath_listings.Medium + CS.gallery_bath_listings.Low) + " comps photograph a bathroom, and none is Low."],
+            ["entertainment", "Game & Entertainment", "The Low tier has the biggest entertainment programs in the set: a golf simulator, an arcade lounge, a large basement rec room. High galleries barely show a game room. Entertainment gets a home into the comp set; it doesn't move it up."],
+            ["outdoor", "Hot Tub & Outdoor Program", "Every comp has a hot tub; where it sits is what differs. High puts it in an elevated evening setting (a rooftop over Main Street or facing the ski runs, a treetop deck). Low puts it in a backyard with a pool, a court or a pasture view."],
+          ]
+        ),
+      },
+      {
+        title: "Counterexamples",
+        body: "<p>The comps that break the obvious pattern say more about the buy box than the averages do.</p>",
+        html: () =>
+          csCounterexamples([
+            ["Heber Resort Home", "The most amenities in the set (" + cc("Heber Resort Home").amen_count + " tracked: pool, pickleball, playground, mini golf, game room) should put it near the top.",
+              "Low, " + cStats("Heber Resort Home") + ". Only " + cc("Heber Resort Home").baths + " baths for " + cc("Heber Resort Home").sleeps + " (" + cc("Heber Resort Home").guests_per_bath.toFixed(1) + " per bath).",
+              "Amenities got it into the comp set; bathrooms and the Heber rate cap it. Don't pay for a backyard amenity park."],
+            ["Deer Valley Views (Heber)", "One of the most finished interiors in the set (luxury interior " + Math.round(cc("Deer Valley Views (Heber)").concept_pct["Luxury interior"]) + "th percentile, high-end kitchen " + Math.round(cc("Deer Valley Views (Heber)").concept_pct["High-end kitchen"]) + "th), with “Deer Valley” in the title.",
+              "The lowest comp, " + cStats("Deer Valley Views (Heber)") + ". It's in Heber, " + cc("Deer Valley Views (Heber)").main_st_km.toFixed(0) + " km from Main Street, with " + cc("Deer Valley Views (Heber)").amen_count + " tracked amenity.",
+              "Finish without program or location doesn't command a rate. Check the address, not the title."],
+            ["Park City Pines", "The lowest Visual Score in the set (" + Math.round(pines.visual_pct) + "th percentile), " + pines.lift_km.toFixed(0) + " km from a lift.",
+              "The top comp, " + cStats("Park City Pines") + ", tied with Cabriolet for the highest occupancy in the set.",
+              "The product can create High without ski access: a treetop deck, fire, sauna, putting green and a hot tub by the game room, on the Park City side."],
+            ["Main St Penthouse", "Sleeps " + pent.sleeps + ", below the product's 14+ floor, with no entertainment room.",
+              "High, " + cStats("Main St Penthouse") + ".",
+              "Location can create High without group capacity. Treat it as a Main Street ceiling reference (Ski-Access logic), not a base-case group home."],
+            ["Triple Master DV", "Nothing tracked beyond the hot tub and crib gear.",
+              "Medium, " + cStats("Triple Master DV") + ".",
+              "Deer Valley plus " + cc("Triple Master DV").baths + " baths (" + cc("Triple Master DV").guests_per_bath.toFixed(1) + " guests per bath) earns Medium without an entertainment stack."],
+            ["Heber Heights", cc("Heber Heights").bedrooms + " bedrooms, " + cc("Heber Heights").baths + " baths (" + cc("Heber Heights").guests_per_bath.toFixed(1) + " guests per bath), sauna and fire pit: the most house in the set.",
+              "Low, " + cStats("Heber Heights") + ".", "Bedrooms and baths beyond the spec don't break the Heber rate ceiling."],
+            ["Ski & Tee Chalet", "It meets the whole structural spec: " + cc("Ski & Tee Chalet").baths + " baths (" + cc("Ski & Tee Chalet").guests_per_bath.toFixed(1) + " guests per bath), golf simulator, arcade and pool table.",
+              "Low, " + cStats("Ski & Tee Chalet") + ". Its rate is Medium-like; its occupancy is the lowest in the set.",
+              "A right-spec home in Snyderville isn't a Medium-tier guarantee. The data can't say why it doesn't fill, so underwrite the open-supply routes at Low-tier revenue."],
+          ]),
+      },
+      {
+        title: "What the Comps Change in the Buy Box",
+        body: "<p>Each spec item is tested against the approved comps: <strong>reinforced</strong>, <strong>modified</strong>, <strong>weakened</strong> (as a differentiator) or left <strong>directional</strong>. Nothing is added because it sounds good.</p>",
+        html: () =>
+          csChanges([
+            ["Bedrooms: 5BR+ vs 6BR+", "modified", (allHigh5 ? "All 3 High comps are 5BR. " : "") + "6BR+ is " + n6("Medium") + " of " + T.Medium.n + " Medium and " + n6("Low") + " of " + T.Low.n + " Low; " + csRho(cD("Bedrooms")) + ".", "5BR+. Drop the 6BR+ preference; don't pay for a sixth bedroom."],
+            ["Sleeps 14–16", "reinforced", "Sleeps doesn't separate tiers (" + csRho(cD("Sleeps")) + "). The one comp under 14 (" + pent.short + ") is a Main Street location asset.", "14–16 legal occupancy as eligibility, not a lever."],
+            ["Bathrooms", "reinforced", "Every Medium/High comp is at ≤" + upMaxGpb.toFixed(1) + " guests per bath; the " + lowOverGpb.length + " comps above that are Low. " + lowUnderGpb + " Low comps also meet it.", "≤3.5 guests per bath (≈4.5+ baths for 16): necessary, not sufficient."],
+            ["Hot tub", "reinforced", "In all 14 comps.", "Required; table stakes."],
+            ["Entertainment room", "weakened", "Game room: " + amenOf("Game room") + ". Median entertainment amenities " + cD("ent_stack").High.median + " High vs " + cD("ent_stack").Low.median + " Low.", "Keep the room as an entry requirement (population evidence); don't expect it to lift a home past Low."],
+            ["Pool table", "directional", amenOf("Pool table") + ".", "Auto-add once the room exists."],
+            ["Sauna", "directional", amenOf("Sauna") + ".", "Cheap add; part of the après program."],
+            ["Outdoor program", "reinforced", "Outdoor dining: " + amenOf("Outdoor dining") + "; fire pit in every High comp; après program " + csRho(cD("apres")) + " (" + ddP(cD("apres").p) + ").", "An evening deck: outdoor dining, fire, hot tub, ideally a sauna. Buy the deck footprint."],
+            ["Pool, pickleball, playground", "weakened", "Only in Low comps (pickleball " + cA("Pickleball").Low_n + ", pool " + cA("Pool").Low_n + ", playground " + cA("Playground").Low_n + " of " + T.Low.n + ").", "Not criteria. Don't pay for a lot because of a court or pool."],
+            ["Resort-like execution", "weakened", "Resort-like " + Math.round(cK("Resort-like").High) + " / " + Math.round(cK("Resort-like").Medium) + " / " + Math.round(cK("Resort-like").Low) + " percentile (" + csRho(cK("Resort-like")) + ").", "A design direction from the population layer; not a filter, and not what separates the comps."],
+            ["High-end kitchen", "weakened", "High-end kitchen " + Math.round(cK("High-end kitchen").High) + " / " + Math.round(cK("High-end kitchen").Medium) + " / " + Math.round(cK("High-end kitchen").Low) + " percentile; the top kitchen score is the lowest comp's.", "A finished kitchen with a group island is table stakes."],
+            ["Architecture", "reinforced", "Contemporary, log lodge, Old Town farmhouse and stucco tract all appear; styles span the tiers.", "Any style. Buy bones, glass and deck footprint."],
+            ["View", "weakened", "Scenic view " + csRho(cK("Scenic view")) + ": open valley views are common in Low.", "Not a criterion."],
+            ["Privacy / seclusion", "directional", "Secluded setting " + Math.round(cK("Secluded setting").High) + " / " + Math.round(cK("Secluded setting").Medium) + " / " + Math.round(cK("Secluded setting").Low) + " percentile: no pattern.", "Not a criterion."],
+            ["Location", "modified", pcUp + " of " + nUp + " $200k+ comps are Park City side; " + OPEN.Low + " of " + OPEN.n + " Heber / Snyderville comps are Low. The top comp is " + pines.lift_km.toFixed(0) + " km from a lift.", "Lift-flexible, not market-flexible. Underwrite Heber / Snyderville at Low-tier revenue; Medium/High needs a Park City-side address."],
+            ["Group dining & living", "reinforced", "Dining for 10–12 and a group great room appear in every tier.", "Required; table stakes."],
+            ["Parking", "directional", "Not in the comp data.", "Confirm paved on-site parking (a Heber City rule, Section 5)."],
+            ["Guest", "modified", "High comps: " + Math.round(T.High.group_median) + "% group-trip reviews, " + Math.round(T.High.kids_median) + "% kids. Low comps: " + Math.round(T.Low.group_median) + "%, " + Math.round(T.Low.kids_median) + "%.", "Price and design for adult group trips; families fill the Low tier."],
+          ]),
+      },
+
       { groupTitle: "Guest & Location" },
       {
         title: "Traveler ICP",
         body:
-          "<p><strong>Multi-family and large-group trips.</strong> Group trips appear in about half of all reviews and kids in about a third. The Top 25% homes lean slightly more toward group trips, the rest slightly more toward kids (directional). <strong>What that implies for the product:</strong> enough bathrooms for two or three families at once, a second social space so adults and kids separate, dining for the whole group, and bunks for the kids. These are review-derived signals, not verified demographics.</p>",
-        html: () => ddGuestTable(DG.guest, [["all", "All " + DG.guest.all.n + " listings"], ["top25", "Top 25%"], ["rest", "Below Top 25%"]]),
+          "<p><strong>Multi-family and large-group trips</strong> across the product: group trips appear in about half of all reviews and kids in about a third. <strong>The approved comps sharpen it:</strong> High comps draw adult groups (" + Math.round(T.High.group_median) + "% group-trip reviews, " + Math.round(T.High.kids_median) +
+          "% kids), while the Low tier is the family product (" + Math.round(T.Low.kids_median) + "% kids). <strong>What that implies:</strong> enough bathrooms for adults who won't share, an evening deck, dining for the whole group, and bunks where kids are the market. These are review-derived signals, not verified demographics.</p>",
+        html: () =>
+          ddTableRow([
+            ddGuestTable(DG.guest, [["all", "All " + DG.guest.all.n + " listings"], ["top25", "Top 25%"], ["rest", "Below Top 25%"]]),
+            '<table class="data-table dd-mini"><thead><tr><th>Approved comps</th><th>Kids</th><th>Group trip</th><th>N</th></tr></thead><tbody>' +
+              CS_TIERS.map((t) => '<tr><th scope="row">' + csTierPill(t) + "</th><td>" + Math.round(T[t].kids_median) + "%</td><td>" + Math.round(T[t].group_median) + "%</td><td>" + T[t].n + "</td></tr>").join("") + "</tbody></table>",
+          ]),
       },
       {
-        title: "Where to Buy — Eligibility First",
+        title: "Where to Buy",
         body:
-          "<p>Location is a filter for this product, not the engine. 10 of its 11 Top 10% listings are more than 2 km from a lift (see the Section 3 map).</p><ul>" +
-          "<li><strong>Heber Valley (" + gArea("Heber Valley").n + " listings, " + gArea("Heber Valley").top10 + " Top 10%)</strong> — the deepest supply. Prefer the edges (the north bench toward Red Ledges, south toward Deer Creek). Confirm city limits: <strong>Heber City caps occupancy at 16</strong>, and unincorporated Wasatch County allows STRs only where zoning and CC&Rs both allow them.</li>" +
-          "<li><strong>Snyderville Basin (" + gArea("Snyderville Basin").n + ", " + gArea("Snyderville Basin").top10 + " Top 10%)</strong> — eligible in unincorporated Summit County. Check CC&Rs, since many Basin subdivisions ban nightly rental.</li>" +
-          "<li><strong>Summit Park & Pine Meadow (" + (gArea("Summit Park & Pinebrook").n + gArea("Pine Meadow & Rockport").n) + ", " + (gArea("Summit Park & Pinebrook").top10 + gArea("Pine Meadow & Rockport").top10) +
-          " Top 10%)</strong> — strong product, but on <strong>regulatory hold</strong> pending Summit County's proposed nightly-rental ban.</li>" +
-          "<li><strong>Old Town</strong> — a rare 5BR+ near the lifts fits both boxes; see Buy Box 2. <strong>Avoid Midway</strong> (a shrinking STR overlay zone).</li></ul>",
+          "<p>The comp set changes this from “eligibility first” to <strong>“eligibility decides the revenue tier”</strong> (routes table and map under Revenue Comp Set).</p><ul>" +
+          "<li><strong>Heber Valley (" + gArea("Heber Valley").n + " product listings)</strong> — the deepest supply, and the Low-tier route: " + csRange(T.Low.rev_min, T.Low.rev_max) + " unless the home is exceptional (" + heberLux.short + "). <strong>Heber City caps occupancy at 16</strong>, and unincorporated Wasatch County allows STRs only where zoning and CC&Rs both allow them.</li>" +
+          "<li><strong>Snyderville Basin (" + gArea("Snyderville Basin").n + ")</strong> — eligible in unincorporated Summit County (check CC&Rs); both comps here are Low.</li>" +
+          "<li><strong>Summit Park & Pine Meadow (" + (gArea("Summit Park & Pinebrook").n + gArea("Pine Meadow & Rockport").n) + ")</strong> — " + HOLD.n + " comps here, " + HOLD.High + " High and " + HOLD.Medium + " Medium, but on <strong>regulatory hold</strong> pending Summit County's proposed nightly-rental ban.</li>" +
+          "<li><strong>Old Town / Deer Valley</strong> — " + PCR.High + " High and " + PCR.Medium + " Medium comps; 5BR+ inventory is rare and overlaps Buy Box 2. <strong>Avoid Midway</strong> (a shrinking STR overlay zone).</li></ul>",
       },
-
-      COMP_PENDING,
-      compPendingSection("the Large Group Home"),
 
       { groupTitle: "Projections" },
       {
-        title: "Product-Population Context (Not an Underwriting Target)",
+        title: "Revenue Context from the Approved Comps",
         body:
-          "<p>Descriptive performance of all " + g.n + " listings in the product: median " + ddK(g.median) + ", P25–P75 " + ddK(g.p25) + "–" + ddK(g.p75) + ", median ADR $" + Math.round(g.adr) + " at " + ddPct(g.occ) +
-          " occupancy. The underwriting revenue range will come from the analyst comp set. <strong>Purchase price and acquisition underwriting: pending.</strong></p>",
+          "<p><strong>The range is read by acquisition route, not averaged.</strong> A simple mean of all 14 comps is " + ddK(CS.simple_mean) + ". That is a Medium-tier number only 1 of the " + OPEN.n + " open-supply comps reaches, and it blends the analyst's deliberate tiering with three different acquisition routes.</p><ul>" +
+          "<li><strong>Heber Valley / Snyderville (open supply):</strong> base case is the Low tier, <strong>" + csRange(T.Low.rev_min, T.Low.rev_max) + " (median " + ddK(T.Low.rev_median) + ")</strong>, for a home that meets the spec. Upside to ~" + ddK(heberLux.revenue) + " has one precedent (" + heberLux.short + ": " + heberLux.baths + " baths, " + heberLux.ent_stack + " entertainment amenities, the highest Heber ADR at " + csUsd(heberLux.adr) + ").</li>" +
+          "<li><strong>Park City side, outside Old Town:</strong> Medium, <strong>" + csRange(T.Medium.rev_min, T.Medium.rev_max) + "</strong>, with " + pines.short + " (" + ddK(pines.revenue) + ") as the execution ceiling. Today these comps sit in Summit Park / Pine Meadow, which is on hold.</li>" +
+          "<li><strong>Old Town / Deer Valley:</strong> " + csRange(PCR.rev_min, PCR.rev_max) + " (median " + ddK(PCR.rev_median) + "), driven by the Main Street location. Treat it as a ceiling reference shared with Buy Box 2.</li></ul>" +
+          "<p class=\"dd-note\">Revenue Potential is a gross benchmark from the " + POS.data_date + " comp export, not an underwriting model. Comp tiers describe performance within this approved set. The product population (median " + ddK(g.median) + ", July) stays as descriptive context. <strong>Purchase price and acquisition underwriting: pending.</strong></p>",
       },
 
       { groupTitle: "Buy-Box Summary" },
       {
         title: "One-Page Recap",
         body: ddRecap([
-          ["Search for", "5BR+ (6BR+ preferred), sleeping 14–16, legal for that occupancy at the address"],
-          ["Bathrooms", "≤3.5 guests per bath, about 4.5+ baths for 16. The strongest structural signal, and hard to add"],
+          ["Search for", "5BR+ (don't pay up for 6+), sleeping 14–16, legal for that occupancy at the address"],
+          ["Bathrooms", "≤3.5 guests per bath, about 4.5+ baths for 16. Every Medium/High comp meets it; necessary, not sufficient"],
           ["Floor plan", "Great room with dining for 12–16, a kitchen with a long island, and a second social or game space"],
-          ["Architecture", "Any style. Buy good bones (ceiling height, glass, deck or yard footprint) rather than builder-grade tract product"],
-          ["Must-haves", "Hot tub; an entertainment room with 2+ entertainment amenities; BBQ; fireplace"],
-          ["Nice-to-haves (ranked)", "Pool table, sauna; pickleball court if the lot allows (thin). Gym, pool and theater are not criteria"],
-          ["Auto-add", "Fire pit and outdoor lounge, ping pong and arcade, crib / pack 'n play / high chair, outdoor dining"],
-          ["Execution", "Resort-like and designed: the one visual signal that survives adjustment. The Visual Score is not a filter"],
-          ["Guest", "Multi-family and large groups (≈50% group trips, ≈35% kids in reviews)"],
-          ["Where", "Heber Valley edges and Snyderville (check jurisdiction and CC&Rs). Summit Park and Pine Meadow on hold. Avoid Midway"],
-          ["Revenue context", "Product median " + ddK(g.median) + " (P25–P75 " + ddK(g.p25) + "–" + ddK(g.p75) + "). Underwriting range pending the comp set"],
+          ["Architecture", "Any style. Buy good bones (ceiling height, glass, deck footprint) rather than builder-grade tract product"],
+          ["Must-haves", "Hot tub; an entertainment room with 2+ entertainment amenities; outdoor dining and fire on the deck; BBQ; fireplace"],
+          ["Nice-to-haves", "Sauna, pool table (both cheap adds). Pickleball, pool, playground, gym and theater are not criteria"],
+          ["Auto-add", "Outdoor dining and fire table, ping pong and arcade, crib / pack 'n play / high chair"],
+          ["Execution", "Designed and finished, but design alone doesn't separate the comps. The Visual Score is not a filter"],
+          ["Guest", "Adult group trips at the top (" + Math.round(T.High.group_median) + "% group reviews in High); families in the Low tier (" + Math.round(T.Low.kids_median) + "% kids)"],
+          ["Where", "Lift-flexible, not market-flexible. Heber / Snyderville = Low-tier revenue; Park City side for Medium/High (Summit Park and Pine Meadow on hold; Old Town rare). Avoid Midway"],
+          ["Approved comp tiers", bandText],
+          ["Revenue context", "Open supply: " + csRange(T.Low.rev_min, T.Low.rev_max) + " base (median " + ddK(T.Low.rev_median) + "), ~" + ddK(heberLux.revenue) + " upside precedent. Park City side: " + csRange(T.Medium.rev_min, T.Medium.rev_max) + ", ceiling " + ddK(pines.revenue)],
+          ["Rate vs nights", pctOf(DEC.high_vs_low.adr_share) + " of the Low-to-High gap is ADR"],
           ["Purchase price", "Pending"],
         ]),
       },
     ],
-    pendingNote: "Pre-comp-set deep dive. Photos are reference examples from the market population, not approved comps. The full analysis is in notebooks/parkcity_buybox_deepdive.ipynb.",
+    pendingNote: "Revenue comp-set images are from the 14 approved comps' own galleries. Photos elsewhere on this tab are labelled either market reference or approved comp. The full analysis is in notebooks/parkcity_5br_compset.ipynb (comp set) and notebooks/parkcity_buybox_deepdive.ipynb (product population).",
   });
+
 
   // -------------------------------------------------------------------------
   // Buy Box 2 · Ski-Access Home
@@ -483,6 +691,6 @@
         ]),
       },
     ],
-    pendingNote: "Pre-comp-set deep dive. Photos are reference examples from the market population, not approved comps. The full analysis is in notebooks/parkcity_buybox_deepdive.ipynb.",
+    pendingNote: "Pre-comp-set deep dive. Photos are reference examples from the market population, not approved Ski-Access comps; any that are approved Group Home comps are labelled. The full analysis is in notebooks/parkcity_buybox_deepdive.ipynb.",
   });
 })();

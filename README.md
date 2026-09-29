@@ -19,7 +19,7 @@ This is the same template as the Charlotte, NC site (`../../../Charlotte/webpage
   - **3BR floor:** 1–2BR homes gain from ski access but never reach target level.
   - **No cap:** there is no evidence the premium stops at 5BR+, only N=2 to measure it with. Capping at 4BR would drop a Top 25% 6BR (sleeps 10) near a lift that fits neither box.
 - **Section 7 (Coverage) is removed from the page**, because it repeated Section 1. The segment stats remain in `region_data.js`.
-- **Section 6 has two pre-comp-set deep dives (built 2026-09-29).** See "Section 6" below. Comp sets are pending analyst input.
+- **Section 6: the Group Home tab is complete with its analyst-approved revenue comp set (2026-09-29); the Ski-Access tab is still pre-comp-set.** See "Section 6" and "Group Home revenue comp set" below. Purchase price is pending for both.
 - **Regulatory hold:** Summit County's proposed nightly-rental bans (June 2026) in Summit Park and Tollgate Canyon (Pine Meadow) affect 3 of the 11 Top 10% group homes.
 
 ## Page structure
@@ -107,7 +107,31 @@ The areas come from Ward agglomerative clustering on km-projected lat/long (k = 
 - `js/research.js` holds the drivers table, the bedrooms × ski-access table (from `REGION_RESEARCH.defTest`), the definition test, the collapsed area table and the location conclusion. The area popups are built in the notebook's map cell from the same computed stats.
 - Charlotte's `map.js` was dropped; the folium map is embedded instead.
 
+## Group Home revenue comp set (Section 6, Buy Box 1)
+
+Source of truth: `../Park City - UT - 5BRCustom_Comp_Set.csv`, the analyst's 14 comps, used exactly as supplied. The export has summary rows first, so the parser starts at the row whose first cell is `Listing_Title`.
+
+Pipeline:
+
+1. `../notebooks/build_compset_5br_notebook.py` writes and executes `parkcity_5br_compset.ipynb`.
+2. The notebook:
+   - parses the 14 comps;
+   - assigns tiers on the CSV's own Revenue Potential: Low $100k–<$200k, Medium $200k–<$300k, High $300k+ (7 / 4 / 3);
+   - joins by Airbnb room ID to the market snapshot (reference areas), lift and Main Street distances, and visual features;
+   - computes tier profiles, driver rank correlations, the ADR/occupancy decomposition, amenity prevalence, concept percentiles, gallery composition and acquisition routes;
+   - copies the chosen comp photos, draws the three charts (amenity prevalence by tier, amenity presence by comp, ADR vs. occupancy) and the comp map into `assets/compset5br/`;
+   - writes `compset_5br_stats.json`.
+3. `scripts/generate_webpage_data.py` writes `js/compset_data.js` (`COMPSET_5BR`).
+4. `js/compset.js` renders the tables and cards, and `js/deepdive_content.js` holds the prose.
+
+Two comps (Main St Penthouse, Triple Master DV) were listed after the July market snapshot. Their photos were fetched into `Tools/airbnb_visual_market/data/raw_photos/parkcity_comps/` and scored with the same pipeline, giving `../parkcity_comps_visual_supplement.csv`. The other 12 use the existing galleries.
+
+To update the comp set: replace the CSV. If a listing is added, give it a `SHORT` name and a `COVER` photo in the builder. Then run the builder, nbconvert and the generator.
+
+Photos: comp-set images come from each comp's own gallery. Every photo elsewhere in Section 6 carries a generated label, either "Approved Group Home comp · tier" or "Market reference" (`ddPhoto`).
+
 ## Not yet done
 
-- Section 6 comp sets (analyst-provided), comp-set revenue range, and purchase-price underwriting.
+- Ski-Access comp set (analyst-provided) and its comp-set analysis.
+- Purchase-price underwriting for both boxes.
 - Address-level regulatory checks for any candidate property.

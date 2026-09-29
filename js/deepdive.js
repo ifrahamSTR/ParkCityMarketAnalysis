@@ -21,12 +21,16 @@ function ddFind(rows, key, value) {
   return rows.find((r) => r[key] === value);
 }
 
-// A reference photo from the market population (never a comp). The caption
-// is the analytical point; the listing identity + revenue are appended from
-// DEEPDIVE.photos so they can't drift from the data.
+// A reference photo from the market population. The caption is the
+// analytical point; the listing identity + revenue are appended from
+// DEEPDIVE.photos so they can't drift from the data. If the listing is also
+// in the approved Group Home comp set (COMPSET_5BR), it says so; otherwise
+// it is labelled a market reference, so comp and reference images never blur.
 function ddPhoto(box, key, caption, alt) {
   const p = DEEPDIVE.photos[box][key];
-  const meta = p.title + " · " + p.bedrooms + "BR/" + p.baths + "BA · " + ddK(p.revenue) + " · " + p.tier;
+  const comp = typeof COMPSET_5BR !== "undefined" && COMPSET_5BR.comps.find((c) => c.url.split("?")[0] === String(p.url).split("?")[0]);
+  const role = comp ? "Approved Group Home comp · " + comp.tier : "Market reference";
+  const meta = role + " · " + p.title + " · " + p.bedrooms + "BR/" + p.baths + "BA · " + ddK(p.revenue) + " (July) · " + p.tier;
   return { file: "assets/" + p.file, alt: alt || caption, caption: caption + " <span class=\"photo-meta\">" + meta + "</span>" };
 }
 

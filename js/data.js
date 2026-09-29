@@ -40,7 +40,8 @@ const BUY_BOXES = [
     spec: [
       ["Size", "5BR+, sleeping 14–16 (Heber City caps occupancy at 16)"],
       ["Screening signals", "A hot tub (every Top 10% listing has one) and 2+ entertainment amenities: game room, pool table, sauna, pickleball or theater."],
-      ["Where", "Heber Valley edges, Snyderville Basin, or Old Town when available. <strong>Hold</strong> Summit Park and Pine Meadow pending Summit County's proposed ban. <strong>Avoid</strong> Midway."],
+      // "Approved comps" and "Where" rows, and the thesis, are set from the
+      // approved revenue comp set (COMPSET_5BR) in deepdive_content.js.
     ],
   },
   {

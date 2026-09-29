@@ -1,8 +1,8 @@
 /**
  * Bootstraps everything on DOMContentLoaded; nav scroll-spy; lightbox
- * open/close wiring. Section 6 (Buy-Box Deep Dive) is intentionally blank
- * for this market, so the template's renderDeepDiveTabs()/renderDeepDive()
- * are not called (render.js still carries them for when it's built).
+ * open/close wiring. Section 6 renders the two pre-comp-set deep dives via
+ * the template's renderDeepDiveTabs()/renderDeepDive() (pendingSections
+ * path; content in deepdive_content.js).
  */
 function initNav() {
   const links = Array.from(document.querySelectorAll(".site-nav a"));
@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
   renderMarketOverview();
   renderDemographics();
   renderRegulationsSection();
+  renderDeepDiveTabs();
+  renderDeepDive(BUY_BOXES[0]);
   renderRevenueDistributionChart();
   renderDemographicsPieChart();
   renderDemographicsStackedBarChart();

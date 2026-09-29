@@ -16,7 +16,8 @@
  * from js/region_data.js (generated). Where prose below quotes a number, it
  * was checked against the notebook output for the 2026-07-29 snapshot.
  *
- * Section 6 (Buy-Box Deep Dive) is intentionally blank.
+ * Section 6 (Buy-Box Deep Dive): pre-comp-set deep dives, attached to BUY_BOXES
+ * by js/deepdive_content.js from the generated js/deepdive_data.js.
  */
 
 function photo(relPath, alt, caption) {

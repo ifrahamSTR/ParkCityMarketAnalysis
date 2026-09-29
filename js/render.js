@@ -837,37 +837,41 @@ function analystNotePairsBlock(notes) {
 // point: the same real point illustrated with one photo from each listing,
 // side by side, captioned with the actual visual difference rather than a
 // generic "reference example" line.
-function compStatsTable(rows) {
+// Paired comparison components. Originally Charlotte's Lakefront-vs-
+// Castaway pair; generalized with `labels` + left/right keys so any two
+// listings can be compared (the old lakefront/castaway keys still work).
+function compStatsTable(rows, labels) {
+  labels = labels || ["Lakefront Estate", "Castaway Cove"];
   const table = el("table", "comp-stats-table");
-  let html = "<thead><tr><th></th><th>Lakefront Estate</th><th>Castaway Cove</th></tr></thead><tbody>";
+  let html = "<thead><tr><th></th><th>" + labels[0] + "</th><th>" + labels[1] + "</th></tr></thead><tbody>";
   rows.forEach((r) => {
-    html += "<tr><td>" + r.label + "</td><td>" + r.lakefront + "</td><td>" + r.castaway + "</td></tr>";
+    html += "<tr><td>" + r.label + "</td><td>" + (r.left != null ? r.left : r.lakefront) + "</td><td>" + (r.right != null ? r.right : r.castaway) + "</td></tr>";
   });
   html += "</tbody>";
   table.innerHTML = html;
   return table;
 }
 
-function compPhotoRow(row) {
+function compPhotoRow(row, labels) {
+  labels = labels || ["Lakefront Estate", "Castaway Cove"];
   const wrap = el("div", "comp-photo-row");
   wrap.appendChild(el("p", "comp-photo-row__note", row.note));
   if (row.quote) wrap.appendChild(el("p", "comp-photo-row__quote", row.quote));
   const grid = el("div", "bb2-grid-2");
-  const left = el("div", "comp-photo-row__col");
-  left.appendChild(el("p", "comp-photo-row__label", "Lakefront Estate"));
-  left.appendChild(renderImage(row.lakefront, { wide: true }));
-  const right = el("div", "comp-photo-row__col");
-  right.appendChild(el("p", "comp-photo-row__label", "Castaway Cove"));
-  right.appendChild(renderImage(row.castaway, { wide: true }));
-  grid.appendChild(left);
-  grid.appendChild(right);
+  [[row.left || row.lakefront, labels[0]], [row.right || row.castaway, labels[1]]].forEach(([img, label]) => {
+    const col = el("div", "comp-photo-row__col");
+    col.appendChild(el("p", "comp-photo-row__label", label));
+    if (img) col.appendChild(renderImage(img, { wide: true }));
+    else col.appendChild(el("p", "dd-note", "No equivalent space in this listing's gallery."));
+    grid.appendChild(col);
+  });
   wrap.appendChild(grid);
   return wrap;
 }
 
-function compPhotoRowsBlock(rows) {
+function compPhotoRowsBlock(rows, labels) {
   const wrap = el("div", "comp-photo-rows");
-  (rows || []).forEach((row) => wrap.appendChild(compPhotoRow(row)));
+  (rows || []).forEach((row) => wrap.appendChild(compPhotoRow(row, labels)));
   return wrap;
 }
 
@@ -1155,6 +1159,9 @@ function renderPendingSection(section) {
     return wrap;
   }
   if (section.body) wrap.appendChild(el("div", "dd-block__body", section.body));
+  // Generated HTML (Park City Section 6): tables built at render time from
+  // DEEPDIVE (deepdive_data.js), so no derived number is hand-typed.
+  if (section.html) wrap.appendChild(el("div", "dd-block__body dd-generated", typeof section.html === "function" ? section.html() : section.html));
   if (section.items && section.items.length) {
     wrap.appendChild(amenityChecklist(section.items, "bb2-checklist bb2-checklist--check"));
   }
@@ -1176,8 +1183,8 @@ function renderPendingSection(section) {
   }
   if (section.ranked) wrap.appendChild(niceToHaveRankedBlock(section.ranked));
   if (section.notes) wrap.appendChild(analystNotePairsBlock(section.notes));
-  if (section.compStats) wrap.appendChild(compStatsTable(section.compStats));
-  if (section.compPhotoRows) wrap.appendChild(compPhotoRowsBlock(section.compPhotoRows));
+  if (section.compStats) wrap.appendChild(compStatsTable(section.compStats, section.pairLabels));
+  if (section.compPhotoRows) wrap.appendChild(compPhotoRowsBlock(section.compPhotoRows, section.pairLabels));
   // Inline map embed -- replaces prose in Geo Considerations / Property
   // Locations with the same interactive map from Section 3 (already marks
   // landmarks, properties, and is region/tier filterable) per explicit

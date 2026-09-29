@@ -19,7 +19,7 @@ This is the same template as the Charlotte, NC site (`../../../Charlotte/webpage
   - **3BR floor:** 1–2BR homes gain from ski access but never reach target level.
   - **No cap:** there is no evidence the premium stops at 5BR+, only N=2 to measure it with. Capping at 4BR would drop a Top 25% 6BR (sleeps 10) near a lift that fits neither box.
 - **Section 7 (Coverage) is removed from the page**, because it repeated Section 1. The segment stats remain in `region_data.js`.
-- **Section 6 is intentionally blank.**
+- **Section 6 has two pre-comp-set deep dives (built 2026-09-29).** See "Section 6" below. Comp sets are pending analyst input.
 - **Regulatory hold:** Summit County's proposed nightly-rental bans (June 2026) in Summit Park and Tollgate Canyon (Pine Meadow) affect 3 of the 11 Top 10% group homes.
 
 ## Page structure
@@ -60,6 +60,40 @@ These commands used the `airbnb_visual_tier` conda env, which has pandas, scikit
 
 `js/data.js` holds prose and config only. Where a sentence there quotes a number, it was checked against the notebook output. If the workbook changes, re-read the prose, because the generated numbers will update but the sentences will not.
 
+## Section 6 — Buy-box deep dives (pre-comp-set)
+
+Pipeline: `../notebooks/build_deepdive_notebook.py` writes and executes `parkcity_buybox_deepdive.ipynb`, which produces two outputs:
+
+- `deepdive_stats.json`, which `scripts/generate_webpage_data.py` turns into `js/deepdive_data.js` (generated);
+- `assets/deepdive/<box>/*.jpg`, resized copies of the hand-picked reference photos.
+
+Sources:
+
+- `../parkcity_market_enriched.parquet` (the same data as the enriched `.xlsx`) — STR data plus visual features;
+- the `Base_Table` description text — keyword flags, labelled "(listing text)" on the page;
+- the per-photo feature parquet and the already-downloaded photos in `Tools/airbnb_visual_market/data/raw_photos/parkcity/`. Nothing was re-downloaded.
+
+Rendering:
+
+- `js/deepdive_content.js` attaches `overview` and `pendingSections` to each `BUY_BOXES` entry. It reads every number from `DEEPDIVE` at render time.
+- `js/deepdive.js` holds the table and photo helpers.
+- `render.js`'s pending-section renderer gained an `html` field for generated tables, and `pairLabels` so the paired-comparison components (originally Charlotte's Lakefront vs. Castaway) work for any two listings.
+
+Structure and method:
+
+- **Structure:** follows Charlotte Lake (hero → grouped sections → recap), with Clearwater's "buy the space vs. add the equipment" and Must-Have / Nice-to-Have / Auto-Add logic. The two boxes deliberately differ:
+  - Large Group Home: a product and execution spec, with capacity, group usability, architecture, outdoor program and a deeper execution section;
+  - Ski-Access Home: a location spec, covering walkability, the ski areas and a minimum product.
+- **Comparisons:** all are within the product population. Anything with fewer than 5 listings on a side is tagged "directional".
+- **Visual concepts:** tested after adjusting for bedrooms, and then again after also adjusting for bathrooms, entertainment count and hot tub. Result:
+  - in the group home, only "resort-like" survives full adjustment;
+  - in the ski-access home, only "luxury interior" is near significance;
+  - the overall Visual Score survives in neither, so it is explicitly not a filter.
+- **Photos:** picked by hand (`PHOTO_PICKS`) after viewing every gallery in both populations. They are reference examples, never comps. Two paired case studies hold the product fixed:
+  - Group: *Luxury Home, Family Friendly, Sleeps 16* vs. *Luxury family gathering retreat*;
+  - Ski: *Chic Park City Retreat* vs. *Walk to Ski Lifts*.
+- **Comp Set Analysis** is a visible pending section in each tab. When the analyst comp set arrives, replace that section with Charlotte-style `compSetComparison` / Alexandria / revenue-range content. Purchase price is marked pending.
+
 ## Cluster method (reference geography)
 
 The areas come from Ward agglomerative clustering on km-projected lat/long (k = 7), named by centroid (`pc_common._name_cluster`). k = 4–10 were tested, and higher k only split off 3–5-listing pockets. On the page this is a one-line note under the map; the full method stays in the notebook. Hit rates use the market-wide thresholds (P90 = $120,568, P75 = $72,247). Lift distance is measured to the nearest of six lift bases (`../notebooks/landmarks.json`), and the ski-access zone is set at 2 km (`ACCESS_KM` in the notebook). Regulations were researched 2026-09-28; see `STR_REGULATIONS` in `js/data.js` for the sourced detail.
@@ -69,10 +103,11 @@ The areas come from Ward agglomerative clustering on km-projected lat/long (k = 
 - `renderDeclarations()` renders the two product cards from `BUY_BOXES` (with a `spec` list) and `REGION_RESEARCH.segments`, and `NOT_TARGETS` below them.
 - `renderMarketOverview()` puts the photo beside the identity and demand drivers; stats and watch-outs run full width underneath.
 - `renderRegulationsSection()` renders `STR_REGULATIONS.rows` as one table. Section 7 and `renderPendingBuyBoxes()` were removed.
+- `main.js` calls `renderDeepDiveTabs()` / `renderDeepDive()` again for Section 6. `compStatsTable` / `compPhotoRow` take `labels`.
 - `js/research.js` holds the drivers table, the bedrooms × ski-access table (from `REGION_RESEARCH.defTest`), the definition test, the collapsed area table and the location conclusion. The area popups are built in the notebook's map cell from the same computed stats.
 - Charlotte's `map.js` was dropped; the folium map is embedded instead.
 
 ## Not yet done
 
-- Section 6 deep dives: comp sets, revenue tiering, amenity and photo evidence.
+- Section 6 comp sets (analyst-provided), comp-set revenue range, and purchase-price underwriting.
 - Address-level regulatory checks for any candidate property.

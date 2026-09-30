@@ -140,7 +140,7 @@ Pipeline:
 2. The notebook:
    - joins the 12 comps by room ID to `parkcity_market_enriched.xlsx` and to the Base_Table description text;
    - computes lift, ski-area and Main Street distances;
-   - derives tiers from the revenue breaks: High $300k+ (1), Medium $150k–<$300k (3), Low $75k–<$150k (8). An exhaustive natural-breaks check must agree, and does;
+   - sets the $337k 5BR on Main Street apart as a **Ceiling / Overlap Reference**, because it combines both buy boxes. It then tiers the other 11: High $175k+ (3), Medium $115k–<$175k (2), Low <$115k (6). A pure natural-breaks split of the 11 would leave Medium with a single comp, so the notebook reports that split alongside the chosen tiers;
    - computes the walkability bands, the walkable-zone split, drivers (all 12 and the 3–4BR core), the ADR/occupancy decomposition, amenity prevalence, concept percentiles and capacity buckets;
    - saves the photos, three charts and a comp map (lift bases with 2 km zones and a Main Street ring) into `assets/compsetski/`;
    - writes `compset_ski_stats.json`.
@@ -150,6 +150,14 @@ Pipeline:
 `../notebooks/ski_comp_photo_catalogue.json` is a per-photo description of all 96 gallery photos, from a photo-review pass over the existing downloaded images. It is used to choose images and for the "finish (photo review)" field, which is a judgment, not a measurement.
 
 To update the comp set: edit the URL file. A newly added listing also needs a `SHORT` name, a `COVER` photo and a catalogue entry. Then run the builder, nbconvert and the generator.
+
+## Section 6 presentation rules (2026-10-01)
+
+- The page shows plain-English conclusions only: conclusion, then the key number, then images, then what to buy.
+- These stay in the notebooks: correlations, p-values, the Visual Score and visual-concept percentiles. Visual features are still used behind the scenes to pick which listings and photos to show.
+- Tier tables end in a plain "What it means" column. Checklist strength labels are "Strong pattern", "Directional" and "Weak evidence".
+- Both tabs follow the Charlotte Lake section order.
+- The Buy-Box Summary is Charlotte's One-Page Recap template (`csRecap` in `js/compset.js`, the same `summary-sheet-table` markup): the profile sheet, "Analyst Notes — Acquisition Target Profile", the target-profile sheet, then Revenue Potential / Purchase Price.
 
 ## Not yet done
 

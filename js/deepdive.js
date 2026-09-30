@@ -119,11 +119,10 @@ function ddPairStats(pair, extra) {
   const a = pair.strong, b = pair.ordinary;
   const rows = [
     ["Revenue Potential", ddK(a.revenue) + " (" + a.tier + ")", ddK(b.revenue) + " (" + b.tier + ")"],
-    ["ADR · occupancy", "$" + Math.round(a.adr) + " · " + ddPct(a.occ), "$" + Math.round(b.adr) + " · " + ddPct(b.occ)],
+    ["Nightly rate · nights filled", "$" + Math.round(a.adr) + " · " + ddPct(a.occ), "$" + Math.round(b.adr) + " · " + ddPct(b.occ)],
     ["Bedrooms · baths · sleeps", a.bedrooms + " · " + a.baths + " · " + a.sleeps, b.bedrooms + " · " + b.baths + " · " + b.sleeps],
     ["Guests per bathroom", (a.sleeps / a.baths).toFixed(1), (b.sleeps / b.baths).toFixed(1)],
-    ["Hot tub · entertainment amenities", (a.hot_tub ? "Yes" : "No") + " · " + a.ent_stack, (b.hot_tub ? "Yes" : "No") + " · " + b.ent_stack],
-    ["Overall Visual Score", a.visual_score == null ? "—" : a.visual_score.toFixed(1), b.visual_score == null ? "—" : b.visual_score.toFixed(1)],
+    ["Hot tub · game/entertainment features", (a.hot_tub ? "Yes" : "No") + " · " + a.ent_stack, (b.hot_tub ? "Yes" : "No") + " · " + b.ent_stack],
     ["Rating (reviews)", a.rating + "★ (" + a.reviews + ")", b.rating + "★ (" + b.reviews + ")"],
   ].concat(extra ? extra(a, b) : []);
   return rows.map(([label, left, right]) => ({ label: label, left: left, right: right }));
@@ -131,12 +130,14 @@ function ddPairStats(pair, extra) {
 
 // "Buy the real estate vs. add it later" checklist.
 // rows: [feature, "buy" | "add" | "either", why, evidence, strength]
+// strength: strong | directional | weak, shown in plain English.
+const DD_STRENGTH = { strong: "Strong pattern", directional: "Directional", weak: "Weak evidence" };
 function ddChecklist(rows) {
   const lab = { buy: "Buy the real estate", add: "Add at conversion", either: "Buy the space, add the equipment" };
   let h = '<div class="table-scroll"><table class="data-table data-table--wrap dd-checklist"><thead><tr><th>Requirement</th><th>How to get it</th><th>Why</th><th>Evidence</th></tr></thead><tbody>';
   rows.forEach(([feat, how, why, ev, strength]) => {
     h += '<tr><th scope="row">' + feat + '</th><td><span class="how-pill how-pill--' + how + '">' + lab[how] + '</span></td><td class="cell-note">' + why +
-      '</td><td class="cell-note">' + ev + ' <span class="strength strength--' + strength + '">' + strength + "</span></td></tr>";
+      '</td><td class="cell-note">' + ev + ' <span class="strength strength--' + strength + '">' + DD_STRENGTH[strength] + "</span></td></tr>";
   });
   return h + "</tbody></table></div>";
 }
@@ -146,15 +147,16 @@ function ddRecap(rows) {
   return '<table class="summary-sheet-table">' + rows.map(([k, v]) => "<tr><td>" + k + "</td><td>" + v + "</td></tr>").join("") + "</table>";
 }
 
-// Ranked nice-to-have items from the generated feature rows.
+// Ranked nice-to-have items from the generated feature rows: the median
+// revenue difference with vs. without, and a plain note. Too few listings on
+// either side -> a one-line "too few listings to conclude" row.
 function ddRanked(rows, picks) {
   return picks.map(([feature, note, images, forceThin]) => {
     const r = ddFind(rows, "feature", feature);
     const thin = forceThin || r.thin;
     const uplift = r.median_without ? Math.round((r.median_with / r.median_without - 1) * 100) : null;
-    const hit = Math.round((r.top10_with / r.n_with - r.top10_without / r.n_without) * 100);
     return thin
-      ? { name: feature, thinData: true, n: r.n_with, note: "N=" + r.n_with + ". " + note, images: images || [] }
-      : { name: feature, revenueUplift: (uplift >= 0 ? "+" : "") + uplift + "% median", p90Uplift: (hit >= 0 ? "+" : "") + hit + "pp", n: r.n_with, note: note, images: images || [] };
+      ? { name: feature, thinData: true, note: "Too few listings to conclude. " + note, images: images || [] }
+      : { name: feature, revenueUplift: (uplift >= 0 ? "+" : "") + uplift + "% median revenue", note: note, images: images || [] };
   });
 }

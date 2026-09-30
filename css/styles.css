@@ -682,3 +682,14 @@ img { max-width: 100%; display: block; }
 .cs-cmp__item figcaption a { font-weight: 700; color: var(--color-primary); }
 @media (max-width: 760px) { .cs-cmp__cols { grid-template-columns: 1fr; } }
 .cs-card__rev .muted { font-size: 0.76rem; font-weight: 500; }
+
+/* Ski-Access Ceiling / Overlap reference tier */
+:root { --cs-ceil: #5B3F78; --cs-ceil-bg: color-mix(in srgb, #5B3F78 10%, white); }
+.cs-tier--ceiling { color: var(--cs-ceil); background: var(--cs-ceil-bg); }
+.cs-band--ceiling { background: var(--cs-ceil-bg); border-color: color-mix(in srgb, var(--cs-ceil) 30%, transparent); }
+.cs-band--ceiling .cs-band__label { color: var(--cs-ceil); }
+.cs-bands--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 960px) { .cs-bands--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .cs-bands--4 { grid-template-columns: 1fr; } }
+.cs-facts td.cell-note { min-width: 220px; }
+@media (max-width: 600px) { #deep-dive-content .comp-stats-table th, #deep-dive-content .comp-stats-table td { padding: 6px 8px; } }

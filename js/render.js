@@ -849,7 +849,10 @@ function compStatsTable(rows, labels) {
   });
   html += "</tbody>";
   table.innerHTML = html;
-  return table;
+  // Scroll wrapper so a wide pair table never widens the page on a phone.
+  const wrap = el("div", "table-scroll");
+  wrap.appendChild(table);
+  return wrap;
 }
 
 function compPhotoRow(row, labels) {

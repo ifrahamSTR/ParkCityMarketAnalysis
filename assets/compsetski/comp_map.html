@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_22e045d9399ba9b9e8da68961d2428e7 {
+                #map_f49240a98ecd4224ef8785c7600e6cbc {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -53,16 +53,16 @@
 </head>
 <body>
     
-    <div style='position:fixed;bottom:18px;left:12px;z-index:9999;background:#fff;padding:8px 10px;border:1px solid #DCE2E6;border-radius:6px;font:12px Arial'><b>Approved Ski-Access comps (N=12)</b><br><span style='color:#1B7A43;font-size:15px'>●</span> High (1)<br><span style='color:#D9A404;font-size:15px'>●</span> Medium (3)<br><span style='color:#8FA6B8;font-size:15px'>●</span> Low (8)<br><span style='color:#C0473F'>●</span> Lift base (shaded: 2 km)<br><span style='color:#5b3f78'>- -</span> ~1.1 km from Main Street</div>
+    <div style='position:fixed;bottom:18px;left:12px;z-index:9999;background:#fff;padding:8px 10px;border:1px solid #DCE2E6;border-radius:6px;font:12px Arial'><b>Approved Ski-Access comps (N=12)</b><br><span style='color:#5B3F78;font-size:15px'>●</span> Ceiling / overlap (1)<br><span style='color:#1B7A43;font-size:15px'>●</span> High (3)<br><span style='color:#D9A404;font-size:15px'>●</span> Medium (2)<br><span style='color:#8FA6B8;font-size:15px'>●</span> Low (6)<br><span style='color:#C0473F'>●</span> Lift base (shaded: 2 km)<br><span style='color:#5b3f78'>- -</span> ~1.1 km from Main Street</div>
     
-            <div class="folium-map" id="map_22e045d9399ba9b9e8da68961d2428e7" ></div>
+            <div class="folium-map" id="map_f49240a98ecd4224ef8785c7600e6cbc" ></div>
         
 </body>
 <script>
     
     
-            var map_22e045d9399ba9b9e8da68961d2428e7 = L.map(
-                "map_22e045d9399ba9b9e8da68961d2428e7",
+            var map_f49240a98ecd4224ef8785c7600e6cbc = L.map(
+                "map_f49240a98ecd4224ef8785c7600e6cbc",
                 {
                     center: [40.645, -111.485],
                     crs: L.CRS.EPSG3857,
@@ -75,13 +75,13 @@
 
                 }
             );
-            L.control.scale().addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            L.control.scale().addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
 
             
 
         
     
-            var tile_layer_8b7a1aa3db5bc093c8bba1ef4fd8c838 = L.tileLayer(
+            var tile_layer_053732cd581591f53548e95f55bb008f = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -98,16 +98,16 @@
             );
         
     
-            tile_layer_8b7a1aa3db5bc093c8bba1ef4fd8c838.addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            tile_layer_053732cd581591f53548e95f55bb008f.addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            var circle_b325318fd4b0e578288308d1ce18eef9 = L.circle(
+            var circle_b745a05fb0ee305fbbebc6e4830d29fa = L.circle(
                 [40.6474, -111.4985],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 0.04, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2000, "stroke": true, "weight": 1}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_b325318fd4b0e578288308d1ce18eef9.bindTooltip(
+            circle_b745a05fb0ee305fbbebc6e4830d29fa.bindTooltip(
                 `<div>
                      Park City Mountain — Town Lift (Main St): 2 km
                  </div>`,
@@ -117,13 +117,13 @@
             );
         
     
-            var circle_marker_21173cbc804fccb4538601706c13c69e = L.circleMarker(
+            var circle_marker_49c40626017261d5972547272ec9beec = L.circleMarker(
                 [40.6474, -111.4985],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_marker_21173cbc804fccb4538601706c13c69e.bindTooltip(
+            circle_marker_49c40626017261d5972547272ec9beec.bindTooltip(
                 `<div>
                      Park City Mountain — Town Lift (Main St)
                  </div>`,
@@ -133,13 +133,13 @@
             );
         
     
-            var circle_497ede23779431613e44ee3a84aa6440 = L.circle(
+            var circle_2aba86ef5c97103224b5416a2f867853 = L.circle(
                 [40.6526, -111.5082],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 0.04, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2000, "stroke": true, "weight": 1}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_497ede23779431613e44ee3a84aa6440.bindTooltip(
+            circle_2aba86ef5c97103224b5416a2f867853.bindTooltip(
                 `<div>
                      Park City Mountain — Mountain Village base: 2 km
                  </div>`,
@@ -149,13 +149,13 @@
             );
         
     
-            var circle_marker_33a4e6d10e3271d66dba831232fcb56f = L.circleMarker(
+            var circle_marker_543403f05c8a2703471c800f1ed70dab = L.circleMarker(
                 [40.6526, -111.5082],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_marker_33a4e6d10e3271d66dba831232fcb56f.bindTooltip(
+            circle_marker_543403f05c8a2703471c800f1ed70dab.bindTooltip(
                 `<div>
                      Park City Mountain — Mountain Village base
                  </div>`,
@@ -165,13 +165,13 @@
             );
         
     
-            var circle_f6b85eb48947d36918af8a717a5a9eda = L.circle(
+            var circle_43bca9c63c9221506e1e00c1355796d3 = L.circle(
                 [40.6855, -111.5565],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 0.04, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2000, "stroke": true, "weight": 1}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_f6b85eb48947d36918af8a717a5a9eda.bindTooltip(
+            circle_43bca9c63c9221506e1e00c1355796d3.bindTooltip(
                 `<div>
                      Canyons Village (new Skyway gondola 2026/27): 2 km
                  </div>`,
@@ -181,13 +181,13 @@
             );
         
     
-            var circle_marker_e6e712a5031f313141e6b4ce71b41355 = L.circleMarker(
+            var circle_marker_09471d3ef42d8a3b0268d73804a9a6a1 = L.circleMarker(
                 [40.6855, -111.5565],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_marker_e6e712a5031f313141e6b4ce71b41355.bindTooltip(
+            circle_marker_09471d3ef42d8a3b0268d73804a9a6a1.bindTooltip(
                 `<div>
                      Canyons Village (new Skyway gondola 2026/27)
                  </div>`,
@@ -197,13 +197,13 @@
             );
         
     
-            var circle_5217bdbdf440e1d5ec4ea1bacf74c713 = L.circle(
+            var circle_bddaf29993b4dfc8d5cc042a1bd0d861 = L.circle(
                 [40.6373, -111.4783],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 0.04, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2000, "stroke": true, "weight": 1}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_5217bdbdf440e1d5ec4ea1bacf74c713.bindTooltip(
+            circle_bddaf29993b4dfc8d5cc042a1bd0d861.bindTooltip(
                 `<div>
                      Deer Valley — Snow Park Lodge: 2 km
                  </div>`,
@@ -213,13 +213,13 @@
             );
         
     
-            var circle_marker_def7e357628e9b802df874e48a65d96f = L.circleMarker(
+            var circle_marker_5dc4328ad4afc66a8a63ad4905b4155e = L.circleMarker(
                 [40.6373, -111.4783],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_marker_def7e357628e9b802df874e48a65d96f.bindTooltip(
+            circle_marker_5dc4328ad4afc66a8a63ad4905b4155e.bindTooltip(
                 `<div>
                      Deer Valley — Snow Park Lodge
                  </div>`,
@@ -229,13 +229,13 @@
             );
         
     
-            var circle_cd56f0d0dd40cce00f724e7f3d6efbba = L.circle(
+            var circle_1746d549a02bfd01a63637d8bbebe3c2 = L.circle(
                 [40.636, -111.4516],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 0.04, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2000, "stroke": true, "weight": 1}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_cd56f0d0dd40cce00f724e7f3d6efbba.bindTooltip(
+            circle_1746d549a02bfd01a63637d8bbebe3c2.bindTooltip(
                 `<div>
                      Deer Valley — Jordanelle Express Gondola base: 2 km
                  </div>`,
@@ -245,13 +245,13 @@
             );
         
     
-            var circle_marker_3c1e252d98b8ad700378807f5ad7c3bb = L.circleMarker(
+            var circle_marker_57b08e39136aa32a0c2d4612d2632952 = L.circleMarker(
                 [40.636, -111.4516],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_marker_3c1e252d98b8ad700378807f5ad7c3bb.bindTooltip(
+            circle_marker_57b08e39136aa32a0c2d4612d2632952.bindTooltip(
                 `<div>
                      Deer Valley — Jordanelle Express Gondola base
                  </div>`,
@@ -261,13 +261,13 @@
             );
         
     
-            var circle_93141a823f8a0b452b17d16d1f6b0abc = L.circle(
+            var circle_4c3af74fc7b301ac1025c1abfcca4757 = L.circle(
                 [40.6207, -111.4415],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 0.04, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2000, "stroke": true, "weight": 1}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_93141a823f8a0b452b17d16d1f6b0abc.bindTooltip(
+            circle_4c3af74fc7b301ac1025c1abfcca4757.bindTooltip(
                 `<div>
                      Deer Valley East Village (Expanded Excellence, approx.): 2 km
                  </div>`,
@@ -277,13 +277,13 @@
             );
         
     
-            var circle_marker_ec82854b85038c74af1bc684f40bcd0d = L.circleMarker(
+            var circle_marker_833bfb7e8c8c32c8620cad2857d8c26e = L.circleMarker(
                 [40.6207, -111.4415],
                 {"bubblingMouseEvents": true, "color": "#C0473F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#C0473F", "fillOpacity": 1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_marker_ec82854b85038c74af1bc684f40bcd0d.bindTooltip(
+            circle_marker_833bfb7e8c8c32c8620cad2857d8c26e.bindTooltip(
                 `<div>
                      Deer Valley East Village (Expanded Excellence, approx.)
                  </div>`,
@@ -293,13 +293,13 @@
             );
         
     
-            var circle_2f7f3021d61981017376617be02bc942 = L.circle(
+            var circle_cf7f884f43e098d2e2124aad14788bda = L.circle(
                 [40.6426, -111.4949],
                 {"bubblingMouseEvents": true, "color": "#5b3f78", "dashArray": "5 4", "dashOffset": null, "fill": false, "fillColor": "#5b3f78", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 1100, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            circle_2f7f3021d61981017376617be02bc942.bindTooltip(
+            circle_cf7f884f43e098d2e2124aad14788bda.bindTooltip(
                 `<div>
                      About 1.1 km from Main Street (walk to dinner)
                  </div>`,
@@ -309,20 +309,20 @@
             );
         
     
-            var marker_cde2261cb3aa92f166bbc772b5aa42ed = L.marker(
+            var marker_31001c02e2ba099744d42c827bd32fbd = L.marker(
                 [40.6426, -111.4949],
                 {
 }
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-            var div_icon_c47303c83880a8f79d63f323a636d8db = L.divIcon({
+            var div_icon_83104700cb8317888b4f145eb4b867a2 = L.divIcon({
   "html": "\u003cdiv style=\"font:700 11px Arial;color:#5b3f78;white-space:nowrap;\"\u003e\u2605 Main Street\u003c/div\u003e",
   "className": "empty",
 });
         
     
-            marker_cde2261cb3aa92f166bbc772b5aa42ed.bindTooltip(
+            marker_31001c02e2ba099744d42c827bd32fbd.bindTooltip(
                 `<div>
                      Historic Main Street
                  </div>`,
@@ -332,35 +332,35 @@
             );
         
     
-                marker_cde2261cb3aa92f166bbc772b5aa42ed.setIcon(div_icon_c47303c83880a8f79d63f323a636d8db);
+                marker_31001c02e2ba099744d42c827bd32fbd.setIcon(div_icon_83104700cb8317888b4f145eb4b867a2);
             
     
-            var circle_marker_681849f13ed38d4d8100f38890668f1c = L.circleMarker(
+            var circle_marker_4bfb7a6dc11b88ee9a7d4ed77cb6e7b4 = L.circleMarker(
                 [40.6506, -111.5015],
-                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1B7A43", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#5B3F78", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11, "stroke": true, "weight": 1.5}
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_bbf98cf7cf1e0a346d220dcdf7cb9f92 = L.popup({
+        var popup_d9ed145141e64ee66a1f490c01a1ed4d = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_aef1a33435e6ddb2379022e907036edb = $(`<div id="html_aef1a33435e6ddb2379022e907036edb" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Ski Views · Main St</b> · <span style='color:#1B7A43;font-weight:700'>High</span><br>$336,697 · ADR $1,721 · 53% occ<br>5BR / 7BA · sleeps 14<br>Town Lift / Park City Mountain 0.4 km · Main St 1.0 km<br><a href='https://www.airbnb.com/rooms/1157237634486793116' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_bbf98cf7cf1e0a346d220dcdf7cb9f92.setContent(html_aef1a33435e6ddb2379022e907036edb);
+                var html_d7638fc48d054494628077cbda9f2d49 = $(`<div id="html_d7638fc48d054494628077cbda9f2d49" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Ski Views · Main St</b> · <span style='color:#5B3F78;font-weight:700'>Ceiling</span><br>$336,697 · ADR $1,721 · 53% occ<br>5BR / 7BA · sleeps 14<br>Town Lift / Park City Mountain 0.4 km · Main St 1.0 km<br><a href='https://www.airbnb.com/rooms/1157237634486793116' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_d9ed145141e64ee66a1f490c01a1ed4d.setContent(html_d7638fc48d054494628077cbda9f2d49);
             
         
 
-        circle_marker_681849f13ed38d4d8100f38890668f1c.bindPopup(popup_bbf98cf7cf1e0a346d220dcdf7cb9f92)
+        circle_marker_4bfb7a6dc11b88ee9a7d4ed77cb6e7b4.bindPopup(popup_d9ed145141e64ee66a1f490c01a1ed4d)
         ;
 
         
     
     
-            circle_marker_681849f13ed38d4d8100f38890668f1c.bindTooltip(
+            circle_marker_4bfb7a6dc11b88ee9a7d4ed77cb6e7b4.bindTooltip(
                 `<div>
-                     Ski Views · Main St · High · $337k
+                     Ski Views · Main St · Ceiling · $337k
                  </div>`,
                 {
   "sticky": true,
@@ -368,32 +368,32 @@
             );
         
     
-            var circle_marker_55ecb1e2b222905219cab1b4af621d2c = L.circleMarker(
+            var circle_marker_d476d3eefe7555379d4b5e8b23a30138 = L.circleMarker(
                 [40.64472, -111.49839],
-                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#D9A404", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1B7A43", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11, "stroke": true, "weight": 1.5}
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_ddcf797ef8dfacb02692aaf56d76a7ab = L.popup({
+        var popup_4e2d1004ee5e9aa810d5f0165a41aa63 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_fdedf974b29b2e288cc20d27f0b7a5ef = $(`<div id="html_fdedf974b29b2e288cc20d27f0b7a5ef" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Chic Town Lift Retreat</b> · <span style='color:#D9A404;font-weight:700'>Medium</span><br>$194,260 · ADR $811 · 66% occ<br>3BR / 4BA · sleeps 8<br>Town Lift / Park City Mountain 0.3 km · Main St 0.4 km<br><a href='https://www.airbnb.com/rooms/1303102720980307494' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_ddcf797ef8dfacb02692aaf56d76a7ab.setContent(html_fdedf974b29b2e288cc20d27f0b7a5ef);
+                var html_dde97a6cbcfb3c579133fd5e15cee9e8 = $(`<div id="html_dde97a6cbcfb3c579133fd5e15cee9e8" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Chic Town Lift Retreat</b> · <span style='color:#1B7A43;font-weight:700'>High</span><br>$194,260 · ADR $811 · 66% occ<br>3BR / 4BA · sleeps 8<br>Town Lift / Park City Mountain 0.3 km · Main St 0.4 km<br><a href='https://www.airbnb.com/rooms/1303102720980307494' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_4e2d1004ee5e9aa810d5f0165a41aa63.setContent(html_dde97a6cbcfb3c579133fd5e15cee9e8);
             
         
 
-        circle_marker_55ecb1e2b222905219cab1b4af621d2c.bindPopup(popup_ddcf797ef8dfacb02692aaf56d76a7ab)
+        circle_marker_d476d3eefe7555379d4b5e8b23a30138.bindPopup(popup_4e2d1004ee5e9aa810d5f0165a41aa63)
         ;
 
         
     
     
-            circle_marker_55ecb1e2b222905219cab1b4af621d2c.bindTooltip(
+            circle_marker_d476d3eefe7555379d4b5e8b23a30138.bindTooltip(
                 `<div>
-                     Chic Town Lift Retreat · Medium · $194k
+                     Chic Town Lift Retreat · High · $194k
                  </div>`,
                 {
   "sticky": true,
@@ -401,32 +401,32 @@
             );
         
     
-            var circle_marker_9ae6116ed6cf8ca225fb740db551224f = L.circleMarker(
+            var circle_marker_abacc552fb44bb360242e6ba31ba96bc = L.circleMarker(
                 [40.6413, -111.4954],
-                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#D9A404", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1B7A43", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11, "stroke": true, "weight": 1.5}
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_fdd755f0d9dabae5ec58bc0898d09712 = L.popup({
+        var popup_e2d6647355845bc486ed80678d4220c6 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_25ba59881ed011b99660e35e8b1ce7a4 = $(`<div id="html_25ba59881ed011b99660e35e8b1ce7a4" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Main St & Trails</b> · <span style='color:#D9A404;font-weight:700'>Medium</span><br>$187,992 · ADR $736 · 69% occ<br>4BR / 3BA · sleeps 10<br>Town Lift / Park City Mountain 0.7 km · Main St 0.2 km<br><a href='https://www.airbnb.com/rooms/467426' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_fdd755f0d9dabae5ec58bc0898d09712.setContent(html_25ba59881ed011b99660e35e8b1ce7a4);
+                var html_a0d5abd03cd8d7033e0204651f344a03 = $(`<div id="html_a0d5abd03cd8d7033e0204651f344a03" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Main St & Trails</b> · <span style='color:#1B7A43;font-weight:700'>High</span><br>$187,992 · ADR $736 · 69% occ<br>4BR / 3BA · sleeps 10<br>Town Lift / Park City Mountain 0.7 km · Main St 0.2 km<br><a href='https://www.airbnb.com/rooms/467426' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_e2d6647355845bc486ed80678d4220c6.setContent(html_a0d5abd03cd8d7033e0204651f344a03);
             
         
 
-        circle_marker_9ae6116ed6cf8ca225fb740db551224f.bindPopup(popup_fdd755f0d9dabae5ec58bc0898d09712)
+        circle_marker_abacc552fb44bb360242e6ba31ba96bc.bindPopup(popup_e2d6647355845bc486ed80678d4220c6)
         ;
 
         
     
     
-            circle_marker_9ae6116ed6cf8ca225fb740db551224f.bindTooltip(
+            circle_marker_abacc552fb44bb360242e6ba31ba96bc.bindTooltip(
                 `<div>
-                     Main St & Trails · Medium · $188k
+                     Main St & Trails · High · $188k
                  </div>`,
                 {
   "sticky": true,
@@ -434,32 +434,32 @@
             );
         
     
-            var circle_marker_985ef17c3bf7f28ed265817db4ea02a0 = L.circleMarker(
+            var circle_marker_1006e188e8090b961ba2e5e229b9da7e = L.circleMarker(
                 [40.6451, -111.4855],
-                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#D9A404", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#1B7A43", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11, "stroke": true, "weight": 1.5}
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_0a1b897da4644491e34a7fcf78dd1277 = L.popup({
+        var popup_9855d95c15c50ffa9df3bd9a8aeed115 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_6f08a0a5a2e082d06b77ea9be819cae0 = $(`<div id="html_6f08a0a5a2e082d06b77ea9be819cae0" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Deer Valley Walk-In</b> · <span style='color:#D9A404;font-weight:700'>Medium</span><br>$178,196 · ADR $991 · 51% occ<br>4BR / 4BA · sleeps 10<br>Deer Valley Snow Park 1.1 km · Main St 0.8 km<br><a href='https://www.airbnb.com/rooms/1008845836798748592' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_0a1b897da4644491e34a7fcf78dd1277.setContent(html_6f08a0a5a2e082d06b77ea9be819cae0);
+                var html_3a6308a8564929739f5d2bebae58eaa2 = $(`<div id="html_3a6308a8564929739f5d2bebae58eaa2" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Deer Valley Walk-In</b> · <span style='color:#1B7A43;font-weight:700'>High</span><br>$178,196 · ADR $991 · 51% occ<br>4BR / 4BA · sleeps 10<br>Deer Valley Snow Park 1.1 km · Main St 0.8 km<br><a href='https://www.airbnb.com/rooms/1008845836798748592' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_9855d95c15c50ffa9df3bd9a8aeed115.setContent(html_3a6308a8564929739f5d2bebae58eaa2);
             
         
 
-        circle_marker_985ef17c3bf7f28ed265817db4ea02a0.bindPopup(popup_0a1b897da4644491e34a7fcf78dd1277)
+        circle_marker_1006e188e8090b961ba2e5e229b9da7e.bindPopup(popup_9855d95c15c50ffa9df3bd9a8aeed115)
         ;
 
         
     
     
-            circle_marker_985ef17c3bf7f28ed265817db4ea02a0.bindTooltip(
+            circle_marker_1006e188e8090b961ba2e5e229b9da7e.bindTooltip(
                 `<div>
-                     Deer Valley Walk-In · Medium · $178k
+                     Deer Valley Walk-In · High · $178k
                  </div>`,
                 {
   "sticky": true,
@@ -467,32 +467,32 @@
             );
         
     
-            var circle_marker_62162d83a8779ba9514e95759790ce30 = L.circleMarker(
+            var circle_marker_041a40e6fc3b6e3ce921bb922ec0784f = L.circleMarker(
                 [40.6416, -111.4963],
-                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#D9A404", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_2bfdcad4aa7812be56874ee7d7ab1241 = L.popup({
+        var popup_cce2c35b58db7ec5ec8f731f1c261bd4 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_bc89f205df14965054b495ca25c2eb00 = $(`<div id="html_bc89f205df14965054b495ca25c2eb00" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Steps to Main Street</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$142,452 · ADR $908 · 48% occ<br>4BR / 4.5BA · sleeps 12<br>Town Lift / Park City Mountain 0.7 km · Main St 0.2 km<br><a href='https://www.airbnb.com/rooms/26625927' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_2bfdcad4aa7812be56874ee7d7ab1241.setContent(html_bc89f205df14965054b495ca25c2eb00);
+                var html_281f562de832e21188db5bbfb34bec4d = $(`<div id="html_281f562de832e21188db5bbfb34bec4d" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Steps to Main Street</b> · <span style='color:#D9A404;font-weight:700'>Medium</span><br>$142,452 · ADR $908 · 48% occ<br>4BR / 4.5BA · sleeps 12<br>Town Lift / Park City Mountain 0.7 km · Main St 0.2 km<br><a href='https://www.airbnb.com/rooms/26625927' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_cce2c35b58db7ec5ec8f731f1c261bd4.setContent(html_281f562de832e21188db5bbfb34bec4d);
             
         
 
-        circle_marker_62162d83a8779ba9514e95759790ce30.bindPopup(popup_2bfdcad4aa7812be56874ee7d7ab1241)
+        circle_marker_041a40e6fc3b6e3ce921bb922ec0784f.bindPopup(popup_cce2c35b58db7ec5ec8f731f1c261bd4)
         ;
 
         
     
     
-            circle_marker_62162d83a8779ba9514e95759790ce30.bindTooltip(
+            circle_marker_041a40e6fc3b6e3ce921bb922ec0784f.bindTooltip(
                 `<div>
-                     Steps to Main Street · Low · $142k
+                     Steps to Main Street · Medium · $142k
                  </div>`,
                 {
   "sticky": true,
@@ -500,32 +500,32 @@
             );
         
     
-            var circle_marker_75b1730d339c0fa1a5c250f6e2dfca3e = L.circleMarker(
+            var circle_marker_bc78d2eae7b47f509ff591050f4c28d7 = L.circleMarker(
                 [40.66373, -111.49317],
-                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#D9A404", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_dd482da3a59127e0efab6c6330e43172 = L.popup({
+        var popup_c09b2e9ca4cfb047313de094aaf72f5e = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_56a10130ebe4a845c89eb326b1e5fcd4 = $(`<div id="html_56a10130ebe4a845c89eb326b1e5fcd4" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Dog-Friendly 6BR</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$115,715 · ADR $966 · 35% occ<br>6BR / 3.5BA · sleeps 10<br>Town Lift / Park City Mountain 1.8 km · Main St 2.4 km<br><a href='https://www.airbnb.com/rooms/755055809328356959' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_dd482da3a59127e0efab6c6330e43172.setContent(html_56a10130ebe4a845c89eb326b1e5fcd4);
+                var html_175ffe7bf9f94bd380a3d3719aa57e9f = $(`<div id="html_175ffe7bf9f94bd380a3d3719aa57e9f" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Dog-Friendly 6BR</b> · <span style='color:#D9A404;font-weight:700'>Medium</span><br>$115,715 · ADR $966 · 35% occ<br>6BR / 3.5BA · sleeps 10<br>Town Lift / Park City Mountain 1.8 km · Main St 2.4 km<br><a href='https://www.airbnb.com/rooms/755055809328356959' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_c09b2e9ca4cfb047313de094aaf72f5e.setContent(html_175ffe7bf9f94bd380a3d3719aa57e9f);
             
         
 
-        circle_marker_75b1730d339c0fa1a5c250f6e2dfca3e.bindPopup(popup_dd482da3a59127e0efab6c6330e43172)
+        circle_marker_bc78d2eae7b47f509ff591050f4c28d7.bindPopup(popup_c09b2e9ca4cfb047313de094aaf72f5e)
         ;
 
         
     
     
-            circle_marker_75b1730d339c0fa1a5c250f6e2dfca3e.bindTooltip(
+            circle_marker_bc78d2eae7b47f509ff591050f4c28d7.bindTooltip(
                 `<div>
-                     Dog-Friendly 6BR · Low · $116k
+                     Dog-Friendly 6BR · Medium · $116k
                  </div>`,
                 {
   "sticky": true,
@@ -533,30 +533,30 @@
             );
         
     
-            var circle_marker_efc085cecd352604b4215fd4a2eb6f1b = L.circleMarker(
+            var circle_marker_b627613c6fb5823511e0649f4dc0e092 = L.circleMarker(
                 [40.6294, -111.4335],
                 {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_5bd61806b2abc85f6de80f437c821553 = L.popup({
+        var popup_939b8aeabf897c992f6a7e5d80a8aa24 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_74df300265e78ff573d2c26570be752a = $(`<div id="html_74df300265e78ff573d2c26570be752a" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>East Village 4BR</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$110,073 · ADR $480 · 63% occ<br>4BR / 3.5BA · sleeps 12<br>Deer Valley Jordanelle / East Village 1.2 km · Main St 5.4 km<br><a href='https://www.airbnb.com/rooms/636760517094064833' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_5bd61806b2abc85f6de80f437c821553.setContent(html_74df300265e78ff573d2c26570be752a);
+                var html_f38cbe5d3774d7fdf0ffd73df5578f04 = $(`<div id="html_f38cbe5d3774d7fdf0ffd73df5578f04" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>East Village 4BR</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$110,073 · ADR $480 · 63% occ<br>4BR / 3.5BA · sleeps 12<br>Deer Valley Jordanelle / East Village 1.2 km · Main St 5.4 km<br><a href='https://www.airbnb.com/rooms/636760517094064833' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_939b8aeabf897c992f6a7e5d80a8aa24.setContent(html_f38cbe5d3774d7fdf0ffd73df5578f04);
             
         
 
-        circle_marker_efc085cecd352604b4215fd4a2eb6f1b.bindPopup(popup_5bd61806b2abc85f6de80f437c821553)
+        circle_marker_b627613c6fb5823511e0649f4dc0e092.bindPopup(popup_939b8aeabf897c992f6a7e5d80a8aa24)
         ;
 
         
     
     
-            circle_marker_efc085cecd352604b4215fd4a2eb6f1b.bindTooltip(
+            circle_marker_b627613c6fb5823511e0649f4dc0e092.bindTooltip(
                 `<div>
                      East Village 4BR · Low · $110k
                  </div>`,
@@ -566,30 +566,30 @@
             );
         
     
-            var circle_marker_f3561449c06dbafdb746d96ae23c5d70 = L.circleMarker(
+            var circle_marker_c3148bd8f45b623421618d82d903f5ef = L.circleMarker(
                 [40.6436, -111.4458],
                 {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_724cbd47eb26a08e394a4c1a6545ff7e = L.popup({
+        var popup_53035378f4d87798e970b229180fd93f = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_76278fe6453622746b777b114e11531d = $(`<div id="html_76278fe6453622746b777b114e11531d" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Jordanelle Château</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$107,958 · ADR $422 · 69% occ<br>4BR / 2.5BA · sleeps 11<br>Deer Valley Jordanelle / East Village 1.0 km · Main St 4.1 km<br><a href='https://www.airbnb.com/rooms/1427512835281574002' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_724cbd47eb26a08e394a4c1a6545ff7e.setContent(html_76278fe6453622746b777b114e11531d);
+                var html_19f9be8a6a66fcac7379b07ace2e3314 = $(`<div id="html_19f9be8a6a66fcac7379b07ace2e3314" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Jordanelle Château</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$107,958 · ADR $422 · 69% occ<br>4BR / 2.5BA · sleeps 11<br>Deer Valley Jordanelle / East Village 1.0 km · Main St 4.1 km<br><a href='https://www.airbnb.com/rooms/1427512835281574002' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_53035378f4d87798e970b229180fd93f.setContent(html_19f9be8a6a66fcac7379b07ace2e3314);
             
         
 
-        circle_marker_f3561449c06dbafdb746d96ae23c5d70.bindPopup(popup_724cbd47eb26a08e394a4c1a6545ff7e)
+        circle_marker_c3148bd8f45b623421618d82d903f5ef.bindPopup(popup_53035378f4d87798e970b229180fd93f)
         ;
 
         
     
     
-            circle_marker_f3561449c06dbafdb746d96ae23c5d70.bindTooltip(
+            circle_marker_c3148bd8f45b623421618d82d903f5ef.bindTooltip(
                 `<div>
                      Jordanelle Château · Low · $108k
                  </div>`,
@@ -599,30 +599,30 @@
             );
         
     
-            var circle_marker_f9353cb3a930d17755939fd0a9b9438f = L.circleMarker(
+            var circle_marker_c2772ad687cd114b0597070e93c98413 = L.circleMarker(
                 [40.6408, -111.4952],
                 {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_c13d821813250bd2fadc9a7992c30860 = L.popup({
+        var popup_98e3595aab6ab41f3ef298d8176fac30 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_5e93b1c55e01a7e8b440d3586031fe46 = $(`<div id="html_5e93b1c55e01a7e8b440d3586031fe46" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Ski-in/out Old Town</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$107,709 · ADR $895 · 40% occ<br>3BR / 3BA · sleeps 7<br>Town Lift / Park City Mountain 0.8 km · Main St 0.2 km<br><a href='https://www.airbnb.com/rooms/621644324634749112' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_c13d821813250bd2fadc9a7992c30860.setContent(html_5e93b1c55e01a7e8b440d3586031fe46);
+                var html_84d5cc7dfce68ab107522ff9bbf80f6e = $(`<div id="html_84d5cc7dfce68ab107522ff9bbf80f6e" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Ski-in/out Old Town</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$107,709 · ADR $895 · 40% occ<br>3BR / 3BA · sleeps 7<br>Town Lift / Park City Mountain 0.8 km · Main St 0.2 km<br><a href='https://www.airbnb.com/rooms/621644324634749112' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_98e3595aab6ab41f3ef298d8176fac30.setContent(html_84d5cc7dfce68ab107522ff9bbf80f6e);
             
         
 
-        circle_marker_f9353cb3a930d17755939fd0a9b9438f.bindPopup(popup_c13d821813250bd2fadc9a7992c30860)
+        circle_marker_c2772ad687cd114b0597070e93c98413.bindPopup(popup_98e3595aab6ab41f3ef298d8176fac30)
         ;
 
         
     
     
-            circle_marker_f9353cb3a930d17755939fd0a9b9438f.bindTooltip(
+            circle_marker_c2772ad687cd114b0597070e93c98413.bindTooltip(
                 `<div>
                      Ski-in/out Old Town · Low · $108k
                  </div>`,
@@ -632,30 +632,30 @@
             );
         
     
-            var circle_marker_f301c5faa47163035b65569fb1c536f4 = L.circleMarker(
+            var circle_marker_99c940eec1b37cff7f1f6cfd20209dff = L.circleMarker(
                 [40.642, -111.493],
                 {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_32155fb98805065ad7819e071f926735 = L.popup({
+        var popup_bd76e28fb976f0974be52289d10e5435 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_9e65f505c9b386457742853d35cc37d3 = $(`<div id="html_9e65f505c9b386457742853d35cc37d3" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Old Town 3BR Views</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$104,752 · ADR $461 · 63% occ<br>3BR / 3.5BA · sleeps 6<br>Town Lift / Park City Mountain 0.8 km · Main St 0.2 km<br><a href='https://www.airbnb.com/rooms/1193546316152007277' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_32155fb98805065ad7819e071f926735.setContent(html_9e65f505c9b386457742853d35cc37d3);
+                var html_ab5f8a9c20d789e649ae6e24f6303cb8 = $(`<div id="html_ab5f8a9c20d789e649ae6e24f6303cb8" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Old Town 3BR Views</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$104,752 · ADR $461 · 63% occ<br>3BR / 3.5BA · sleeps 6<br>Town Lift / Park City Mountain 0.8 km · Main St 0.2 km<br><a href='https://www.airbnb.com/rooms/1193546316152007277' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_bd76e28fb976f0974be52289d10e5435.setContent(html_ab5f8a9c20d789e649ae6e24f6303cb8);
             
         
 
-        circle_marker_f301c5faa47163035b65569fb1c536f4.bindPopup(popup_32155fb98805065ad7819e071f926735)
+        circle_marker_99c940eec1b37cff7f1f6cfd20209dff.bindPopup(popup_bd76e28fb976f0974be52289d10e5435)
         ;
 
         
     
     
-            circle_marker_f301c5faa47163035b65569fb1c536f4.bindTooltip(
+            circle_marker_99c940eec1b37cff7f1f6cfd20209dff.bindTooltip(
                 `<div>
                      Old Town 3BR Views · Low · $105k
                  </div>`,
@@ -665,30 +665,30 @@
             );
         
     
-            var circle_marker_607e5c0461bab6a6ba719ef068a7f4e7 = L.circleMarker(
+            var circle_marker_de6982ea8baa9f18e3112c9439048d0f = L.circleMarker(
                 [40.6432, -111.4965],
                 {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_a276db8cedd365535dfcc29164a1cc6a = L.popup({
+        var popup_15e362250ffc9576993076e591f24ee5 = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_6ebf295c567fa5072df9896dcb31252e = $(`<div id="html_6ebf295c567fa5072df9896dcb31252e" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Reese Williams House</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$101,432 · ADR $689 · 42% occ<br>4BR / 2BA · sleeps 10<br>Town Lift / Park City Mountain 0.5 km · Main St 0.2 km<br><a href='https://www.airbnb.com/rooms/908661763658406173' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_a276db8cedd365535dfcc29164a1cc6a.setContent(html_6ebf295c567fa5072df9896dcb31252e);
+                var html_a73302325bb2326bfb1e8eda15533a00 = $(`<div id="html_a73302325bb2326bfb1e8eda15533a00" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Reese Williams House</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$101,432 · ADR $689 · 42% occ<br>4BR / 2BA · sleeps 10<br>Town Lift / Park City Mountain 0.5 km · Main St 0.2 km<br><a href='https://www.airbnb.com/rooms/908661763658406173' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_15e362250ffc9576993076e591f24ee5.setContent(html_a73302325bb2326bfb1e8eda15533a00);
             
         
 
-        circle_marker_607e5c0461bab6a6ba719ef068a7f4e7.bindPopup(popup_a276db8cedd365535dfcc29164a1cc6a)
+        circle_marker_de6982ea8baa9f18e3112c9439048d0f.bindPopup(popup_15e362250ffc9576993076e591f24ee5)
         ;
 
         
     
     
-            circle_marker_607e5c0461bab6a6ba719ef068a7f4e7.bindTooltip(
+            circle_marker_de6982ea8baa9f18e3112c9439048d0f.bindTooltip(
                 `<div>
                      Reese Williams House · Low · $101k
                  </div>`,
@@ -698,30 +698,30 @@
             );
         
     
-            var circle_marker_55575af0552ff2f0a013d4fd21c4975d = L.circleMarker(
+            var circle_marker_42d08fafa13f61e2c2661011abf4d15c = L.circleMarker(
                 [40.6435, -111.4464],
                 {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8FA6B8", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9, "stroke": true, "weight": 1.5}
-            ).addTo(map_22e045d9399ba9b9e8da68961d2428e7);
+            ).addTo(map_f49240a98ecd4224ef8785c7600e6cbc);
         
     
-        var popup_70d2598d814b9fe605bfd1eb74e22370 = L.popup({
+        var popup_941ebe99e6df59ba5754f5836356f86a = L.popup({
   "maxWidth": 260,
 });
 
         
             
-                var html_7ebbee254da72ebf54e241d2a779ae1a = $(`<div id="html_7ebbee254da72ebf54e241d2a779ae1a" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Gondola Lake Chalet</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$86,057 · ADR $434 · 61% occ<br>4BR / 2.5BA · sleeps 9<br>Deer Valley Jordanelle / East Village 0.9 km · Main St 4.1 km<br><a href='https://www.airbnb.com/rooms/1354532865929584819' target='_blank'>View on Airbnb</a></div></div>`)[0];
-                popup_70d2598d814b9fe605bfd1eb74e22370.setContent(html_7ebbee254da72ebf54e241d2a779ae1a);
+                var html_cecf37b76df3630ea14368cdb460609f = $(`<div id="html_cecf37b76df3630ea14368cdb460609f" style="width: 100.0%; height: 100.0%;"><div style='font:12px Arial;max-width:240px'><b>Gondola Lake Chalet</b> · <span style='color:#8FA6B8;font-weight:700'>Low</span><br>$86,057 · ADR $434 · 61% occ<br>4BR / 2.5BA · sleeps 9<br>Deer Valley Jordanelle / East Village 0.9 km · Main St 4.1 km<br><a href='https://www.airbnb.com/rooms/1354532865929584819' target='_blank'>View on Airbnb</a></div></div>`)[0];
+                popup_941ebe99e6df59ba5754f5836356f86a.setContent(html_cecf37b76df3630ea14368cdb460609f);
             
         
 
-        circle_marker_55575af0552ff2f0a013d4fd21c4975d.bindPopup(popup_70d2598d814b9fe605bfd1eb74e22370)
+        circle_marker_42d08fafa13f61e2c2661011abf4d15c.bindPopup(popup_941ebe99e6df59ba5754f5836356f86a)
         ;
 
         
     
     
-            circle_marker_55575af0552ff2f0a013d4fd21c4975d.bindTooltip(
+            circle_marker_42d08fafa13f61e2c2661011abf4d15c.bindTooltip(
                 `<div>
                      Gondola Lake Chalet · Low · $86k
                  </div>`,
@@ -731,7 +731,7 @@
             );
         
     
-            map_22e045d9399ba9b9e8da68961d2428e7.fitBounds(
+            map_f49240a98ecd4224ef8785c7600e6cbc.fitBounds(
                 [[40.621399999999994, -111.5135], [40.671730000000004, -111.4215]],
                 {}
             );

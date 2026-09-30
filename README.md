@@ -19,7 +19,7 @@ This is the same template as the Charlotte, NC site (`../../../Charlotte/webpage
   - **3BR floor:** 1–2BR homes gain from ski access but never reach target level.
   - **No cap:** there is no evidence the premium stops at 5BR+, only N=2 to measure it with. Capping at 4BR would drop a Top 25% 6BR (sleeps 10) near a lift that fits neither box.
 - **Section 7 (Coverage) is removed from the page**, because it repeated Section 1. The segment stats remain in `region_data.js`.
-- **Section 6: the Group Home tab is complete with its analyst-approved revenue comp set (2026-09-29); the Ski-Access tab is still pre-comp-set.** See "Section 6" and "Group Home revenue comp set" below. Purchase price is pending for both.
+- **Section 6: both tabs are complete on the revenue-comp side (2026-09-29).** The Group Home has 14 analyst-approved comps and the Ski-Access Home has 12. See "Group Home revenue comp set" and "Ski-Access revenue comp set" below. Purchase price is pending for both.
 - **Regulatory hold:** Summit County's proposed nightly-rental bans (June 2026) in Summit Park and Tollgate Canyon (Pine Meadow) affect 3 of the 11 Top 10% group homes.
 
 ## Page structure
@@ -60,7 +60,7 @@ These commands used the `airbnb_visual_tier` conda env, which has pandas, scikit
 
 `js/data.js` holds prose and config only. Where a sentence there quotes a number, it was checked against the notebook output. If the workbook changes, re-read the prose, because the generated numbers will update but the sentences will not.
 
-## Section 6 — Buy-box deep dives (pre-comp-set)
+## Section 6 — Buy-box deep dives (product-population layer)
 
 Pipeline: `../notebooks/build_deepdive_notebook.py` writes and executes `parkcity_buybox_deepdive.ipynb`, which produces two outputs:
 
@@ -130,8 +130,28 @@ To update the comp set: replace the CSV. If a listing is added, give it a `SHORT
 
 Photos: comp-set images come from each comp's own gallery. Every photo elsewhere in Section 6 carries a generated label, either "Approved Group Home comp · tier" or "Market reference" (`ddPhoto`).
 
+## Ski-Access revenue comp set (Section 6, Buy Box 2)
+
+Source of truth: `../Park City - UT - SkiAccess_Comp_Set_URLs.txt`, the analyst's 12 Airbnb URLs, used exactly as supplied. The analyst's rule was 3BR+, within about 2 km of a lift, and Revenue Potential ≥ $75,000 on the exact value. The notebook checks that the rule reproduces the list, but never selects with it.
+
+Pipeline:
+
+1. `../notebooks/build_compset_ski_notebook.py` writes and executes `parkcity_ski_compset.ipynb`.
+2. The notebook:
+   - joins the 12 comps by room ID to `parkcity_market_enriched.xlsx` and to the Base_Table description text;
+   - computes lift, ski-area and Main Street distances;
+   - derives tiers from the revenue breaks: High $300k+ (1), Medium $150k–<$300k (3), Low $75k–<$150k (8). An exhaustive natural-breaks check must agree, and does;
+   - computes the walkability bands, the walkable-zone split, drivers (all 12 and the 3–4BR core), the ADR/occupancy decomposition, amenity prevalence, concept percentiles and capacity buckets;
+   - saves the photos, three charts and a comp map (lift bases with 2 km zones and a Main Street ring) into `assets/compsetski/`;
+   - writes `compset_ski_stats.json`.
+3. `scripts/generate_webpage_data.py` writes `js/compset_ski_data.js` (`COMPSET_SKI`).
+4. `js/compset.js` provides one kit per comp set (`compsetKit`), and `js/deepdive_content.js` holds the prose.
+
+`../notebooks/ski_comp_photo_catalogue.json` is a per-photo description of all 96 gallery photos, from a photo-review pass over the existing downloaded images. It is used to choose images and for the "finish (photo review)" field, which is a judgment, not a measurement.
+
+To update the comp set: edit the URL file. A newly added listing also needs a `SHORT` name, a `COVER` photo and a catalogue entry. Then run the builder, nbconvert and the generator.
+
 ## Not yet done
 
-- Ski-Access comp set (analyst-provided) and its comp-set analysis.
 - Purchase-price underwriting for both boxes.
-- Address-level regulatory checks for any candidate property.
+- Address-level checks for any candidate: zoning, CC&Rs, and snow-season access and parking in Old Town.

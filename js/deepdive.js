@@ -24,12 +24,16 @@ function ddFind(rows, key, value) {
 // A reference photo from the market population. The caption is the
 // analytical point; the listing identity + revenue are appended from
 // DEEPDIVE.photos so they can't drift from the data. If the listing is also
-// in the approved Group Home comp set (COMPSET_5BR), it says so; otherwise
+// in an approved comp set (COMPSET_5BR / COMPSET_SKI), it says so; otherwise
 // it is labelled a market reference, so comp and reference images never blur.
 function ddPhoto(box, key, caption, alt) {
   const p = DEEPDIVE.photos[box][key];
-  const comp = typeof COMPSET_5BR !== "undefined" && COMPSET_5BR.comps.find((c) => c.url.split("?")[0] === String(p.url).split("?")[0]);
-  const role = comp ? "Approved Group Home comp · " + comp.tier : "Market reference";
+  const u = String(p.url).split("?")[0];
+  const inSet = (D) => typeof D !== "undefined" && D && D.comps.find((c) => c.url.split("?")[0] === u);
+  const sets = [["Group Home", typeof COMPSET_5BR !== "undefined" ? COMPSET_5BR : null], ["Ski-Access", typeof COMPSET_SKI !== "undefined" ? COMPSET_SKI : null]];
+  if (box === "ski") sets.reverse();
+  const hit = sets.map(([lab, D]) => [lab, inSet(D)]).find(([, c]) => c);
+  const role = hit ? "Approved " + hit[0] + " comp · " + hit[1].tier : "Market reference";
   const meta = role + " · " + p.title + " · " + p.bedrooms + "BR/" + p.baths + "BA · " + ddK(p.revenue) + " (July) · " + p.tier;
   return { file: "assets/" + p.file, alt: alt || caption, caption: caption + " <span class=\"photo-meta\">" + meta + "</span>" };
 }

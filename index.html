@@ -6,7 +6,8 @@
 <title>Park City, UT STR Buy-Box Evaluation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/styles.css?v=20261001-pc13" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="css/styles.css?v=20261001-pc15" />
 </head>
 <body>
 
@@ -20,6 +21,7 @@
       <a href="#declaration">Buy Box</a>
       <a href="#market">Market</a>
       <a href="#location">Location</a>
+      <a href="#destinations">Why Here</a>
       <a href="#demographics">Demographics</a>
       <a href="#regulations">Regulations</a>
       <a href="#deep-dive">Deep Dive</a>
@@ -34,7 +36,7 @@
     <div class="container">
       <p class="section-kicker">Preliminary Direction</p>
       <h1>One Park City market, two products</h1>
-      <p class="hero-sub"><strong>For mid-size homes, buy the location; for large homes, buy the product.</strong> The seven areas on the map are reference geography, not strategies. The two boxes below account for all 15 of the market's Top 10% listings. They are unranked: which one to pursue first depends on price, inventory, margins and regulation. Section 6 specifies each against its analyst-approved revenue comp set (14 Group Home comps, 12 Ski-Access comps). Purchase-price underwriting is pending for both.</p>
+      <p class="hero-sub"><strong>For mid-size homes, buy the location; for large homes, buy the product.</strong> The seven areas on the map are reference geography, not strategies. The two boxes below account for all 15 of the market's Top 10% listings. They are unranked: which one to pursue first depends on price, inventory, margins and regulation. Section 7 specifies each against its analyst-approved revenue comp set (14 Group Home comps, 12 Ski-Access comps). Purchase-price underwriting is pending for both.</p>
       <div id="buybox-declarations" class="declarations-grid"></div>
       <p id="not-targets" class="not-targets"></p>
     </div>
@@ -64,7 +66,7 @@
     <div class="container">
       <p class="section-kicker">Section 3</p>
       <h2>Location Analysis</h2>
-      <iframe class="embedded-map embedded-map--tall" src="assets/overview/parkcity_overview_map.html?v=20261001-pc13" loading="lazy" title="Interactive map of Park City area STR revenue tiers, seven reference areas, the 2 km ski-access zone, and demand-driver landmarks"></iframe>
+      <iframe class="embedded-map embedded-map--tall" src="assets/overview/parkcity_overview_map.html?v=20261001-pc15" loading="lazy" title="Interactive map of Park City area STR revenue tiers, seven reference areas, the 2 km ski-access zone, and demand-driver landmarks"></iframe>
       <p id="map-interpretation" class="caption"></p>
 
       <h3 class="subsection-title">When Does Location Matter? Bedrooms × Ski Access</h3>
@@ -96,10 +98,27 @@
     </div>
   </section>
 
-  <!-- Section 4: Traveller demographics -->
-  <section id="demographics" class="section">
+  <!-- Section 4: why location changes the rate (destination context). Content: js/destination.js -->
+  <section id="destinations" class="section">
     <div class="container">
       <p class="section-kicker">Section 4</p>
+      <h2>Why Location Changes the Rate</h2>
+      <p class="subsection-lede">Why guests pay more in some parts of the market, and why large homes can still work farther out. Click an area.</p>
+      <div id="destination-body"></div>
+      <h3 class="subsection-title">When Guests Come</h3>
+      <div id="dest-season"></div>
+      <div class="conclusion-box dest-bridge">
+        <p><strong>Near skiing and town, guests pay for location and convenience.</strong> → Ski-Access Home</p>
+        <p><strong>Farther out, the property itself has to do more of the work.</strong> → Large Group Home</p>
+      </div>
+      <p id="dest-sources" class="dest-sources"></p>
+    </div>
+  </section>
+
+  <!-- Section 5: Traveller demographics -->
+  <section id="demographics" class="section">
+    <div class="container">
+      <p class="section-kicker">Section 5</p>
       <h2>Traveller Demographics</h2>
       <div id="demographics-intro-body"></div>
       <div class="chart-row">
@@ -117,10 +136,10 @@
     </div>
   </section>
 
-  <!-- Section 5: STR regulations -->
+  <!-- Section 6: STR regulations -->
   <section id="regulations" class="section">
     <div class="container">
-      <p class="section-kicker">Section 5</p>
+      <p class="section-kicker">Section 6</p>
       <h2>STR Regulations</h2>
       <div id="regulations-body"></div>
     </div>
@@ -129,7 +148,7 @@
   <!-- Section 6: buy-box deep dives against the approved revenue comp sets (js/compset_data.js, js/compset_ski_data.js). Content: js/deepdive_content.js -->
   <section id="deep-dive" class="section">
     <div class="container">
-      <p class="section-kicker">Section 6</p>
+      <p class="section-kicker">Section 7</p>
       <h2>Buy-Box Deep Dive</h2>
       <p class="subsection-lede">A specification for each product: what to search for, what to buy versus add, and what winning execution looks like. Both boxes are complete on the revenue-comp side: <strong>Large Group Home</strong> against 14 analyst-approved comps, <strong>Ski-Access Home</strong> against 12. Purchase price is pending for both. Every photo is labelled as either an approved comp or a market reference.</p>
       <div id="deep-dive-tabs" class="tabs"></div>
@@ -155,17 +174,19 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<script src="js/region_data.js?v=20261001-pc13"></script>
-<script src="js/deepdive_data.js?v=20261001-pc13"></script>
-<script src="js/compset_data.js?v=20261001-pc13"></script>
-<script src="js/compset_ski_data.js?v=20261001-pc13"></script>
-<script src="js/data.js?v=20261001-pc13"></script>
-<script src="js/render.js?v=20261001-pc13"></script>
-<script src="js/research.js?v=20261001-pc13"></script>
-<script src="js/deepdive.js?v=20261001-pc13"></script>
-<script src="js/compset.js?v=20261001-pc13"></script>
-<script src="js/deepdive_content.js?v=20261001-pc13"></script>
-<script src="js/charts.js?v=20261001-pc13"></script>
-<script src="js/main.js?v=20261001-pc13"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/region_data.js?v=20261001-pc15"></script>
+<script src="js/deepdive_data.js?v=20261001-pc15"></script>
+<script src="js/compset_data.js?v=20261001-pc15"></script>
+<script src="js/compset_ski_data.js?v=20261001-pc15"></script>
+<script src="js/data.js?v=20261001-pc15"></script>
+<script src="js/render.js?v=20261001-pc15"></script>
+<script src="js/research.js?v=20261001-pc15"></script>
+<script src="js/deepdive.js?v=20261001-pc15"></script>
+<script src="js/compset.js?v=20261001-pc15"></script>
+<script src="js/destination.js?v=20261001-pc15"></script>
+<script src="js/deepdive_content.js?v=20261001-pc15"></script>
+<script src="js/charts.js?v=20261001-pc15"></script>
+<script src="js/main.js?v=20261001-pc15"></script>
 </body>
 </html>

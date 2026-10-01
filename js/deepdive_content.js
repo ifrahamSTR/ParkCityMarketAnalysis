@@ -281,7 +281,7 @@
         title: "Buy the Real Estate vs. Add at Conversion",
         html: () => ddChecklist([
           ["Walk to Main Street (within about 1 km), at the Town Lift or Deer Valley Snow Park", "buy", "The whole thesis. It can't be added later.", "Every High comp is walkable; none of the " + KG.not_walkable_n + " comps farther out reach High.", "strong"],
-          ["Legal nightly rental", "buy", "Park City zoning: HR-1, R-1, Estate and most RD zones. MIDA / Hideout rules on the Jordanelle side.", "Section 5", "strong"],
+          ["Legal nightly rental", "buy", "Park City zoning: HR-1, R-1, Estate and most RD zones. MIDA / Hideout rules on the Jordanelle side.", "Section 6", "strong"],
           ["Enough bathrooms: 3+ baths for 10 guests", "buy", "One of the clearest differences, and hard to add in an Old Town footprint.", "High comps: " + KT.High.baths_median + " baths. Low: " + KT.Low.baths_median + ". The only 2-bath comp is Low.", "strong"],
           ["3–4BR sleeping 8–10", "buy", "The top 3–4BR comp is a 3BR. Both comps sleeping 6–7 are Low.", "A fourth bedroom adds little.", "directional"],
           ["Deck or balcony, fireplace, on-site parking", "buy", "Structural, and every comp has them.", "The entry ticket, not what separates the tiers.", "strong"],

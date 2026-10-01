@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderDemographicsStackedBarChart();
   renderLocationInterpretation();
   renderClusterResearch();
+  if (typeof renderDestinationSection === "function") renderDestinationSection();
   document.getElementById("drivers-note").innerHTML = DRIVERS_NOTE;
   renderLiftScatterChart();
   initNav();

@@ -32,8 +32,14 @@ This is the same template as the Charlotte, NC site (`../../../Charlotte/webpage
    - the definition-test bullets beside a revenue vs. lift-distance scatter, colored by size;
    - a collapsed reference-area table;
    - a three-bullet acquisition conclusion.
-4. **Demographics:** market-wide and by bedroom count.
-5. **Regulations:** one jurisdiction table.
+4. **Why Location Changes the Rate** (`js/destination.js`):
+   - a Leaflet map of six combined demand areas: Old Town / Main Street, Deer Valley, Canyons / Snyderville / Kimball Junction, East Village / Jordanelle, Heber & Midway, and Summit Park & Pine Meadow;
+   - clicking an area zooms to it and updates a side panel with three lines: why guests choose it, main season / trip type, and why it matters here. Each "why it matters" line is computed from the approved comp sets;
+   - a one-row season strip, two underwriting notes (snow dependence, Sundance's exit), and the bridge into the two buy boxes;
+   - destination facts were researched 2026-09-30 and are cited in the section.
+5. **Demographics:** market-wide and by bedroom count.
+6. **Regulations:** one jurisdiction table.
+7. **Deep Dive:** the two buy-box tabs.
 
 Removed from the page but kept in the notebook: the cluster methodology, the full scorecards, the region × bedroom grid, lift-band detail, region profiles, the Top 10% roster and region demographics. Anything resting on fewer than 15 listings is greyed and tagged "directional" (`SMALL_N` in `js/research.js`).
 

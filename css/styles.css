@@ -742,3 +742,11 @@ img { max-width: 100%; display: block; }
 .dest-sources { font-size: 0.74rem; color: var(--color-text-muted); margin-top: 14px; }
 @media (max-width: 860px) { .dest-layout { grid-template-columns: 1fr; } .dest-map { height: 400px; } }
 .leaflet-tooltip.dest-tip { font: 700 11px/1.3 Inter, Arial, sans-serif; color: #263238; border-radius: 6px; padding: 2px 7px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+/* One-Page Recap in the BuyBox Template V.2 layout */
+.bb-template { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 6px 0; }
+.bb-template th, .bb-template td { border: 1px solid #d5dbe0; padding: 7px 10px; text-align: left; vertical-align: top; }
+.bb-template thead th { background: #eef1f4; color: var(--color-primary); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.bb-template__cat { background: #eaf2f8; color: #1f3d5c; font-weight: 800; width: 15%; text-align: center !important; vertical-align: middle !important; }
+.bb-template__sub { width: 21%; font-weight: 600; color: var(--color-primary); }
+@media (max-width: 600px) { .bb-template { font-size: 0.82rem; } .bb-template th, .bb-template td { padding: 6px 7px; } }

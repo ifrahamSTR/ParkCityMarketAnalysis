@@ -1,8 +1,8 @@
 /**
  * Section 6 — Buy-Box Deep Dives, attached to BUY_BOXES.
  *
- * Each tab is structured around what its approved comps show, with Charlotte's
- * One-Page Recap template (csRecap) at the end:
+ * Each tab is structured around what its approved comps show, with the
+ * One-Page Recap in the team's BuyBox Template V.2 layout (csTemplate) at the end:
  *   Group Home: minimum standard -> location sets the revenue band ->
  *     execution within the location -> comps -> examples -> recap.
  *   Ski-Access: location first, then the minimum product, comps and recap.
@@ -171,43 +171,38 @@
       { groupTitle: "Buy-Box Summary" },
       {
         title: "One-Page Recap",
-        body: csRecap(
-          [
-            ["Bedrooms / Baths", "5+ bedrooms (5 is enough) · 4.5+ bathrooms for 16 guests"],
-            ["Ideal Sleep Count", "14–16, legal at the address (Heber City caps at 16)"],
-            ["Architectural Style", "Any style: good bones, not builder-grade tract product"],
-            ["Backyard Size", "Room for a hot tub, outdoor dining and a fire zone; no court or pool needed"],
-            ["Must-Have's", "Hot tub, game room, fire pit, BBQ, fireplace; great room and dining for the group"],
-            ["Nice-to-Have's", "Outdoor dining, pool table, sauna. Pickleball, pool, playground, gym and theater are not worth paying for"],
-            ["View", "Not a criterion"],
+        body: csTemplate([
+          ["STR Regulations", [
+            ["Regulation Tier Overall", "🟡&nbsp; Verify. Legal address by address; Summit Park / Pine Meadow on hold"],
+            ["Permit / Residency", "Permit / license required: <strong>Y</strong> · Primary residence required: <strong>N</strong>"],
+            ["Operating Limits", "Heber City: max 16 guests (1 per 200 sq ft), paved on-site parking, manager within 10 miles. Summit County: $350 license; bans proposed in Summit Park, Tollgate Canyon (Pine Meadow) and Rockport Estates. Lodging tax about 13–15%"],
+            ["Investor Notes", "Confirm zoning, CC&Rs and city vs. county for every address. Avoid Midway (shrinking STR zone). Details in Section 6"],
+          ]],
+          ["Property Profile", [
+            ["Bedrooms / Baths", "5+ BR (5 is enough) · 4.5+ baths for 16 guests"],
+            ["Ideal Sleep Count", "Minimum 14 · ideal 16"],
+            ["Architectural Style", "Any style with good bones; avoid builder-grade tract homes"],
+            ["Backyard Size", "Deck or yard with room for a hot tub, outdoor dining and a fire zone"],
+          ]],
+          ["Amenities", [
+            ["Must Have's", "Hot tub, game room, great room + group dining, fire pit, BBQ, fireplace"],
+            ["Nice to Have's", "Outdoor dining set, pool table, sauna, ping pong / arcade. Not worth paying for: pickleball, pool, playground"],
+          ]],
+          ["Geo Considerations", [
+            ["View", "Not required"],
             ["Waterfront", "Not relevant"],
-            ["Privacy / Seclusion", "Not necessary"],
-            ["Ideal Location(s)", "Park City side for $200k+ (Old Town / Deer Valley, or Summit Park / Pine Meadow once the hold clears). Heber / Snyderville at the lower band. Avoid Midway"],
-            ["Traveler ICP", "Large adult groups and multi-family trips"],
-            ["Property Comp Sets", bandText5 + ". The address sets the band; higher-revenue homes charge higher nightly rates"],
-          ],
-          "the house gets you into the buy box and the address sets the revenue band. Buy a real 5BR+ with enough bathrooms, on the Park City side if possible; add the hot tub, game room and evening deck at conversion.",
-          [
-            ["Geography", "Park City side preferred; Heber / Snyderville priced for the lower band"],
-            ["Bedrooms", "5BR+"],
-            ["Bathrooms", "4.5+ for 16 guests"],
-            ["STR capacity", "14–16 guests, legal at the address"],
-            ["Size", "Enough for a great room, dining for 12+ and a separate game room"],
-            ["Ski access", "Not required"],
-            ["Lot", "Deck or yard with space for a hot tub, dining and fire"],
-            ["Interior", "Great room + group kitchen + second social space"],
-            ["Basement", "A lower level for the game room is ideal"],
-            ["Sleeping layout", "Real bedrooms for adults; bunks only with enough bathrooms"],
-            ["Outdoor product", "Hot tub + outdoor dining + fire table"],
-            ["Entertainment", "Pool table, ping pong, arcade in a dedicated room"],
-            ["Pool", "Not needed"],
-            ["Design", "Finished, any style; finish alone doesn't lift a Heber home"],
-          ],
-          [
-            ["Revenue Potential", "Heber / Snyderville " + csRange(OPEN.rev_min, OPEN.rev_max) + " (mostly " + csRange(K5T.Low.rev_min, K5T.Low.rev_max) + ") · Summit Park / Pine Meadow " + csRange(HOLD.rev_min, HOLD.rev_max) + " (on hold) · Old Town / Deer Valley " + csRange(PCR.rev_min, PCR.rev_max)],
+            ["Privacy / Seclusion", "Not required"],
+            ["Ideal Location(s)", "Park City side for $200k+: Old Town / Deer Valley, or Summit Park / Pine Meadow once the hold clears. Heber / Snyderville at the lower band"],
+          ]],
+          ["Property Locations", [["Popular Places", "Park City Mountain, Deer Valley, Main Street; on the Heber side, Deer Creek and Jordanelle reservoirs, Soldier Hollow, Heber Valley Railroad"]]],
+          ["Traveler Demographics", [["Traveler ICP", "Group trips: large adult groups and multi-family trips"]]],
+          ["Property Comp Sets", [["Design / Top Designs", "Designed, finished mountain homes with an evening deck, contemporary or lodge: " + '<a href="' + pines.url + '" target="_blank" rel="noopener">' + pines.short + " ↗</a>" + " · " + '<a href="' + gc("Ski Views · Main St").url + '" target="_blank" rel="noopener">' + gc("Ski Views · Main St").short + " ↗</a>" + " · " + '<a href="' + gc("Aspen Bliss").url + '" target="_blank" rel="noopener">' + gc("Aspen Bliss").short + " ↗</a>"] ]],
+          ["Analyst Notes", [["Notes / Insights", "The house gets you into the buy box; the address sets the revenue band. Bathrooms are the one product feature that holds within each area. Avoid amenity-heavy homes with few bathrooms"]]],
+          ["Projections", [
+            ["Revenue Potential", "Heber / Snyderville: " + csRange(K5T.Low.rev_min, K5T.Low.rev_max) + " (typical " + ddK(K5T.Low.rev_median) + ") · Park City side: " + csRange(pcMin, pcMax)],
             ["Purchase Price", "Pending"],
-          ]
-        ),
+          ]],
+        ]),
       },
     ],
     pendingNote: "Photos are from the approved comps' own galleries. Revenue figures are gross benchmarks, not an underwriting model. The full analysis is in the notebooks (parkcity_5br_compset.ipynb, parkcity_buybox_deepdive.ipynb).",
@@ -489,42 +484,38 @@
       { groupTitle: "Buy-Box Summary" },
       {
         title: "One-Page Recap",
-        body: csRecap(
-          [
-            ["Bedrooms / Baths", "3+ bedrooms (3–4 ideal) · 3+ bathrooms for 10 guests"],
-            ["Ideal Sleep Count", "8–10 (6–7 is too small)"],
-            ["Architectural Style", "Any style; upscale and finished inside"],
-            ["Backyard Size", "A deck or balcony with a hot tub is enough; no yard needed"],
-            ["Must-Have's", "Hot tub, indoor fireplace, deck / patio / balcony, on-site parking"],
-            ["Nice-to-Have's", "Game room / pool table or media room (strong), outdoor dining, sauna, air conditioning"],
-            ["View", "Nice, but doesn't lift revenue"],
-            ["Waterfront", "Not relevant; Jordanelle reservoir views don't lift the rate"],
-            ["Privacy / Seclusion", "Not necessary; walkability matters more"],
-            ["Ideal Location(s)", "Within about 1 km of Main Street: Old Town / Town Lift and Deer Valley Snow Park. Jordanelle / East Village at Low-tier pricing only"],
-            ["Traveler ICP", "Adult ski groups and families of 8–10"],
-            ["Property Comp Sets", bandTextS + ", plus the " + ddK(ceil.revenue) + " 5BR ceiling reference"],
-          ],
-          "buy the walk to the lift and to dinner first, with enough bathrooms; then add the finish, the game room and the ski entry.",
-          [
-            ["Geography", "Old Town / Town Lift or Deer Valley Snow Park"],
-            ["Bedrooms", "3–4BR"],
-            ["Bathrooms", "3+ (about 2.5 guests per bath at the top)"],
-            ["STR capacity", "8–10 guests"],
-            ["Size", "Enough for a real living room with a fireplace, and ideally a second space"],
-            ["Walkability", "Within about 1 km of Main Street: walk to the lift and to dinner"],
-            ["Ski access", "Town Lift or Deer Valley Snow Park; ignore “ski-in/ski-out” labels"],
-            ["Parking", "On-site parking or a garage; check snow-season access"],
-            ["Interior", "Upscale and finished: fireplace living room, updated kitchen"],
-            ["Sleeping layout", "Real beds for adults"],
-            ["Outdoor product", "Hot tub on a deck or balcony"],
-            ["Entertainment", "A game room, pool table or media room"],
-            ["Design", "Finished and upscale, any style; a dated interior holds back even a great location"],
-          ],
-          [
-            ["Revenue Potential", "Low " + csRange(KT.Low.rev_min, KT.Low.rev_max) + " · Medium " + csRange(KT.Medium.rev_min, KT.Medium.rev_max) + " · High " + csRange(KT.High.rev_min, KT.High.rev_max) + " · Ceiling " + ddK(ceil.revenue) + " (overlap reference)"],
+        body: csTemplate([
+          ["STR Regulations", [
+            ["Regulation Tier Overall", "🟡&nbsp; Verify. Eligibility is set by Park City zoning, address by address"],
+            ["Permit / Residency", "Permit / license required: <strong>Y</strong> · Primary residence required: <strong>N</strong>"],
+            ["Operating Limits", "Park City per-unit license with inspection. Allowed in HR-1, R-1, Estate and most RD zones; not in SF, HRL McHenry or named RD subdivisions. Lodging tax about 13–15%"],
+            ["Investor Notes", "Jordanelle side: MIDA has its own license with conflicting guidance; Hideout requires an annual inspection and a manager within 30 minutes. Details in Section 6"],
+          ]],
+          ["Property Profile", [
+            ["Bedrooms / Baths", "3–4BR (3 is enough) · 3+ baths for 10 guests"],
+            ["Ideal Sleep Count", "Minimum 8 · ideal 10"],
+            ["Architectural Style", "Any style; upscale, finished interior"],
+            ["Backyard Size", "A deck or balcony with a hot tub; no yard needed"],
+          ]],
+          ["Amenities", [
+            ["Must Have's", "Hot tub, fireplace, deck / balcony, on-site parking"],
+            ["Nice to Have's", "Game room / pool table or media room, outdoor dining, sauna, air conditioning"],
+          ]],
+          ["Geo Considerations", [
+            ["View", "Nice, but not a driver"],
+            ["Waterfront", "Not relevant"],
+            ["Privacy / Seclusion", "Not required; walkability matters more"],
+            ["Ideal Location(s)", "Within about 1 km of Main Street: Old Town / Town Lift and Deer Valley Snow Park. Jordanelle at Low-tier pricing only"],
+          ]],
+          ["Property Locations", [["Popular Places", "Park City Mountain (Town Lift), Deer Valley, Main Street dining and nightlife"]]],
+          ["Traveler Demographics", [["Traveler ICP", "Group trips (adult ski groups) and families of 8–10"]]],
+          ["Property Comp Sets", [["Design / Top Designs", "A luxury remodel or a real game room, any style: " + '<a href="' + chic.url + '" target="_blank" rel="noopener">' + chic.short + " ↗</a>" + " · " + '<a href="' + mst.url + '" target="_blank" rel="noopener">' + mst.short + " ↗</a>" + " · " + '<a href="' + dvw.url + '" target="_blank" rel="noopener">' + dvw.short + " ↗</a>"] ]],
+          ["Analyst Notes", [["Notes / Insights", "Buy the walk to the lift and to dinner first; the house fills the nights. Avoid 2-bath homes and “ski-in/out” labels without the walk. " + ceil.short + " (5BR, " + ddK(ceil.revenue) + ") is a ceiling, not a target"]]],
+          ["Projections", [
+            ["Revenue Potential", "Walkable 3–4BR, done right: " + csRange(KT.High.rev_min, KT.High.rev_max) + " · under-done or a drive from town: " + csRange(KT.Medium.rev_min, KT.Medium.rev_max) + " · Jordanelle: " + csRange(jordRow.rev_min, jordRow.rev_max)],
             ["Purchase Price", "Pending"],
-          ]
-        ),
+          ]],
+        ]),
       },
     ],
     pendingNote: "Photos are labelled as approved comps or market references. The full analysis is in the notebooks (parkcity_ski_compset.ipynb, parkcity_buybox_deepdive.ipynb).",

@@ -132,12 +132,18 @@ function csPair(pair, rows) {
   return rows.map(([label, fn]) => ({ label: label, left: fn(pair.strong), right: fn(pair.ordinary) }));
 }
 
-// Charlotte's One-Page Recap, same markup as the Charlotte Lake box: the
-// profile sheet, the "Analyst Notes — Acquisition Target Profile" line, the
-// target-profile sheet, then Revenue Potential / Purchase Price.
-function csRecap(profile, notes, target, money) {
-  const sheet = (rows) => '<table class="summary-sheet-table">' + rows.map(([k, v]) => "<tr><td>" + k + "</td><td>" + v + "</td></tr>").join("") + "</table>";
-  return sheet(profile) + '<p style="margin:16px 0 4px;"><strong>Analyst Notes — Acquisition Target Profile:</strong> ' + notes + "</p>" + sheet(target) + sheet(money);
+// One-Page Recap in the team's BuyBox Template V.2 layout: categories in the
+// template's order, one short answer per subcategory.
+// sections = [[category, [[subcategory, answer], ...]], ...]
+function csTemplate(sections) {
+  let h = '<div class="table-scroll"><table class="bb-template"><thead><tr><th>Category</th><th>Subcategory</th><th>Park City answer</th></tr></thead><tbody>';
+  sections.forEach(([cat, rows]) => {
+    rows.forEach(([sub, val], i) => {
+      h += "<tr>" + (i === 0 ? '<th scope="rowgroup" rowspan="' + rows.length + '" class="bb-template__cat">' + cat + "</th>" : "") +
+        '<td class="bb-template__sub">' + sub + "</td><td>" + val + "</td></tr>";
+    });
+  });
+  return h + "</tbody></table></div>";
 }
 
 // ---- Group Home kit (5BR+) ----

@@ -345,6 +345,12 @@ function overviewBlock(box) {
     );
     body.appendChild(revRow);
   }
+  // Acquisition screening chips (Park City): max purchase price by location.
+  if (o.acquisitionChips && o.acquisitionChips.length) {
+    const acqRow = el("div", "bb2-chip-row");
+    o.acquisitionChips.forEach((c) => acqRow.appendChild(el("span", "bb2-chip bb2-chip--acq" + (c.flag ? " bb2-chip--hold" : ""), c.label + ": " + c.value)));
+    body.appendChild(acqRow);
+  }
   hero.appendChild(body);
   return hero;
 }

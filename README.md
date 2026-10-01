@@ -167,7 +167,17 @@ To update the comp set: edit the URL file. A newly added listing also needs a `S
   - **Ski-Access:** location first, then the minimum product, the comps and the recap.
 - The Buy-Box Summary is Charlotte's One-Page Recap template (`csRecap` in `js/compset.js`, the same `summary-sheet-table` markup): the profile sheet, "Analyst Notes — Acquisition Target Profile", the target-profile sheet, then Revenue Potential / Purchase Price.
 
+## Acquisition screening (2026-10-01)
+
+Each tab shows approximate acquisition targets in two places: the overview card's chips and the Purchase Price row of the One-Page Recap.
+
+- Max all-in cost = realistic revenue ÷ 20%, where realistic revenue is the median comp in that location and tier.
+- Max purchase price = all-in minus a conversion allowance: about $125k for the Group Home and $75k for Ski-Access. These are planning assumptions covering furnishing, the hot tub and add-ons; renovation is extra.
+- Areas blocked by regulation are flagged and get no budget: Summit Park / Pine Meadow, Midway, and the prohibited Park City zones.
+- Single exceptional comps are shown for reference only.
+- The logic lives in `acqTable` / `acqBudget` in `js/compset.js`; the rows are in `js/deepdive_content.js`.
+
 ## Not yet done
 
-- Purchase-price underwriting for both boxes.
+- Full underwriting (operating costs, financing, actual purchase prices) for any candidate.
 - Address-level checks for any candidate: zoning, CC&Rs, and snow-season access and parking in Old Town.

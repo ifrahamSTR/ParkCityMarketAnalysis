@@ -750,3 +750,18 @@ img { max-width: 100%; display: block; }
 .bb-template__cat { background: #eaf2f8; color: #1f3d5c; font-weight: 800; width: 15%; text-align: center !important; vertical-align: middle !important; }
 .bb-template__sub { width: 21%; font-weight: 600; color: var(--color-primary); }
 @media (max-width: 600px) { .bb-template { font-size: 0.82rem; } .bb-template th, .bb-template td { padding: 6px 7px; } }
+
+/* Acquisition screening (20% gross revenue to cost) */
+.bb2-chip--acq { background: color-mix(in srgb, var(--brand-green) 10%, white); color: var(--brand-green); border-color: color-mix(in srgb, var(--brand-green) 30%, transparent); font-weight: 700; }
+.bb2-chip--hold { background: #fbe9e2; color: #9a3d1d; border-color: #f0c9b9; }
+.acq-table td.cell-note { white-space: normal; min-width: 200px; }
+.acq-table th[scope="row"] { white-space: normal; min-width: 150px; }
+.acq-row--hold th, .acq-row--hold td { background: #fdf3ef; }
+.acq-row--hold td.cell-note { color: #9a3d1d; font-weight: 600; }
+.acq-row--skip th, .acq-row--skip td, .acq-row--ref th, .acq-row--ref td { color: var(--color-text-muted); }
+.acq-note { margin: 6px 0 0; }
+.bb-template td .table-scroll { margin: 2px 0; }
+/* The acquisition table sits inside a template cell: let it wrap to the column. */
+.bb-template .acq-table th, .bb-template .acq-table td { white-space: normal; min-width: 0; padding: 6px 7px; }
+.bb-template .acq-table td.cell-note, .bb-template .acq-table th[scope="row"] { min-width: 0; }
+.bb-template .table-scroll { max-width: 100%; }

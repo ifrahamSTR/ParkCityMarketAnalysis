@@ -42,6 +42,18 @@
   const gpbOf = (list, t) => med(list.filter((c) => c.tier === t).map((c) => c.guests_per_bath));
   const nOf = (list, t) => list.filter((c) => c.tier === t).length;
   const bandText5 = CS_TIERS.map((t) => t + " " + csRange(K5T[t].rev_min, K5T[t].rev_max) + " (" + K5T[t].n + ")").join(" · ");
+  // Acquisition screening (20% gross revenue to cost), by location and tier.
+  const ALLOW5 = 125000;
+  const rev5 = (pred) => CS.comps.filter(pred).map((c) => c.revenue);
+  const ACQ5 = [
+    ["Heber Valley / Snyderville", "Low (base case)", rev5((c) => c.route.startsWith("Heber") && c.tier === "Low"), "Pursue. Heber City caps occupancy at 16; confirm city vs. county.", "go"],
+    ["Heber Valley / Snyderville", "Medium (exceptional)", rev5((c) => c.route.startsWith("Heber") && c.tier === "Medium"), "Reference only: one exceptional comp (8 baths, full game program). Don't underwrite to it.", "ref"],
+    ["Old Town / Deer Valley", "Medium", rev5((c) => c.route.startsWith("Park City") && c.tier === "Medium"), "Pursue; 5BR+ homes are rare here.", "go"],
+    ["Old Town / Deer Valley", "High", rev5((c) => c.route.startsWith("Park City") && c.tier === "High"), "Top execution only.", "go"],
+    ["Summit Park / Pine Meadow", "Medium–High", rev5((c) => c.route.startsWith("Summit")), "<strong>On hold:</strong> Summit County's proposed nightly-rental ban. Not pursuing.", "hold"],
+    ["Midway", "—", [], "<strong>Avoid:</strong> STR zone reduced Sept 2026.", "hold"],
+  ];
+  const b5 = (i) => acqBudget(ACQ5[i][2], ALLOW5);
   const areaText = "Heber / Snyderville " + csRange(OPEN.rev_min, OPEN.rev_max) + " (mostly " + csRange(K5T.Low.rev_min, K5T.Low.rev_max) + ") · Park City side " + csRange(pcMin, pcMax);
 
   // Section 1 card (numbers generated).
@@ -50,7 +62,7 @@
   group.spec = group.spec.map((r) => (r[0] === "Screening signals"
     ? [r[0], "Enough bathrooms (4.5+ for 16), a great room and dining for the group, a game room, and deck space for a hot tub."]
     : r)).filter((r) => r[0] !== "Where").concat([
-    ["Approved comps", areaText + ". Purchase price pending."],
+    ["Approved comps", areaText + "."],
     ["Where", "Park City side for $200k+: Old Town / Deer Valley (rare) or Summit Park / Pine Meadow (<strong>on hold</strong>). Heber / Snyderville is the open supply at the lower band. <strong>Avoid</strong> Midway."],
   ]);
 
@@ -78,7 +90,7 @@
   Object.assign(group, {
     status: "comp-set",
     overview: {
-      statusBadge: "14 approved revenue comps · purchase price pending",
+      statusBadge: "14 approved revenue comps · acquisition targets at a 20% gross-revenue yield",
       thesis: "A 5BR+ home built for 14–16 guests. <strong>The house gets you into the buy box. The address sets the revenue band.</strong>",
       whyItWorks:
         "Heber and Snyderville comps mostly earn " + csRange(K5T.Low.rev_min, K5T.Low.rev_max) + " at about " + csUsd(OPEN.adr_median) + " a night. Park City-side comps earn " + csRange(pcMin, pcMax) + " at about " + csUsd(pcAdr) + " a night. Homes fill a similar share of nights everywhere; the difference is the rate the address supports.",
@@ -88,6 +100,11 @@
         { label: "Heber / Snyderville", value: csRange(OPEN.rev_min, OPEN.rev_max) },
         { label: "Summit Park / Pine Meadow (hold)", value: csRange(HOLD.rev_min, HOLD.rev_max) },
         { label: "Old Town / Deer Valley", value: csRange(PCR.rev_min, PCR.rev_max) },
+      ],
+      acquisitionChips: [
+        { label: "Max purchase · Heber / Snyderville", value: "~" + acqFmt(b5(0).buy) },
+        { label: "Max purchase · Old Town / Deer Valley", value: "~" + acqFmt(b5(2).buy) + "–" + acqFmt(b5(3).buy) },
+        { label: "Summit Park / Pine Meadow", value: "on hold", flag: true },
       ],
     },
     pendingSections: [
@@ -200,7 +217,7 @@
           ["Analyst Notes", [["Notes / Insights", "The house gets you into the buy box; the address sets the revenue band. Bathrooms are the one product feature that holds within each area. Avoid amenity-heavy homes with few bathrooms"]]],
           ["Projections", [
             ["Revenue Potential", "Heber / Snyderville: " + csRange(K5T.Low.rev_min, K5T.Low.rev_max) + " (typical " + ddK(K5T.Low.rev_median) + ") · Park City side: " + csRange(pcMin, pcMax)],
-            ["Purchase Price", "Pending"],
+            ["Purchase Price", acqTable(ACQ5, ALLOW5, "furnishing for 16, hot tub, game room, outdoor dining and fire")],
           ]],
         ]),
       },
@@ -232,6 +249,20 @@
       left: { file: "assets/" + p.strong, alt: n[1], caption: "Approved Ski-Access comp · " + pr.strong.tier + " · " + pr.strong.short + ": " + n[1] },
       right: { file: "assets/" + p.ordinary, alt: n[2], caption: "Approved Ski-Access comp · " + pr.ordinary.tier + " · " + pr.ordinary.short + ": " + n[2] } };
   });
+  // Acquisition screening (20% gross revenue to cost), by location and tier.
+  const ALLOWS = 75000;
+  const revS = (pred) => CSK.comps.filter(pred).map((c) => c.revenue);
+  const isWalk = (c) => c.walk_band === walkRow.group;
+  const ACQS = [
+    ["Walkable: Old Town / Town Lift & Deer Valley Snow Park", "High (target)", revS((c) => c.tier === "High"), "Pursue in HR-1, R-1, Estate and most RD zones. Needs enough baths and an upscale finish or a game room.", "go"],
+    ["Walkable", "Medium", revS((c) => c.tier === "Medium" && isWalk(c)), "One comp.", "go"],
+    ["Walkable", "Low (under-done)", revS((c) => c.tier === "Low" && isWalk(c)), "Budget here if the house can't be brought to the High standard (e.g. bathrooms).", "go"],
+    ["East Village / Jordanelle", "Low", revS((c) => c.lift_area.startsWith("Deer Valley Jordanelle")), "Pursue only with a confirmed MIDA / Hideout license.", "go"],
+    ["Prohibited Park City zones", "—", [], "<strong>Not allowed:</strong> SF zone (except Prospector Village), HRL McHenry, named RD subdivisions; Bonanza Park ban pending.", "hold"],
+    ["Near a lift, not walkable", "—", [], "Not a target: none of these comps reach High.", "skip"],
+    ["5BR+ ceiling (" + ceil.short + ")", "Ceiling", [ceil.revenue], "Overlap reference only; underwrite a 5BR+ as a Group Home.", "ref"],
+  ];
+  const bS = (i) => acqBudget(ACQS[i][2], ALLOWS);
   const walkLowTypical = med(CSK.comps.filter((c) => c.tier === "Low" && c.walk_band === walkRow.group).map((c) => c.revenue));
 
   // Section 1 card (numbers generated).
@@ -239,7 +270,7 @@
   ski.spec = [
     ["Size", "3BR and up; 3–4BR core. A fourth bedroom adds little; a 5BR+ pays only when it's walkable and built to the group-home standard."],
     ["Screening signals", "Within about 1 km of Main Street; enough bathrooms; hot tub, fireplace, deck and parking (every comp has them); an upscale finish or a game room."],
-    ["Approved comps", bandTextS + ", plus a " + ddK(ceil.revenue) + " 5BR ceiling reference. Purchase price pending."],
+    ["Approved comps", bandTextS + ", plus a " + ddK(ceil.revenue) + " 5BR ceiling reference."],
     ["Where", "Old Town / Town Lift and Deer Valley Snow Park. Jordanelle / East Village comps are all Low. Eligibility follows Park City zoning (HR-1, R-1, Estate, most RD)."],
   ];
 
@@ -261,7 +292,7 @@
   Object.assign(ski, {
     status: "comp-set",
     overview: {
-      statusBadge: "12 approved revenue comps · purchase price pending",
+      statusBadge: "12 approved revenue comps · acquisition targets at a 20% gross-revenue yield",
       thesis:
         "<strong>Buy the walk first:</strong> a 3–4BR within about 1 km of Main Street, at the Town Lift or Deer Valley Snow Park. <strong>Then make sure the house can fill it:</strong> enough bathrooms, a hot tub, fireplace, deck and parking, and either an upscale finish or a second space such as a game room.",
       whyItWorks:
@@ -269,6 +300,11 @@
       heroImage: sp("hero", "A deck looking straight onto the ski runs: the location is the amenity."),
       chips: [{ label: "3–4BR (3BR is enough)" }, { label: "Walk to Main St (≤ ~1 km)" }, { label: "Town Lift or Deer Valley Snow Park" }, { label: "Enough bathrooms" }, { label: "Hot tub · fireplace · deck · parking" }, { label: "Upscale finish or a game room" }],
       revenueChips: ["High", "Medium", "Low", "Ceiling"].map((t) => ({ label: t === "Ceiling" ? "Ceiling (5BR overlap)" : "Comp tier · " + t, value: csRange(KT[t].rev_min, KT[t].rev_max) + " (" + KT[t].n + ")" })),
+      acquisitionChips: [
+        { label: "Max purchase · walkable, done right", value: "~" + acqFmt(bS(0).buy) },
+        { label: "Max purchase · walkable, under-done", value: "~" + acqFmt(bS(2).buy) },
+        { label: "Max purchase · Jordanelle", value: "~" + acqFmt(bS(3).buy) },
+      ],
     },
     pendingSections: [
       { groupTitle: "What to Buy vs. Add Later" },
@@ -478,7 +514,7 @@
           "<li><strong>Jordanelle side:</strong> " + csRange(jordRow.rev_min, jordRow.rev_max) + ", whatever the finish.</li>" +
           "<li><strong>Walkable 5BR+ built to the group-home standard:</strong> " + ddK(ceil.revenue) + ", one example. A ceiling, not a target.</li></ul>" +
           "<p>Representative comps: <a href=\"" + chic.url + "\" target=\"_blank\" rel=\"noopener\">" + chic.short + " ↗</a> (High) · <a href=\"" + steps.url + "\" target=\"_blank\" rel=\"noopener\">" + steps.short + " ↗</a> (Medium) · <a href=\"" + ev4.url + "\" target=\"_blank\" rel=\"noopener\">" + ev4.short + " ↗</a> (Low).</p>" +
-          "<p class=\"dd-note\">Gross revenue benchmarks from the approved comps, not an underwriting model. Purchase price: pending.</p>",
+          "<p class=\"dd-note\">Gross revenue benchmarks from the approved comps, not an underwriting model. Acquisition targets are in the One-Page Recap.</p>",
       },
 
       { groupTitle: "Buy-Box Summary" },
@@ -513,7 +549,7 @@
           ["Analyst Notes", [["Notes / Insights", "Buy the walk to the lift and to dinner first; the house fills the nights. Avoid 2-bath homes and “ski-in/out” labels without the walk. " + ceil.short + " (5BR, " + ddK(ceil.revenue) + ") is a ceiling, not a target"]]],
           ["Projections", [
             ["Revenue Potential", "Walkable 3–4BR, done right: " + csRange(KT.High.rev_min, KT.High.rev_max) + " · under-done or a drive from town: " + csRange(KT.Medium.rev_min, KT.Medium.rev_max) + " · Jordanelle: " + csRange(jordRow.rev_min, jordRow.rev_max)],
-            ["Purchase Price", "Pending"],
+            ["Purchase Price", acqTable(ACQS, ALLOWS, "furnishing a 3–4BR, hot tub and ski entry")],
           ]],
         ]),
       },

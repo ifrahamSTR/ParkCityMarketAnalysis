@@ -146,6 +146,31 @@ function csTemplate(sections) {
   return h + "</tbody></table></div>";
 }
 
+// Acquisition screening at a 20% gross-revenue-to-cost target: max all-in cost
+// = realistic revenue / 0.20, where realistic revenue is the median comp in
+// that location and tier; max purchase price = all-in minus a conversion
+// allowance (planning assumption). rows = [location, tier, revenues[], status, kind]
+// kind: "go" (pursue), "hold" (regulation stops us), "skip" (not a target), "ref" (reference only).
+const ACQ_RATE = 0.20;
+const acqRound = (n) => Math.round(n / 5000) * 5000;
+const acqFmt = (n) => (n >= 1e6 ? "$" + (n / 1e6).toFixed(2).replace(/0$/, "") + "M" : "$" + Math.round(n / 1000) + "k");
+const acqMedian = (a) => { const v = a.slice().sort((x, y) => x - y); return v.length % 2 ? v[(v.length - 1) / 2] : (v[v.length / 2 - 1] + v[v.length / 2]) / 2; };
+function acqBudget(revs, allowance) {
+  const rev = acqMedian(revs), allIn = rev / ACQ_RATE;
+  return { rev: rev, allIn: acqRound(allIn), buy: acqRound(allIn - allowance), lo: Math.min.apply(null, revs), hi: Math.max.apply(null, revs) };
+}
+function acqTable(rows, allowance, allowanceNote) {
+  let h = '<div class="table-scroll"><table class="data-table dd-mini acq-table"><thead><tr><th>Location</th><th>Tier</th><th>Realistic revenue</th><th>Max all-in cost</th><th>Max purchase price</th><th>Status</th></tr></thead><tbody>';
+  rows.forEach(([loc, tier, revs, status, kind]) => {
+    const b = revs.length ? acqBudget(revs, allowance) : null;
+    const revCell = b ? acqFmt(b.rev) + (revs.length > 1 ? ' <span class="muted">(' + acqFmt(b.lo) + "–" + acqFmt(b.hi) + ")</span>" : ' <span class="muted">(1 comp)</span>') : "—";
+    const money = (v) => (kind === "go" || kind === "ref") && b ? "<strong>" + acqFmt(v) + "</strong>" : "—";
+    h += '<tr class="acq-row acq-row--' + kind + '"><th scope="row">' + loc + "</th><td>" + tier + "</td><td>" + revCell + "</td><td>" + money(b && b.allIn) + "</td><td>" + (kind === "ref" ? "—" : money(b && b.buy)) +
+      '</td><td class="cell-note">' + status + "</td></tr>";
+  });
+  return h + '</tbody></table></div><p class="dd-note acq-note">Screening only, not underwriting. Max all-in = realistic revenue (the median comp in that location and tier) ÷ 20%. Max purchase = all-in minus about ' + acqFmt(allowance) + " for conversion (" + allowanceNote + "; a planning assumption). Renovation, such as added bathrooms or a dated finish, comes on top.</p>";
+}
+
 // ---- Group Home kit (5BR+) ----
 const CS = typeof COMPSET_5BR !== "undefined" ? COMPSET_5BR : null;
 const CS_BAND = { High: "$300k+", Medium: "$200k–<$300k", Low: "$100k–<$200k" };

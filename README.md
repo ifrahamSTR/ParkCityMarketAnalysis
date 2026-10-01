@@ -156,7 +156,9 @@ To update the comp set: edit the URL file. A newly added listing also needs a `S
 - The page shows plain-English conclusions only: conclusion, then the key number, then images, then what to buy.
 - These stay in the notebooks: correlations, p-values, the Visual Score and visual-concept percentiles. Visual features are still used behind the scenes to pick which listings and photos to show.
 - Tier tables end in a plain "What it means" column. Checklist strength labels are "Strong pattern", "Directional" and "Weak evidence".
-- Both tabs follow the Charlotte Lake section order.
+- Each tab is structured around what its own comps show; Charlotte and Clearwater are references for quality, not templates to copy.
+  - **Group Home (2026-10-01):** three layers. (1) The minimum property standard qualifies a home, split into "must already exist" and "add at conversion". (2) The address sets the revenue band (area table, nightly-rate chart, map). (3) Execution within the location: bathrooms, which hold within each area, and the two amenity visuals with baseline / useful / not-worth-paying-for buckets. Then the approved comps, four counterexamples, and the recap.
+  - **Ski-Access:** location first, then the minimum product, the comps and the recap.
 - The Buy-Box Summary is Charlotte's One-Page Recap template (`csRecap` in `js/compset.js`, the same `summary-sheet-table` markup): the profile sheet, "Analyst Notes — Acquisition Target Profile", the target-profile sheet, then Revenue Potential / Purchase Price.
 
 ## Not yet done

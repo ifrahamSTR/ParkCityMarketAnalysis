@@ -91,13 +91,15 @@ function compsetKit(D, cfg) {
   }
 
   // Grouped rows (acquisition routes, walkability, ski areas).
-  function groupTable(rows, keyField, header, status) {
+  // `extra`: optional [header, fn(row)] columns placed before the status column.
+  function groupTable(rows, keyField, header, status, extra) {
+    extra = extra || [];
     const cnt = tiers.filter((t) => rows.some((r) => r[t]));
     let h = '<div class="table-scroll"><table class="data-table dd-feature cs-table"><thead><tr><th>' + header + "</th><th>Comps</th><th>" + cnt.map(csTierName).join(" · ") + "</th><th>Revenue</th><th>Typical nightly rate</th>" +
-      (status ? "<th>What it means</th>" : "") + "</tr></thead><tbody>";
+      extra.map((e) => "<th>" + e[0] + "</th>").join("") + (status ? "<th>What it means</th>" : "") + "</tr></thead><tbody>";
     rows.forEach((r) => {
       h += '<tr><th scope="row">' + r[keyField].replace(/ \(regulatory hold\)| \(open supply\)/, "") + "</th><td>" + r.n + "</td><td>" + cnt.map((t) => r[t] || 0).join(" · ") + "</td><td>" +
-        csRange(r.rev_min, r.rev_max) + "</td><td>" + csUsd(r.adr_median) + "</td>" + (status ? '<td class="cell-note">' + (status[r[keyField]] || "") + "</td>" : "") + "</tr>";
+        csRange(r.rev_min, r.rev_max) + "</td><td>" + csUsd(r.adr_median) + "</td>" + extra.map((e) => "<td>" + e[1](r) + "</td>").join("") + (status ? '<td class="cell-note">' + (status[r[keyField]] || "") + "</td>" : "") + "</tr>";
     });
     return h + "</tbody></table></div>";
   }

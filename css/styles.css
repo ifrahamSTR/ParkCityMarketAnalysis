@@ -693,3 +693,21 @@ img { max-width: 100%; display: block; }
 @media (max-width: 760px) { .cs-bands--4 { grid-template-columns: 1fr; } }
 .cs-facts td.cell-note { min-width: 220px; }
 @media (max-width: 600px) { #deep-dive-content .comp-stats-table th, #deep-dive-content .comp-stats-table td { padding: 6px 8px; } }
+
+/* Group Home: "must already exist" vs "add at conversion", and the amenity buckets */
+.cs-two, .cs-three { display: grid; gap: 14px; margin: 10px 0 4px; }
+.cs-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cs-three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cs-two__col, .cs-three__col { border: var(--hairline); border-radius: var(--radius); padding: 12px 16px; background: var(--surface-tint); }
+.cs-two h4, .cs-three h4 { margin: 0 0 6px; font-size: 0.82rem; }
+.cs-two ul, .cs-three ul { margin: 0; padding-left: 1.1em; font-size: 0.92rem; }
+.cs-two li, .cs-three li { margin: 3px 0; }
+.cs-two__col--buy, .cs-three__col--base { border-color: color-mix(in srgb, var(--cs-high) 35%, transparent); background: var(--cs-high-bg); }
+.cs-two__col--buy h4, .cs-three__col--base h4 { color: var(--cs-high); }
+.cs-two__col--add, .cs-three__col--add { border-color: color-mix(in srgb, var(--cs-mid) 35%, transparent); background: var(--cs-mid-bg); }
+.cs-two__col--add h4, .cs-three__col--add h4 { color: var(--cs-mid); }
+.cs-three__col--skip { background: #f3f4f5; }
+.cs-three__col--skip h4 { color: #69777f; }
+@media (max-width: 760px) { .cs-two, .cs-three { grid-template-columns: 1fr; } }
+/* Plain-English note columns wrap instead of pushing the table off-screen. */
+.cs-table td.cell-note { white-space: normal; min-width: 200px; }

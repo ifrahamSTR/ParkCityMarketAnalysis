@@ -1,11 +1,11 @@
 /**
  * Section 6 — Buy-Box Deep Dives, attached to BUY_BOXES.
  *
- * Presentation follows Charlotte's Lake Buy Box, section for section:
- * Property Profile -> Amenities -> Geo Considerations -> Traveler
- * Demographics -> Comp Set -> Analyst Notes -> Comp Deep-Dive -> Projections
- * -> Buy-Box Summary (Charlotte's One-Page Recap template, csRecap). The
- * Ski-Access tab leads with location because location is its thesis.
+ * Each tab is structured around what its approved comps show, with Charlotte's
+ * One-Page Recap template (csRecap) at the end:
+ *   Group Home: minimum standard -> location sets the revenue band ->
+ *     execution within the location -> comps -> examples -> recap.
+ *   Ski-Access: location first, then the minimum product, comps and recap.
  *
  * Written for acquisitions: conclusion first, then the number that matters,
  * then photos. No statistical notation or visual-model scores on the page;
@@ -21,256 +21,151 @@
   const DG = DEEPDIVE.group, DS = DEEPDIVE.ski;
   const gp = (k, c, a) => ddPhoto("group", k, c, a);
   const sp = (k, c, a) => ddPhoto("ski", k, c, a);
-  const PAIR_G = DEEPDIVE.pairs.group;
   const n0 = (x) => Math.round(x);
   const med = (a) => { const s = a.slice().sort((x, y) => x - y); return s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2; };
 
   // =========================================================================
   // Buy Box 1 · Large Group Home
+  // Three layers, driven by the approved comps: the house qualifies (minimum
+  // standard) -> the address sets the revenue band -> execution (bathrooms
+  // first) sets where a home lands inside its band.
   // =========================================================================
   const group = BUY_BOXES.find((b) => b.id === "group");
   const K5T = CS.tiers;
   const OPEN = csRoute("Heber"), HOLD = csRoute("Summit"), PCR = csRoute("Park City");
-  const gc = (s) => K5.comp(s);
+  const gc = (s) => K5.comp(s), ga = (a) => K5.amen(a);
   const pcUp = K5T.High.park_city_side + K5T.Medium.park_city_side, nUp5 = K5T.High.n + K5T.Medium.n;
-  const heberLux = gc("Heber Luxury Home"), pines = gc("Park City Pines"), pent = gc("Main St Penthouse"), resort = gc("Heber Resort Home"), dvv = gc("Deer Valley Views (Heber)"), hh = gc("Heber Heights");
-  const allHigh5 = CS.comps.filter((c) => c.tier === "High").every((c) => c.bedrooms === 5);
+  const heberLux = gc("Heber Luxury Home"), pines = gc("Park City Pines"), pent = gc("Main St Penthouse"), resort = gc("Heber Resort Home"), dvv = gc("Deer Valley Views (Heber)"), hh = gc("Heber Heights"), tm = gc("Triple Master DV");
+  const pcComps = CS.comps.filter((c) => !c.route.startsWith("Heber")), openComps = CS.comps.filter((c) => c.route.startsWith("Heber"));
+  const pcMin = Math.min.apply(null, pcComps.map((c) => c.revenue)), pcMax = Math.max.apply(null, pcComps.map((c) => c.revenue));
+  const pcAdr = med(pcComps.map((c) => c.adr));
+  const gpbOf = (list, t) => med(list.filter((c) => c.tier === t).map((c) => c.guests_per_bath));
+  const nOf = (list, t) => list.filter((c) => c.tier === t).length;
   const bandText5 = CS_TIERS.map((t) => t + " " + csRange(K5T[t].rev_min, K5T[t].rev_max) + " (" + K5T[t].n + ")").join(" · ");
+  const areaText = "Heber / Snyderville " + csRange(OPEN.rev_min, OPEN.rev_max) + " (mostly " + csRange(K5T.Low.rev_min, K5T.Low.rev_max) + ") · Park City side " + csRange(pcMin, pcMax);
 
   // Section 1 card (numbers generated).
   group.name = "5BR+ homes sleeping 14+, lift-flexible";
-  group.thesis = "Buy the product: lift access isn't needed. The house gets you into the comp set; the address sets the tier. " + pcUp + " of the " + nUp5 + " comps above $200k are on the Park City side.";
+  group.thesis = "The house gets you into the buy box; the address sets the revenue band. " + pcUp + " of the " + nUp5 + " comps above $200k are on the Park City side, and the higher-revenue homes win on nightly rate.";
   group.spec = group.spec.map((r) => (r[0] === "Screening signals"
-    ? [r[0], "Enough bathrooms (about 3.5 guests per bath or better), a hot tub, a real game room and an evening deck with outdoor dining and fire."]
+    ? [r[0], "Enough bathrooms (4.5+ for 16), a great room and dining for the group, a game room, and deck space for a hot tub."]
     : r)).filter((r) => r[0] !== "Where").concat([
-    ["Approved comps", bandText5 + ". Purchase price pending."],
-    ["Where", "Heber Valley and Snyderville are the open supply, and " + OPEN.Low + " of their " + OPEN.n + " comps are Low tier. $200k+ needs a Park City-side address: Old Town / Deer Valley (rare) or Summit Park / Pine Meadow (<strong>on hold</strong>). <strong>Avoid</strong> Midway."],
+    ["Approved comps", areaText + ". Purchase price pending."],
+    ["Where", "Park City side for $200k+: Old Town / Deer Valley (rare) or Summit Park / Pine Meadow (<strong>on hold</strong>). Heber / Snyderville is the open supply at the lower band. <strong>Avoid</strong> Midway."],
   ]);
 
   const ROLES5 = {
-    "Park City Pines": "Wins on its outdoor program, 8 km from a lift",
-    "Ski Views · Main St": "Old Town location, 7 baths for 14",
-    "Main St Penthouse": "Sleeps 10: a Main Street location play, not a group-home base case",
+    "Park City Pines": "Exceptional product, 8 km from a lift",
+    "Ski Views · Main St": "Old Town, 7 baths for 14",
+    "Main St Penthouse": "Sleeps 10: the address carries it",
     "Heber Luxury Home": "The one Heber comp above Low: 8 baths",
-    "Aspen Bliss": "High nightly rate, fewer nights: a remote log lodge",
+    "Aspen Bliss": "Remote log lodge, high rate",
     "Views at Matterhorn": "Indoor sport court + game room",
-    "Triple Master DV": "Deer Valley + 6.5 baths, almost no amenities",
-    "Heber Mountain Home": "3 baths for 16 holds it back",
-    "Heber Resort Home": "Most amenities in the set, still Low",
-    "Cabriolet Family Escape": "Fills nights, but at a low rate",
+    "Triple Master DV": "Deer Valley, almost no amenities",
+    "Heber Mountain Home": "3 baths for 16",
+    "Heber Resort Home": "Most amenities in the set",
+    "Cabriolet Family Escape": "Fills nights at a low rate",
     "Ski & Tee Chalet": "Right product, few nights sold",
-    "Heber Heights": "8BR / 6.5BA: size doesn't beat the Heber rate",
+    "Heber Heights": "8BR / 6.5BA in Heber",
     "MTN Lake Retreat": "Lowest nightly rate in the set",
-    "Deer Valley Views (Heber)": "Beautifully finished, lowest revenue: it's in Heber",
+    "Deer Valley Views (Heber)": "Beautifully finished; it's in Heber",
   };
+  const twoLists = (left, right, leftTitle, rightTitle) =>
+    '<div class="cs-two"><div class="cs-two__col cs-two__col--buy"><h4>' + leftTitle + "</h4><ul>" + left.map((x) => "<li>" + x + "</li>").join("") + "</ul></div>" +
+    '<div class="cs-two__col cs-two__col--add"><h4>' + rightTitle + "</h4><ul>" + right.map((x) => "<li>" + x + "</li>").join("") + "</ul></div></div>";
+  const threeLists = (cols) => '<div class="cs-three">' + cols.map(([title, cls, items]) => '<div class="cs-three__col cs-three__col--' + cls + '"><h4>' + title + "</h4><ul>" + items.map((x) => "<li>" + x + "</li>").join("") + "</ul></div>").join("") + "</div>";
 
   Object.assign(group, {
     status: "comp-set",
     overview: {
       statusBadge: "14 approved revenue comps · purchase price pending",
-      thesis:
-        "Buy a 5BR+ house with enough bathrooms for 14–16 guests, a hot tub, a real game room and an evening deck. <strong>The house gets you into the comp set; the address sets the tier.</strong> Heber and Snyderville comps earn " + csRange(K5T.Low.rev_min, K5T.Low.rev_max) + "; " + pcUp + " of the " + nUp5 + " comps above $200k are on the Park City side.",
+      thesis: "A 5BR+ home built for 14–16 guests. <strong>The house gets you into the buy box. The address sets the revenue band.</strong>",
       whyItWorks:
-        "The higher-revenue homes mainly win by charging much higher nightly rates (" + csUsd(K5T.High.adr_median) + " vs " + csUsd(K5T.Low.adr_median) + "), not by filling more nights. More bedrooms, more amenities or more polished photos don't make the difference. Bathrooms, the evening deck and a Park City-side address do.",
-      heroImage: gp("hero", "A multi-zone deck with string lights, a fire pit and lounge seating: the outdoor program a 14–16-guest group uses."),
-      chips: [{ label: "5BR+ (no need for 6+)" }, { label: "≤3.5 guests per bath" }, { label: "Sleeps 14–16" }, { label: "Hot tub + game room" }, { label: "Evening deck: dining + fire" }, { label: "Park City side for $200k+" }],
-      revenueChips: CS_TIERS.map((t) => ({ label: "Comp tier · " + t, value: csRange(K5T[t].rev_min, K5T[t].rev_max) + " (" + K5T[t].n + ")" })),
+        "Heber and Snyderville comps mostly earn " + csRange(K5T.Low.rev_min, K5T.Low.rev_max) + " at about " + csUsd(OPEN.adr_median) + " a night. Park City-side comps earn " + csRange(pcMin, pcMax) + " at about " + csUsd(pcAdr) + " a night. Homes fill a similar share of nights everywhere; the difference is the rate the address supports.",
+      heroImage: gp("hero", "A multi-zone deck with string lights, a fire pit and lounge seating."),
+      chips: [{ label: "5BR+, sleeps 14–16" }, { label: "4.5+ baths for 16" }, { label: "Great room + group dining" }, { label: "Game room + hot tub" }, { label: "Park City side for $200k+" }],
+      revenueChips: [
+        { label: "Heber / Snyderville", value: csRange(OPEN.rev_min, OPEN.rev_max) },
+        { label: "Summit Park / Pine Meadow (hold)", value: csRange(HOLD.rev_min, HOLD.rev_max) },
+        { label: "Old Town / Deer Valley", value: csRange(PCR.rev_min, PCR.rev_max) },
+      ],
     },
     pendingSections: [
-      { groupTitle: "What to Buy vs. Add Later" },
+      { groupTitle: "What the Property Must Have" },
       {
-        title: "Buy the Real Estate vs. Add at Conversion",
-        html: () => ddChecklist([
-          ["5BR+ (a sixth bedroom isn't worth paying for)", "buy", "Bedrooms can't be added cheaply.", (allHigh5 ? "All three High comps are 5BR. " : "") + "6BR+ homes don't earn more.", "strong"],
-          ["Enough bathrooms: about 3.5 guests per bath or better (4.5+ baths for 16)", "buy", "The clearest structural difference, and hard to add later.", "Every Medium and High comp meets it. The comps with the fewest bathrooms are all Low.", "strong"],
-          ["A Park City-side address, legal for 14–16 guests", "buy", "The address sets the nightly rate.", pcUp + " of " + nUp5 + " comps above $200k. Heber / Snyderville comps charge about half the rate.", "strong"],
-          ["A floor plan for 16: great room, dining for 12+, a second social space", "either", "The rooms must exist; the game equipment can be added.", "Common to every tier. It gets a home into the comp set.", "strong"],
-          ["Deck room for a hot tub, outdoor dining and fire", "either", "Buy the deck; add the tub and furniture.", "Every comp has a hot tub. Every High comp has outdoor dining and a fire pit.", "strong"],
-          ["Finished interior", "add", "The biggest conversion cost; price it before offering.", "Needed, but finish alone doesn't lift a home out of Low.", "directional"],
-          ["Sauna, pool table, arcade", "add", "Equipment for an existing room.", "More common in the High comps.", "directional"],
-          ["Pickleball, pool, playground", "either", "Needs lot area; not worth paying for.", "Only the Low comps have them.", "weak"],
-          ["Crib, pack 'n play, high chair", "add", "Cheap. Provide them anyway.", "No difference either way.", "weak"],
-        ]),
-      },
-
-      { groupTitle: "Property Profile" },
-      {
-        title: "Bedrooms & Bathrooms",
-        body: "<p><strong>Bathrooms, not bedrooms or headcount.</strong> High comps have about " + K5T.High.gpb_median.toFixed(0) + " guests per bathroom; Low comps about " + K5T.Low.gpb_median.toFixed(1) + ". All three High comps are 5BR, and almost every comp sleeps 14–16.</p>",
-        html: () => K5.tierFacts([
-          ["Bedrooms", (s) => s.bedrooms_median + "BR", "No difference: 5BR is enough"],
-          ["Bathrooms", (s) => s.baths_median, "More bathrooms in the upper tiers"],
-          ["Guests per bathroom", (s) => s.gpb_median.toFixed(1), "Clear difference: far less bathroom sharing at the top"],
-          ["Sleeps", (s) => s.sleeps_median, "No difference: 14–16 is the norm"],
-        ]),
+        title: "Minimum Property Standard",
+        body: "<p>These make a home a credible large-group rental. <strong>They don't decide whether it earns $130k or $330k; the address does</strong> (next section). Any architectural style works if the bones and the group layout are right; avoid builder-grade tract houses.</p>",
+        html: () => twoLists(
+          ["5+ bedrooms (5 is enough), legal for 14–16 guests", "Enough bathrooms: 4.5+ for 16 guests", "A great room and a dining table for the whole group", "A kitchen several people can cook in", "A second social space for a game room", "A deck or yard with room for a hot tub and seating"],
+          ["Hot tub", "Pool table, ping pong, arcade", "Outdoor dining set and a fire pit or fire table", "Sauna", "Furniture, finish and styling", "Crib, pack 'n play, high chair"],
+          "Must already exist (buy it)", "Can add at conversion"),
         images: [
-          gp("dining_12", "Dining for the whole group, with the view."),
-          gp("bunk", "Bunks reach 14–16 guests cheaply, but this home has 3 baths for 16."),
-        ],
-      },
-      {
-        title: "Architectural Style",
-        body: "<p>Any style works: contemporary, log lodge and Old Town farmhouse all appear in every tier. Buy good bones (ceiling height, glass, a deck footprint), not builder-grade tract product.</p>",
-        images: [
-          gp("arch_contemporary", "Contemporary mountain."),
-          gp("arch_lodge", "A traditional log lodge."),
-          gp("arch_tract", "Builder-grade tract house: large and well photographed, ordinary revenue."),
-        ],
-      },
-      {
-        title: "Group Space: Great Room, Kitchen & Dining",
-        body: "<p>Sixteen guests need one room where everyone fits, a kitchen for several cooks, and a second place to go.</p>",
-        images: [
-          gp("great_room", "A great room scaled for the group."),
-          gp("kitchen_strong", "A long island with seating for eight."),
-          gp("dining_long", "Dining for ten under a vaulted ceiling."),
-          gp("living_ordinary", "Weaker: an ordinary living room sized for one family."),
-        ],
-      },
-      {
-        title: "Backyard Size",
-        body: "<p><strong>The hot tub is required. The upper tiers add an evening deck: outdoor dining and fire.</strong> Backyard sports (pickleball, pool, playground) only show up in Low comps. Buy the deck footprint; add the program.</p>",
-        images: [
-          gp("deck_zones", "A fire-pit lounge on a big deck: the evening zone."),
-          gp("hot_tub_view", "A hot tub sold as part of the view."),
-          gp("sport_court", "A backyard court: only Low comps have one."),
-          gp("hot_tub_plain", "Weaker: a hot tub on a plain porch."),
+          K5.pic("living", "Ski Views · Main St"), K5.pic("living", tm.short), K5.pic("living", pent.short), K5.pic("entertainment", "Views at Matterhorn", 5),
+          K5.pic("sleeping", tm.short), K5.pic("sleeping", "Ski Views · Main St"), K5.pic("outdoor", pines.short), K5.pic("outdoor", "Aspen Bliss", 4),
         ],
       },
 
-      { groupTitle: "Amenities" },
+      { groupTitle: "Location Sets the Revenue Band" },
       {
-        title: "Amenity Prevalence By Tier",
+        title: "Location & Revenue",
         body:
-          "<p>Left: how common each amenity is in each tier. Right: which amenities each comp has, High → Low.</p><ul class=\"tight-list\">" +
-          "<li><strong>Every comp has a hot tub.</strong> Game rooms and pool tables are common in every tier.</li>" +
-          "<li><strong>High adds an evening program:</strong> outdoor dining and a fire pit in every High comp.</li>" +
-          "<li><strong>More amenities isn't better:</strong> pickleball, pools and playgrounds only appear in Low comps.</li></ul>",
+          "<p><strong>Location is the main difference between the tiers.</strong> " + OPEN.Low + " of the " + OPEN.n + " Heber / Snyderville comps are Low; " + pcUp + " of the " + nUp5 + " comps above $200k are on the Park City side. Ski access isn't the reason: the top comp is " + pines.lift_km.toFixed(0) + " km from a lift.</p>" +
+          "<p><strong>Higher-revenue homes charge much higher nightly rates</strong> (" + csUsd(K5T.High.adr_median) + " a night for High, " + csUsd(K5T.Low.adr_median) + " for Low). They don't fill many more nights (" + n0(K5T.High.occ_median) + "% vs " + n0(K5T.Low.occ_median) + "%).</p>",
+        html: () => K5.groupTable(CS.routes, "route", "Area", {
+          "Heber Valley / Snyderville (open supply)": "The open supply, at the lower band. Heber City caps occupancy at 16.",
+          "Summit Park / Pine Meadow (regulatory hold)": "<strong>On hold:</strong> Summit County's proposed nightly-rental ban covers these areas.",
+          "Park City: Old Town / Deer Valley": "The top band, but 5BR+ homes are rare here.",
+        }, [["Nights filled", (r) => n0(r.occ_median) + "%"]]),
+        chartsRow: [{ file: "assets/" + CS.charts.adr_occ, alt: "Nightly rate against occupancy for the 14 comps", caption: "Each dot is a comp: up = higher nightly rate, right = more nights filled; dashed lines = equal revenue." }],
+        mapEmbed: { url: "assets/" + CS.map + "?v=20261001", className: "embedded-map--compact", title: "Map of the 14 approved Group Home comps by tier" },
+      },
+
+      { groupTitle: "Execution Within the Location" },
+      {
+        title: "Bathrooms",
+        body:
+          "<p><strong>The stronger comps generally have less bathroom sharing, even within the same area. For a 16-person home, aim for roughly 4.5+ bathrooms.</strong> It's the one feature that's hard to add after purchase. The High comps also lean toward adult group trips (" + n0(K5T.High.group_median) + "% of reviews), the guests least willing to share a bathroom.</p>",
+        html: () => '<div class="table-scroll"><table class="data-table dd-mini cs-table"><thead><tr><th>Guests per bathroom</th><th>Stronger homes in the area</th><th>Weaker homes in the area</th></tr></thead><tbody>' +
+          '<tr><th scope="row">Heber / Snyderville</th><td>' + gpbOf(openComps, "Medium").toFixed(1) + " (the one Medium comp)</td><td>" + gpbOf(openComps, "Low").toFixed(1) + " (" + nOf(openComps, "Low") + " Low comps)</td></tr>" +
+          '<tr><th scope="row">Park City side</th><td>' + gpbOf(pcComps, "High").toFixed(1) + " (" + nOf(pcComps, "High") + " High comps)</td><td>" + gpbOf(pcComps, "Medium").toFixed(1) + " (" + nOf(pcComps, "Medium") + " Medium comps)</td></tr></tbody></table></div>",
+        images: [K5.pic("sleeping", "Ski Views · Main St"), K5.pic("sleeping", "Aspen Bliss"), K5.cover(heberLux.short, "the only Heber comp above Low, with 8 baths for 16")],
+      },
+      {
+        title: "Amenities",
+        body: "<p><strong>Every comp has a hot tub, and Low comps carry about as many amenities as High ones. More amenities don't overcome a weaker location.</strong> The High homes also sit in stronger locations, so read these as product standards, not as reasons a home earns more.</p>",
         chartsRow: [
           { file: "assets/" + CS.charts.prevalence, alt: "Bar chart of amenity prevalence by comp tier", caption: "How common each amenity is, by tier." },
           { file: "assets/" + CS.charts.presence, alt: "Grid of amenities for each approved comp", caption: "Which amenities each comp has, High → Low." },
         ],
       },
       {
-        title: "Must-Have's",
-        body: "<p>A hot tub, a real game room with at least two entertainment features, and an evening deck. The room is what you buy; the equipment is added.</p>",
-        items: ["Hot tub", "Game / entertainment room (the space)", "2+ entertainment features", "Outdoor dining + fire on the deck", "BBQ grill", "Indoor fireplace"],
-        images: [
-          gp("game_room_1", "A game level: ping pong, arcade, foosball and a lounge."),
-          gp("game_room_2", "A pool table in a second living space."),
-          gp("game_arcade", "Arcade cabinets: cheap once the room exists."),
-        ],
-      },
-      {
-        ranked: {
-          note: "Median revenue with vs. without the feature, across Park City's large group homes.",
-          items: ddRanked(DG.amenities, [
-            ["Pool table", "Cheap to add once the game room exists.", []],
-            ["Sauna", "A luxury add-on, not a real-estate requirement.", [gp("sauna_1", "A cabin sauna on the deck."), gp("sauna_2", "An indoor cedar sauna.")]],
-            ["Pickleball", "Needs lot area, and in the comps only Low homes have a court.", [], true],
-            ["Gym", "Never visible in listing photos; not a criterion.", [], true],
-            ["Pool", "Heavy cost, short season, and only Low comps have one.", [], true],
-          ]),
-        },
-      },
-      {
-        title: "Auto-Add",
-        body: "<ul class=\"tight-list\"><li>Outdoor dining set, fire table and lounge furniture</li><li>Pool table, ping pong, arcade, board games</li><li>Crib, pack 'n play, high chair</li></ul>",
-      },
-
-      { groupTitle: "Geo Considerations" },
-      {
-        title: "Where to Buy",
-        body:
-          "<p><strong>Lift access isn't needed, but the address sets the rate.</strong> The top comp is " + pines.lift_km.toFixed(0) + " km from a lift. Heber and Snyderville comps typically charge " + csUsd(OPEN.adr_median) + " a night; Park City-side comps " + csUsd(HOLD.adr_median) + "–" + csUsd(PCR.adr_median) + ".</p>",
-        html: () => K5.groupTable(CS.routes, "route", "Area", {
-          "Heber Valley / Snyderville (open supply)": "Deepest supply; Low-tier revenue unless exceptional. Heber City caps occupancy at 16.",
-          "Summit Park / Pine Meadow (regulatory hold)": "<strong>On hold:</strong> Summit County's proposed ban covers these areas.",
-          "Park City: Old Town / Deer Valley": "Top revenue, but 5BR+ homes are rare here.",
-        }),
-        mapEmbed: { url: "assets/" + CS.map + "?v=20261001", className: "embedded-map--compact", title: "Map of the 14 approved Group Home comps by tier" },
-      },
-
-      { groupTitle: "Traveler Demographics" },
-      {
-        title: "Traveler ICP",
-        body: "<p><strong>Large groups and multi-family trips.</strong> The High comps lean to adult group trips (" + n0(K5T.High.group_median) + "% of reviews mention one, " + n0(K5T.High.kids_median) + "% mention kids); the Low comps lean to families (" + n0(K5T.Low.kids_median) + "% kids). Build for adults who won't share bathrooms.</p>",
-        html: () => '<div class="table-scroll"><table class="data-table dd-mini"><thead><tr><th>Reviews that mention…</th>' + CS_TIERS.map((t) => "<th>" + csTierPill(t) + "</th>").join("") + "</tr></thead><tbody>" +
-          '<tr><th scope="row">A group trip</th>' + CS_TIERS.map((t) => "<td>" + n0(K5T[t].group_median) + "%</td>").join("") + "</tr>" +
-          '<tr><th scope="row">Kids</th>' + CS_TIERS.map((t) => "<td>" + n0(K5T[t].kids_median) + "%</td>").join("") + "</tr></tbody></table></div>",
-      },
-
-      { groupTitle: "Comp Set" },
-      {
-        title: "Revenue Comp Tiers",
-        body: "<p>The analyst's 14 approved comps, tiered by revenue. All of them are at the top of the market: even Low is around the market's Top 10%.</p>",
-        html: () => K5.tierBands() + K5.tierFacts([
-          ["Nightly rate", (s) => csUsd(s.adr_median), "The main difference: High charges about twice the Low rate"],
-          ["Nights filled", (s) => n0(s.occ_median) + "%", "Similar across tiers"],
-          ["Park City side", (s) => s.park_city_side + " of " + s.n, "The address sets the tier"],
-          ["Guests per bathroom", (s) => s.gpb_median.toFixed(1), "Less bathroom sharing at the top"],
-        ]),
-      },
-      {
-        title: "The 14 Approved Comps",
-        html: () => K5.cards(ROLES5) + '<details class="ref-details"><summary>All 14 comps in one table</summary>' + K5.fullTable() + "</details>",
-      },
-      {
-        title: "Nightly Rate vs. Occupancy",
-        body: "<p><strong>The higher-revenue homes mainly win by charging much higher nightly rates, not by filling more nights.</strong> " + pines.short + " is the exception that does both: " + csUsd(pines.adr) + " a night at " + n0(pines.occ) + "% of nights.</p>",
-        chartsRow: [{ file: "assets/" + CS.charts.adr_occ, alt: "Nightly rate against occupancy for the 14 comps", caption: "Each dot is a comp: up = higher nightly rate, right = more nights filled; dashed lines = equal revenue." }],
-      },
-      {
-        title: "Comp-Set Visual Comparison",
-        body: "<p>Photos from the approved comps' own galleries: what the High homes physically do differently.</p>",
-        html: () => K5.comparisonHtml([
-          ["setting", "Setting", "Any architecture works. High comps sit in Old Town or in forest; most Low comps sit in open Heber subdivisions."],
-          ["living", "Great Room, Kitchen & Dining", "Every tier has a group-sized great room. A finished kitchen alone doesn't lift a home: one of the nicest is on the lowest comp."],
-          ["sleeping", "Bedrooms & Bathrooms", "Bedrooms look alike across the tiers. The difference is the number of bathrooms."],
-          ["entertainment", "Game & Entertainment", "Low comps have the biggest game programs. A game room gets a home into the comp set; it doesn't lift it to High."],
-          ["outdoor", "Hot Tub & Outdoor", "High homes put the hot tub in an evening setting: a rooftop, a treetop deck. Low homes put it in a backyard next to a pool or court."],
+        html: () => threeLists([
+          ["Baseline", "base", ["Hot tub (" + ga("Hot tub").all_n + " of 14)", "A game / entertainment room", "Fire pit (" + ga("Fire pit").all_n + " of 14)", "BBQ grill, indoor fireplace"]],
+          ["Useful additions", "add", ["Outdoor dining (every High comp)", "Pool table, ping pong, arcade", "Sauna", "Crib, pack 'n play"]],
+          ["Not worth paying for", "skip", ["Pickleball court, pool, playground (only Low comps have them)", "Mini golf, golf simulator", "Gym, theater"]],
         ]),
       },
 
-      { groupTitle: "Analyst Notes" },
+      { groupTitle: "Approved Revenue Comps" },
       {
-        title: "Notes / Insights",
+        title: "High / Medium / Low",
+        body: "<p>The analyst's 14 approved comps. All sit at the top of the market: even Low is around the market's Top 10%.</p>",
+        html: () => K5.tierBands() + K5.cards(ROLES5) + '<details class="ref-details"><summary>All 14 comps in one table</summary>' + K5.fullTable() + "</details>",
+      },
+
+      { groupTitle: "Examples & Counterexamples" },
+      {
+        title: "What the Comps Teach",
         notes: [
-          { text: "<strong>More amenities isn't better.</strong> " + resort.short + " has the most amenities in the set (pool, pickleball, playground, mini golf, game room) and earns " + ddK(resort.revenue) + ". It has " + resort.baths + " bathrooms for " + resort.sleeps + " guests.",
+          { text: "<strong>More amenities don't overcome a weaker location.</strong> " + resort.short + " has the most amenities in the set (pool, pickleball, playground, mini golf, game room) and earns " + ddK(resort.revenue) + ", with " + resort.baths + " baths for " + resort.sleeps + " guests.",
             images: [K5.pic("outdoor", resort.short), K5.pic("entertainment", resort.short)] },
-          { text: "<strong>Looking polished alone doesn't make a top performer.</strong> " + dvv.short + " has one of the best-finished kitchens in the set and the lowest revenue (" + ddK(dvv.revenue) + "). It's in Heber, despite the name.",
-            images: [K5.pic("living", dvv.short), K5.cover(dvv.short, "a new build in a Heber subdivision")] },
-          { text: "<strong>Size doesn't beat the Heber rate.</strong> " + hh.short + " has " + hh.bedrooms + " bedrooms and " + hh.baths + " baths and earns " + ddK(hh.revenue) + ". The only Heber comp above Low (" + heberLux.short + ", " + ddK(heberLux.revenue) + ") has " + heberLux.baths + " baths and a full game program.",
-            images: [K5.cover(hh.short, "8BR / 6.5BA in Heber"), K5.cover(heberLux.short, "the Heber exception")] },
-          { text: "<strong>The product can win without ski access.</strong> " + pines.short + " is " + pines.lift_km.toFixed(0) + " km from a lift and the top earner (" + ddK(pines.revenue) + "): a treetop deck, fire, sauna, putting green and a hot tub by the game room.",
+          { text: "<strong>Bigger or more polished doesn't break the Heber band.</strong> " + hh.short + " has " + hh.bedrooms + " bedrooms and " + hh.baths + " baths (" + ddK(hh.revenue) + "). " + dvv.short + " has one of the best-finished kitchens in the set and the lowest revenue (" + ddK(dvv.revenue) + ").",
+            images: [K5.cover(hh.short, "8BR / 6.5BA in Heber"), K5.pic("living", dvv.short)] },
+          { text: "<strong>A strong address carries a thin product.</strong> " + tm.short + " has almost no amenities beyond a hot tub and earns " + ddK(tm.revenue) + " in Deer Valley. " + pent.short + " sleeps only " + pent.sleeps + " and earns " + ddK(pent.revenue) + " on Main Street.",
+            images: [K5.pic("living", tm.short), K5.pic("outdoor", pent.short)] },
+          { text: "<strong>An exceptional product can win away from skiing, on the Park City side.</strong> " + pines.short + " is " + pines.lift_km.toFixed(0) + " km from a lift and the top earner (" + ddK(pines.revenue) + "): a treetop deck, fire, sauna, putting green and a hot tub by the game room.",
             images: [K5.pic("outdoor", pines.short), K5.pic("entertainment", pines.short, 7)] },
-          { text: "<strong>Location can win without group capacity.</strong> " + pent.short + " sleeps " + pent.sleeps + " and earns " + ddK(pent.revenue) + " on Main Street. Treat it as a location ceiling, not a group-home base case.",
-            images: [K5.pic("outdoor", pent.short), K5.pic("sleeping", pent.short)] },
         ],
-      },
-
-      { groupTitle: "Comp Deep-Dive" },
-      {
-        title: "Same Size, Same Valley, More Than 3× the Revenue",
-        body: "<p>Both are 6BR Heber homes sleeping 16 with a hot tub. <strong>The gap is bathrooms (8 vs 3.5) and the resort program.</strong> The left home is an approved Medium comp; the right is a market reference (July figures).</p>",
-        pairLabels: [PAIR_G.strong.title, PAIR_G.ordinary.title],
-        compStats: ddPairStats(PAIR_G),
-        compPhotoRows: [
-          { note: "<strong>Exterior:</strong> a contemporary build against a standard subdivision house.", left: gp("pair_ext_strong", "Contemporary exterior."), right: gp("pair_ext_ordinary", "Builder-grade exterior.") },
-          { note: "<strong>Great room:</strong> double-height, around a fireplace wall, against a standard living room.", left: gp("pair_living_strong", "Double-height great room."), right: gp("pair_living_ordinary", "A standard living room.") },
-          { note: "<strong>Kitchen:</strong> an island seating eight against a stock kitchen.", left: gp("pair_kitchen_strong", "Island seating for eight."), right: gp("pair_kitchen_ordinary", "A stock kitchen.") },
-        ],
-      },
-
-      { groupTitle: "Projections" },
-      {
-        title: "Revenue Potential & Representative Listings",
-        body:
-          "<ul><li><strong>Heber / Snyderville:</strong> " + csRange(K5T.Low.rev_min, K5T.Low.rev_max) + " (typical " + ddK(K5T.Low.rev_median) + "). About " + ddK(heberLux.revenue) + " only with an exceptional home.</li>" +
-          "<li><strong>Park City side, outside Old Town:</strong> " + csRange(K5T.Medium.rev_min, K5T.Medium.rev_max) + ", up to " + ddK(pines.revenue) + " for the best execution. Currently on regulatory hold.</li>" +
-          "<li><strong>Old Town / Deer Valley:</strong> " + csRange(PCR.rev_min, PCR.rev_max) + ", location-driven and rare.</li></ul>" +
-          "<p>Representative comps: <a href=\"" + pines.url + "\" target=\"_blank\" rel=\"noopener\">" + pines.short + " ↗</a> (High) · <a href=\"" + heberLux.url + "\" target=\"_blank\" rel=\"noopener\">" + heberLux.short + " ↗</a> (Medium) · <a href=\"" + hh.url + "\" target=\"_blank\" rel=\"noopener\">" + hh.short + " ↗</a> (Low).</p>" +
-          "<p class=\"dd-note\">Gross revenue benchmarks from the approved comps, not an underwriting model. Purchase price: pending.</p>",
       },
 
       { groupTitle: "Buy-Box Summary" },
@@ -278,44 +173,44 @@
         title: "One-Page Recap",
         body: csRecap(
           [
-            ["Bedrooms / Baths", "5+ bedrooms (5 is enough) · about 3.5 guests per bath or better (4.5+ baths for 16)"],
+            ["Bedrooms / Baths", "5+ bedrooms (5 is enough) · 4.5+ bathrooms for 16 guests"],
             ["Ideal Sleep Count", "14–16, legal at the address (Heber City caps at 16)"],
             ["Architectural Style", "Any style: good bones, not builder-grade tract product"],
-            ["Backyard Size", "Room for a hot tub, outdoor dining and a fire zone; a court or pool isn't needed"],
-            ["Must-Have's", "Hot tub, game room with 2+ entertainment features, outdoor dining + fire pit, BBQ, fireplace"],
-            ["Nice-to-Have's", "Sauna, pool table. Pickleball, pool, playground, gym and theater are not criteria"],
+            ["Backyard Size", "Room for a hot tub, outdoor dining and a fire zone; no court or pool needed"],
+            ["Must-Have's", "Hot tub, game room, fire pit, BBQ, fireplace; great room and dining for the group"],
+            ["Nice-to-Have's", "Outdoor dining, pool table, sauna. Pickleball, pool, playground, gym and theater are not worth paying for"],
             ["View", "Not a criterion"],
             ["Waterfront", "Not relevant"],
-            ["Privacy / Seclusion", "Not necessary; forest settings do well, and so does Old Town"],
-            ["Ideal Location(s)", "Park City side for $200k+ (Old Town / Deer Valley, or Summit Park / Pine Meadow once the hold clears); Heber / Snyderville underwrite at Low-tier revenue. Avoid Midway"],
+            ["Privacy / Seclusion", "Not necessary"],
+            ["Ideal Location(s)", "Park City side for $200k+ (Old Town / Deer Valley, or Summit Park / Pine Meadow once the hold clears). Heber / Snyderville at the lower band. Avoid Midway"],
             ["Traveler ICP", "Large adult groups and multi-family trips"],
-            ["Property Comp Sets", bandText5 + ". High homes charge about twice the Low nightly rate"],
+            ["Property Comp Sets", bandText5 + ". The address sets the band; higher-revenue homes charge higher nightly rates"],
           ],
-          "buy a real 5BR+ with enough bathrooms and the rooms for a group, on the Park City side if possible, then add the resort program: hot tub, game room, evening deck.",
+          "the house gets you into the buy box and the address sets the revenue band. Buy a real 5BR+ with enough bathrooms, on the Park City side if possible; add the hot tub, game room and evening deck at conversion.",
           [
-            ["Geography", "Park City side preferred; Heber / Snyderville only at Low-tier pricing"],
+            ["Geography", "Park City side preferred; Heber / Snyderville priced for the lower band"],
             ["Bedrooms", "5BR+"],
             ["Bathrooms", "4.5+ for 16 guests"],
             ["STR capacity", "14–16 guests, legal at the address"],
             ["Size", "Enough for a great room, dining for 12+ and a separate game room"],
             ["Ski access", "Not required"],
-            ["Lot", "Deck or yard with space for hot tub, dining and fire zones"],
+            ["Lot", "Deck or yard with space for a hot tub, dining and fire"],
             ["Interior", "Great room + group kitchen + second social space"],
             ["Basement", "A lower level for the game room is ideal"],
             ["Sleeping layout", "Real bedrooms for adults; bunks only with enough bathrooms"],
-            ["Outdoor product", "Hot tub + outdoor dining + fire table; sauna if possible"],
+            ["Outdoor product", "Hot tub + outdoor dining + fire table"],
             ["Entertainment", "Pool table, ping pong, arcade in a dedicated room"],
             ["Pool", "Not needed"],
-            ["Design", "Finished and designed, any style; finish alone doesn't lift a Heber home"],
+            ["Design", "Finished, any style; finish alone doesn't lift a Heber home"],
           ],
           [
-            ["Revenue Potential", "Heber / Snyderville " + csRange(K5T.Low.rev_min, K5T.Low.rev_max) + " · Park City side " + csRange(K5T.Medium.rev_min, K5T.Medium.rev_max) + " · Top " + csRange(K5T.High.rev_min, K5T.High.rev_max)],
+            ["Revenue Potential", "Heber / Snyderville " + csRange(OPEN.rev_min, OPEN.rev_max) + " (mostly " + csRange(K5T.Low.rev_min, K5T.Low.rev_max) + ") · Summit Park / Pine Meadow " + csRange(HOLD.rev_min, HOLD.rev_max) + " (on hold) · Old Town / Deer Valley " + csRange(PCR.rev_min, PCR.rev_max)],
             ["Purchase Price", "Pending"],
           ]
         ),
       },
     ],
-    pendingNote: "Photos are labelled as approved comps or market references. The full analysis is in the notebooks (parkcity_5br_compset.ipynb, parkcity_buybox_deepdive.ipynb).",
+    pendingNote: "Photos are from the approved comps' own galleries. Revenue figures are gross benchmarks, not an underwriting model. The full analysis is in the notebooks (parkcity_5br_compset.ipynb, parkcity_buybox_deepdive.ipynb).",
   });
 
   // =========================================================================
